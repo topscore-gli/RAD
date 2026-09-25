@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 312 - General Introduction to Equipment Engineering</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:20px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:18px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .jamb-alert{
+      background:linear-gradient(135deg,rgba(255,193,7,.15),rgba(255,152,0,.1));
+      border:1px solid rgba(255,193,7,.4);border-radius:12px;padding:16px;margin:18px 0
+    }
+    .jamb-alert h4{color:#ffc107;margin-bottom:8px;font-size:15px;font-weight:900}
+    .jamb-alert li{font-size:13px}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+    .table-scroll-hint{font-size:11px;color:var(--text-secondary);text-align:center;margin-top:4px;font-style:italic}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{
+      background:var(--accent-tertiary);
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">RAD 312</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>⚡ General Introduction to Equipment Engineering</h1>
+        <p>X-ray Circuit • Power Supply • Filament Circuit • Rectification • High-yield Summary</p>
+      </div>
+
+      <!-- HIGH-YIELD SUMMARY -->
+      <div class="section-card">
+        <h2>📋 One-Sentence Summary</h2>
+        <p>An X-ray machine converts electrical energy into X-rays by heating the cathode filament to release electrons, accelerating those electrons across a high-voltage potential toward the anode, and controlling the process with appropriate voltage, current, rectification, and exposure timing.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Memory Map</strong>
+          <p>POWER → CONTROL → HEAT → RELEASE → ACCELERATE → COLLIDE → X-RAY</p>
+        </div>
+      </div>
+
+      <!-- 1. What is Equipment Engineering -->
+      <div class="section-card">
+        <h2>1️⃣ What is Equipment Engineering?</h2>
+        <p>The main aim is to understand the components that make X-ray production possible.</p>
+        
+        <div class="highlight-box">
+          <p><strong>Basic principle:</strong> Fast-moving electrons strike a target → X-rays are produced.</p>
+        </div>
+
+        <p>Two major types of X-radiation can be produced:</p>
+        <ul>
+          <li>Bremsstrahlung radiation</li>
+          <li>Characteristic radiation</li>
+        </ul>
+
+        <p>Although the idea sounds simple, an X-ray machine needs a carefully controlled environment. Several electrical and mechanical factors must remain stable for useful and safe X-ray production.</p>
+
+        <div class="quick-facts">
+          <h4>Basic Sequence</h4>
+          <p>Power supply → Controls → X-ray tube → X-rays</p>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Easy Analogy</strong>
+          <p>Think of an X-ray machine like a water supply system:<br>
+          • Power supply = water source/pump<br>
+          • Control panel = taps and valves<br>
+          • X-ray tube = the place where the process occurs<br>
+          • X-rays = the final product</p>
+        </div>
+      </div>
+
+      <!-- 2. Major Components -->
+      <div class="section-card">
+        <h2>2️⃣ Major Visible Components of an X-ray Room</h2>
+        
+        <h3>Visible components</h3>
+        <ul>
+          <li><strong>X-ray tube and housing</strong> – Usually positioned above the examination couch. This is where X-rays are generated.</li>
+          <li><strong>X-ray examination couch</strong> – Where the patient is positioned.</li>
+          <li><strong>Control panel</strong> – Where the radiographer selects exposure factors (kVp, mA, time).</li>
+        </ul>
+
+        <h3>Hidden components</h3>
+        <ul>
+          <li>High-tension generator</li>
+          <li>High-tension cables</li>
+        </ul>
+
+        <p>The purpose of studying the equipment is to follow the journey of electrical current and voltage from the power source until X-rays are finally produced inside the tube.</p>
+      </div>
+
+      <!-- 3. The X-ray Circuit -->
+      <div class="section-card">
+        <h2>3️⃣ The X-ray Circuit</h2>
+        <p>The X-ray circuit converts <strong>electrical energy → X-ray energy</strong>.</p>
+        <p>The mains supply normally provides alternating current (AC), but the X-ray equipment requires suitable direct current (DC).</p>
+
+        <h3>Two major types of power supply</h3>
+        
+        <div class="highlight-box">
+          <p><strong>1. Linear Power Supply</strong><br>
+          Uses transformer + rectifier + filter to convert AC into suitable DC.</p>
+        </div>
+
+        <div class="highlight-box">
+          <p><strong>2. Switch-Mode Power Supply (SMPS)</strong><br>
+          Uses high-frequency switching to achieve the required conversion. It can take power from AC mains or DC sources.</p>
+        </div>
+      </div>
+
+      <!-- 4. How SMPS Works -->
+      <div class="section-card">
+        <h2>4️⃣ How SMPS Works (4 Stages)</h2>
+
+        <h3>Stage 1: Input Rectification</h3>
+        <p>If the input is AC, it is first converted into DC using a rectifier (AC → Rectifier → DC). If the input is already DC, this stage is skipped.</p>
+
+        <h3>Stage 2: High-frequency Switching</h3>
+        <p>A high-frequency oscillator controls transistors that switch ON and OFF rapidly. This controls the flow of current to the transformer.</p>
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of a very fast electrical gate that repeatedly opens and closes.</p>
+        </div>
+
+        <h3>Stage 3: Transformation and Rectification</h3>
+        <p>The switched current passes through a transformer (which can step voltage up or down). After transformation, it is rectified again to produce DC.</p>
+
+        <h3>Stage 4: Filtering and Output Regulation</h3>
+        <p>Capacitors and filters smooth the voltage, reducing noise, fluctuations and ripple. The output is regulated so the required voltage remains stable.</p>
+      </div>
+
+      <!-- 5. Advantages & Limitations of SMPS -->
+      <div class="section-card">
+        <h2>5️⃣ Advantages & Limitations of SMPS</h2>
+
+        <h3>Advantages</h3>
+        <ul>
+          <li><strong>High efficiency</strong> – Operates at high frequencies (tens to hundreds of kHz)</li>
+          <li><strong>Small and lightweight</strong> – Smaller transformers can be used</li>
+          <li><strong>Wide input voltage range</strong> – Works with 110 V or 230 V systems</li>
+          <li><strong>Better heat management</strong> – Less energy wasted as heat</li>
+          <li><strong>Stable output voltage</strong> – Critical for consistent X-ray production</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>If an oven temperature keeps fluctuating (180°C → 150°C → 200°C), the cakes will not come out consistently. A regulated SMPS keeps the “oven temperature” stable for X-ray production.</p>
+        </div>
+
+        <h3>Limitations</h3>
+        <ul>
+          <li>Electromagnetic interference</li>
+          <li>More complex design</li>
+          <li>Some residual ripple and noise</li>
+        </ul>
+      </div>
+
+      <!-- 6. Components of the X-ray Circuit -->
+      <div class="section-card">
+        <h2>6️⃣ Major Components of the X-ray Circuit</h2>
+
+        <h3>1. Power Supply / High-voltage Generator</h3>
+        <p>Provides the high voltage required by the X-ray tube (typical range: <strong>40 kV – 150 kV</strong>). It converts ordinary mains voltage (240 V or 415 V) into the much higher voltage needed.</p>
+
+        <h3>2. Control Panel</h3>
+        <p>The radiographer selects:</p>
+        <ul>
+          <li>kVp</li>
+          <li>mA</li>
+          <li>Exposure time</li>
+        </ul>
+      </div>
+
+      <!-- 7. Filament Circuit & X-ray Tube -->
+      <div class="section-card">
+        <h2>7️⃣ Filament Circuit & X-ray Tube</h2>
+
+        <h3>Filament Circuit</h3>
+        <p>Supplies low voltage to the filament inside the cathode. Its purpose is to heat the filament so that electrons are released by <strong>thermionic emission</strong>.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of an electric stove. When current passes through the heating element, electrical energy turns into heat. When the filament is hot enough, electrons are released.</p>
+        </div>
+
+        <h3>X-ray Tube</h3>
+        <p>The core component where X-rays are produced. It contains two major electrodes:</p>
+        <ul>
+          <li><strong>Cathode</strong> – Contains the filament. Produces and releases electrons.</li>
+          <li><strong>Anode</strong> – Serves as the target. Electrons strike the anode to produce X-rays.</li>
+        </ul>
+
+        <div class="highlight-box">
+          <p><strong>Basic process:</strong><br>
+          Heated cathode → electrons released → high voltage accelerates electrons → electrons hit anode → X-rays produced</p>
+        </div>
+
+        <h3>High-tension Cables</h3>
+        <p>Transmit the high voltage between the high-tension generator and the X-ray tube. Because the voltage is extremely high, the cables must be properly insulated.</p>
+      </div>
+
+      <!-- 8. Two Major Circuits -->
+      <div class="section-card">
+        <h2>8️⃣ Two Major Circuits</h2>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Circuit</th>
+              <th>Main Role</th>
+            </tr>
+            <tr>
+              <td><strong>Mains Circuit</strong></td>
+              <td>Controls the potential difference between cathode and anode (accelerates electrons)</td>
+            </tr>
+            <tr>
+              <td><strong>Filament Circuit</strong></td>
+              <td>Controls heating of the filament (determines number of electrons available)</td>
+            </tr>
+          </table>
+        </div>
+
+        <h3>Mains Circuit Sections</h3>
+        <ul>
+          <li><strong>Primary / Low-voltage section</strong></li>
+          <li><strong>Secondary / High-voltage section</strong></li>
+        </ul>
+        <p>These two sections are separated by the high-tension step-up transformer.</p>
+      </div>
+
+      <!-- 9. Journey of Electricity -->
+      <div class="section-card">
+        <h2>9️⃣ Journey of Electricity Through the Circuit</h2>
+
+        <h3>Step 1: Power enters</h3>
+        <p>Electrical power comes from the mains supply and passes through the mains switch.</p>
+
+        <h3>Step 2: Circuit breaker</h3>
+        <p>Protects the equipment. If excessive voltage or current is detected, it opens the circuit (like a security guard).</p>
+
+        <h3>Step 3: Line voltage compensator</h3>
+        <p>Corrects variations in the incoming mains voltage.</p>
+
+        <h3>Step 4: Autotransformer</h3>
+        <p>Uses self-induction to adjust the voltage supplied to the primary winding of the high-tension transformer. Controlled by the kVp selector (major + minor) and monitored by the kVp meter.</p>
+
+        <h3>Step 5: Exposure & Timing controls</h3>
+        <p>The exposure control closes the circuit. The timer determines how long the circuit stays closed (how long X-rays are produced).</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Opening a tap = starting X-ray production<br>
+          Keeping it open = duration of exposure<br>
+          Closing it = stopping X-ray production</p>
+        </div>
+
+        <h3>Step 6: Step-up transformer & Rectifiers</h3>
+        <p>Voltage is increased by the high-tension step-up transformer, then passed through rectifiers before reaching the X-ray tube.</p>
+      </div>
+
+      <!-- 10. Filament Circuit Components -->
+      <div class="section-card">
+        <h2>🔟 Filament Circuit Components</h2>
+        <p>The filament circuit starts from the autotransformer and includes:</p>
+        <ul>
+          <li><strong>Filament stabilizer</strong> – Corrects line voltage variations</li>
+          <li><strong>mA selector</strong> – Determines current to the filament (approx. 3–5 A at 6–10 V)</li>
+          <li><strong>Filament ammeter</strong> – Measures filament current</li>
+          <li><strong>Space-charge compensator</strong> – Maintains filament current as kVp changes</li>
+          <li><strong>Step-down transformer</strong> – Reduces voltage and increases current for the filament</li>
+          <li><strong>Focal spot selector</strong> – Selects which filament/focal spot is used</li>
+        </ul>
+      </div>
+
+      <!-- 11. Stationary vs Rotating Anode -->
+      <div class="section-card">
+        <h2>1️⃣1️⃣ Stationary vs Rotating Anode Tubes</h2>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Type</th>
+              <th>Key Features</th>
+            </tr>
+            <tr>
+              <td><strong>Stationary anode</strong></td>
+              <td>Low-power units. One-step exposure system.</td>
+            </tr>
+            <tr>
+              <td><strong>Rotating anode</strong></td>
+              <td>Higher power handling. Two-step exposure: <strong>Prepare → Expose</strong></td>
+            </tr>
+          </table>
+        </div>
+
+        <h3>Prepare Stage (Rotating Anode)</h3>
+        <ul>
+          <li>Rotating anode is energized and reaches maximum speed</li>
+          <li>Filament circuit is closed and the filament is heated</li>
+          <li>Thermionic emission begins</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Like starting a car: start the engine and allow it to reach operating condition before driving. Prepare → anode spins + filament heats → then Expose.</p>
+        </div>
+      </div>
+
+      <!-- 12. Rectification -->
+      <div class="section-card">
+        <h2>1️⃣2️⃣ Why Rectification is Necessary</h2>
+        <p>Alternating current has a sinusoidal waveform that alternates between positive half-cycle, zero, and negative half-cycle. The direction of voltage therefore changes periodically.</p>
+
+        <p>The X-ray tube needs the polarity to remain correct at all times:</p>
+        <div class="highlight-box">
+          <p><strong>Cathode = negative</strong> → <strong>Anode = positive</strong><br>
+          So electrons always travel from cathode to anode.</p>
+        </div>
+
+        <h3>What happens without rectification?</h3>
+        <ul>
+          <li>During the negative half-cycle the polarity reverses</li>
+          <li>Cathode becomes positive and anode becomes negative</li>
+          <li>Electrons could travel in the wrong direction</li>
+          <li>This can damage the filament and stop useful X-ray production</li>
+        </ul>
+
+        <p>Rectifiers ensure the voltage/current stays in the required direction so electrons always move correctly from filament to anode.</p>
+      </div>
+
+      <!-- 13. Final Sequence -->
+      <div class="section-card">
+        <h2>1️⃣3️⃣ Complete Sequence of X-ray Production</h2>
+        <ol>
+          <li>Filament is heated</li>
+          <li>Thermionic emission releases electrons</li>
+          <li>High voltage creates potential difference between cathode and anode</li>
+          <li>Electrons are accelerated across the tube</li>
+          <li>Electrons strike the anode/target</li>
+          <li>X-rays are produced</li>
+          <li>Process continues until the selected exposure time ends</li>
+          <li>Timer opens the circuit</li>
+          <li>X-ray production stops</li>
+        </ol>
+      </div>
+
+      <!-- HIGH-YIELD POINTS -->
+      <div class="section-card">
+        <h2>⭐ High-Yield Points to Remember</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Basic principle: Fast-moving electrons striking a target produce X-rays</li>
+            <li>Two types of radiation: Bremsstrahlung + Characteristic</li>
+            <li>Basic sequence: Power supply → Controls → X-ray tube → X-rays</li>
+            <li>Two major circuits: Mains circuit + Filament circuit</li>
+            <li>Mains circuit → controls tube voltage → accelerates electrons</li>
+            <li>Filament circuit → heats filament → produces electrons (thermionic emission)</li>
+            <li>Cathode = electron source | Anode = target</li>
+            <li>High-tension transformer steps voltage UP</li>
+            <li>Step-down transformer reduces voltage for the filament</li>
+            <li>Rectifier keeps correct polarity (cathode negative, anode positive)</li>
+            <li>Timer controls how long X-rays are produced</li>
+            <li>kVp = quality (penetrating power) | mA = quantity of X-rays</li>
+            <li>Rotating anode uses Prepare → Expose sequence</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="section-card">
+        <h2>✅ Quick Revision Checklist</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Purpose of equipment engineering</li>
+            <li>Visible and hidden components of an X-ray room</li>
+            <li>Linear vs Switch-Mode Power Supply</li>
+            <li>Four stages of SMPS</li>
+            <li>Advantages and limitations of SMPS</li>
+            <li>Mains circuit vs Filament circuit</li>
+            <li>Journey of electricity (mains switch → circuit breaker → compensator → autotransformer → timer → step-up transformer → rectifiers → tube)</li>
+            <li>Components of the filament circuit</li>
+            <li>Stationary vs rotating anode (Prepare → Expose)</li>
+            <li>Why rectification is needed</li>
+            <li>Complete sequence of X-ray production</li>
+          </ul>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Final Memory Line</strong>
+          <p>Power → Control → Heat → Release → Accelerate → Collide → X-ray</p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='note1q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note2.html'">Next Page →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    // Load saved theme or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
