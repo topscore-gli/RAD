@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 312 - The Mains Circuit</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:20px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:18px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{
+      background:var(--accent-tertiary);
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">RAD 312</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>⚡ The Mains Circuit</h1>
+        <p>Power Entry • Switches • Voltage Stabilization • Uniform X-ray Beam</p>
+      </div>
+
+      <!-- ONE-SENTENCE SUMMARY -->
+      <div class="section-card">
+        <h2>📋 One-Sentence Summary</h2>
+        <p>The mains circuit creates a stable potential difference between the cathode and anode of the X-ray tube so that electrons can be accelerated uniformly to produce a consistent X-ray beam.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Overall Flow</strong>
+          <p>Mains supply → Mains switch → Line voltage compensator → Mains circuit → Cathode–anode potential difference → X-ray production</p>
+        </div>
+      </div>
+
+      <!-- 1. The Mains Circuit -->
+      <div class="section-card">
+        <h2>1️⃣ The Mains Circuit</h2>
+        <p>The mains circuit is completely separate from the filament circuit.</p>
+        
+        <div class="highlight-box">
+          <p><strong>Main function:</strong> To create a potential difference (voltage) between the cathode and anode of the X-ray tube.</p>
+        </div>
+
+        <p>This potential difference provides the electrical force that drives electrons from the cathode toward the anode during X-ray production.</p>
+
+        <h3>Why must the voltage be constant?</h3>
+        <p>A constant potential difference is required to produce a <strong>uniform X-ray beam</strong>.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine water flowing through a pipe. If the water pressure keeps changing, the amount of water coming out will fluctuate. In the same way, if the voltage supplied to the X-ray tube fluctuates, the X-ray output becomes inconsistent.<br><br>
+          Stable voltage → stable electron acceleration → more uniform X-ray production.</p>
+        </div>
+      </div>
+
+      <!-- 2. The Mains Supply -->
+      <div class="section-card">
+        <h2>2️⃣ The Mains Supply</h2>
+        <p>The mains supply is the electrical source that powers the X-ray machine.</p>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Type of X-ray Unit</th>
+              <th>Supply Voltage</th>
+            </tr>
+            <tr>
+              <td>Low-powered / Mobile / Portable</td>
+              <td>≈ 240 V (wall socket)</td>
+            </tr>
+            <tr>
+              <td>High-powered units</td>
+              <td>≈ 415 V (combined line voltages)</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of electricity like fuel for a vehicle.<br>
+          A small vehicle needs less power.<br>
+          A large vehicle requires a greater power supply.<br>
+          The same principle applies to low-powered versus high-powered X-ray equipment.</p>
+        </div>
+      </div>
+
+      <!-- 3. Types of Mains Switches -->
+      <div class="section-card">
+        <h2>3️⃣ Types of Mains Switches</h2>
+        <p>Six possible types of switches may be found in an X-ray room:</p>
+
+        <h3>3.1 Toggle Switch</h3>
+        <p>A simple mechanical switch operated by moving a lever.</p>
+        <ul>
+          <li>Moving the lever completes the circuit → electricity flows</li>
+          <li>Moving it the other way breaks the circuit → electricity stops</li>
+        </ul>
+        <p>Common in smaller or older systems for basic ON/OFF control.</p>
+        <div class="highlight-box">
+          <p><strong>Advantage:</strong> Simple, reliable, easy to operate<br>
+          <strong>Limitation:</strong> Manual only – not ideal for remote control or automation</p>
+        </div>
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Just like a traditional wall light switch – you physically flip it to turn something on or off.</p>
+        </div>
+
+        <h3>3.2 Push-Button Switch</h3>
+        <p>Operated by pressing a button. Two forms exist:</p>
+        <ul>
+          <li><strong>Momentary</strong> – Circuit is closed only while the button is held down</li>
+          <li><strong>Latching</strong> – Stays ON or OFF until pressed again</li>
+        </ul>
+        <p>Often used for emergency shut-offs.</p>
+        <div class="highlight-box">
+          <p><strong>Advantage:</strong> Rapid one-touch operation<br>
+          <strong>Limitation:</strong> Better for quick actions than continuous manual control</p>
+        </div>
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>A doorbell is a momentary switch. A push-to-start appliance button is closer to a latching switch.</p>
+        </div>
+
+        <h3>3.3 Knife Switch</h3>
+        <p>A large manual switch with a lever (blade) that is physically moved to connect or disconnect the circuit.</p>
+        <p>Designed to handle high currents. Common in heavy-duty or older X-ray machines.</p>
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine a physical metal bridge connecting two roads.<br>
+          Bridge down → current can pass<br>
+          Bridge lifted → current cannot pass</p>
+        </div>
+
+        <h3>3.4 Circuit Breaker Switch</h3>
+        <p>Performs two important jobs:</p>
+        <ul>
+          <li><strong>Switching</strong> – Can open or close the circuit</li>
+          <li><strong>Protection</strong> – Automatically opens the circuit during overload or short circuit</li>
+        </ul>
+        <p>Protects the machine, the electrical system, and the operator. Can usually be reset manually after tripping.</p>
+        <div class="highlight-box">
+          <p><strong>Advantage:</strong> Provides automatic protection and can be reset<br>
+          <strong>Limitation:</strong> Bulkier and more expensive than simple switches</p>
+        </div>
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>A normal switch only does what you tell it.<br>
+          A circuit breaker is like an automatic security guard that shuts the system down when something is wrong.</p>
+        </div>
+
+        <h3>3.5 Magnetic Contactor</h3>
+        <p>An electrically operated switch. A small control signal creates a magnetic field that opens or closes the main power contacts.</p>
+        <p>Widely used when remote or automatic control of high power is needed.</p>
+        <div class="highlight-box">
+          <p><strong>Advantage:</strong> Handles high voltage/current, supports automation and remote control<br>
+          <strong>Limitation:</strong> More complex and expensive than simple manual switches</p>
+        </div>
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Like a very heavy door. Instead of pushing the heavy door yourself, you press a small button and a motor opens it for you. A small control signal operates a contactor that controls a much larger power circuit.</p>
+        </div>
+
+        <h3>3.6 Remote-Controlled Switch</h3>
+        <p>Allows the operator to control the switch from a distance (wireless, control panel, or computer interface).</p>
+        <p>Found in advanced high-end X-ray systems.</p>
+        <div class="highlight-box">
+          <p><strong>Advantage:</strong> Remote operation, automation, greater flexibility<br>
+          <strong>Limitation:</strong> More expensive and requires specialized installation</p>
+        </div>
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Just like a television remote – you control the power from a distance without physically touching the equipment.</p>
+        </div>
+      </div>
+
+      <!-- 4. Quick Comparison -->
+      <div class="section-card">
+        <h2>4️⃣ Quick Comparison of Key Switches</h2>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Component</th>
+              <th>Main Idea</th>
+            </tr>
+            <tr>
+              <td><strong>Circuit Breaker</strong></td>
+              <td>Switching + electrical protection</td>
+            </tr>
+            <tr>
+              <td><strong>Magnetic Contactor</strong></td>
+              <td>Electrically controlled switching of high power</td>
+            </tr>
+            <tr>
+              <td><strong>Remote-controlled Switch</strong></td>
+              <td>Allows switching from a distance</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Easy Memory Trick</strong>
+          <p>Breaker = Protect<br>
+          Contactor = Control<br>
+          Remote switch = Distance</p>
+        </div>
+      </div>
+
+      <!-- 5. Line Voltage Compensator -->
+      <div class="section-card">
+        <h2>5️⃣ Line Voltage Compensator</h2>
+        <p>Located between the mains supply and the mains circuit.</p>
+
+        <div class="highlight-box">
+          <p><strong>Purpose:</strong> To stabilize fluctuations in the voltage coming from the mains supply.</p>
+        </div>
+
+        <p>The X-ray tube needs a stable potential difference. If the incoming voltage keeps changing, the voltage supplied to the tube will also fluctuate, affecting X-ray quality.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine a water tank supplying a machine. If the city water pressure constantly changes (high → low → high), the machine will not run consistently. A pressure regulator keeps the pressure stable.<br>
+          A line voltage compensator does the same job for electrical voltage.</p>
+        </div>
+      </div>
+
+      <!-- HIGH-YIELD -->
+      <div class="section-card">
+        <h2>⭐ High-Yield Points</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Mains circuit is separate from the filament circuit</li>
+            <li>Main job: create potential difference between cathode and anode</li>
+            <li>Voltage must stay constant → uniform X-ray beam</li>
+            <li>240 V → low-powered / mobile / portable units</li>
+            <li>415 V → high-powered units</li>
+            <li>Toggle = simple manual lever</li>
+            <li>Push-button = press (momentary or latching)</li>
+            <li>Knife = large physical blade for high current</li>
+            <li>Circuit breaker = switching + automatic protection</li>
+            <li>Magnetic contactor = electrically controlled high-power switching</li>
+            <li>Remote-controlled = operate from a distance</li>
+            <li>Line voltage compensator = stabilizes incoming voltage fluctuations</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="section-card">
+        <h2>✅ Quick Revision Checklist</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Function of the mains circuit</li>
+            <li>Why constant voltage is important</li>
+            <li>240 V vs 415 V supply</li>
+            <li>Six types of mains switches and their key features</li>
+            <li>Difference between circuit breaker, magnetic contactor and remote switch</li>
+            <li>Function and location of the line voltage compensator</li>
+            <li>Overall flow from mains supply to X-ray production</li>
+          </ul>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Final Memory Line</strong>
+          <p>Stable voltage from the mains circuit = stable electron acceleration = uniform X-ray beam</p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='note2q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note3.html'">Next Page →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
