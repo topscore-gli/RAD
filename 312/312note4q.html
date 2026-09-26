@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High-Tension Cables, Plugs & Sockets</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:14px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="exit()">←</button>
+      <h1>High-Tension Cables</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 20:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 1200, PASS: 60 };
+
+const SECTIONS = {
+  0: "A: Purpose & Requirements",
+  10: "B: Cable Construction",
+  22: "C: Insulation",
+  27: "D: Earth Braid & Outer Cover",
+  37: "E: Plugs, Sockets & Connections"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  {q:"What is the main reason special cables are required in X-ray equipment?",o:["X-ray equipment uses low voltage","X-ray equipment uses very high voltage","Ordinary cables are too long","Cables must produce X-rays"],a:1,e:"Special high-tension cables are needed because X-ray equipment operates at very high voltages."},
+  {q:"High-tension cables are primarily used to connect the:",o:["Control panel to the table","X-ray tube to the high-tension generator","Patient to the generator","Filament to the control panel"],a:1,e:"They carry the high voltage from the generator tank to the X-ray tube."},
+  {q:"One major requirement of a high-tension cable is to:",o:["Increase voltage loss","Allow external leakage","Transmit high voltage without insulation failure","Produce heat"],a:2,e:"The cable must safely transmit high voltage without insulation breakdown."},
+  {q:"A high-tension cable should retain the high voltage:",o:["Outside the cable","Within the conduit","In the room","In the earth braid only"],a:1,e:"The high voltage must be contained within the cable."},
+  {q:"A high-tension cable should minimize:",o:["Insulation","Cable length","Voltage loss","Earth connection"],a:2,e:"Voltage loss along the cable should be kept as low as possible."},
+  {q:"Which of the following is NOT listed as a requirement of high-tension cables?",o:["Safe transmission of high voltage","Prevention of external leakage","Minimization of voltage loss","Production of X-rays"],a:3,e:"Production of X-rays is not a function of the cable."},
+  {q:"Heavy-duty high-tension cables may be used with:",o:["Three-phase generators","Mobile phones","Low-voltage lamps","Ordinary household sockets"],a:0,e:"Heavy-duty cables are used with high-powered three-phase generators."},
+  {q:"Low-duty cables may be used for:",o:["Three-phase generators only","Mobile and portable equipment","High-powered industrial generators only","Hospital lighting systems"],a:1,e:"Lighter cables are suitable for mobile and portable X-ray units."},
+  {q:"Which of the following is associated with a high-tension cable system?",o:["High-tension plug","High-tension socket","High-tension cable","All of the above"],a:3,e:"The complete system includes the cable, plug and socket."},
+  {q:"High-tension cables are designed to withstand:",o:["Heat and stress","Water pressure only","Low temperatures only","Mechanical movement only"],a:0,e:"They must withstand both heat and mechanical stress."},
+
+  {q:"The central conductor of a high-tension cable carries the:",o:["Earth connection only","Electrical supply","Mechanical load","Outer covering"],a:1,e:"The central conductor(s) carry the high-voltage electrical supply."},
+  {q:"The central conductors are made primarily from:",o:["Aluminium sheets","Copper wires","Iron rods","Plastic fibres"],a:1,e:"Copper wires are used because of their low resistance and good conductivity."},
+  {q:"The copper wires are wrapped with:",o:["Cotton only","High-grade plastic insulation","Metal foil only","Rubber tubing only"],a:1,e:"Each conductor is insulated with high-grade plastic."},
+  {q:"Why are several copper wires used instead of one large wire?",o:["To increase voltage leakage","To reduce heat associated with resistance","To eliminate insulation","To make the cable electrically unsafe"],a:1,e:"Multiple thinner wires reduce resistance heating compared with a single large conductor."},
+  {q:"According to the material, resistance in a conductor is related to its:",o:["Colour","Diameter","Length only","Outer covering only"],a:1,e:"Resistance is inversely related to the cross-sectional area (diameter) of the conductor."},
+  {q:"The cable used for the anode section traditionally has:",o:["One central core","Two central cores","Three central cores","Four central cores"],a:0,e:"The anode cable traditionally contains a single central conductor."},
+  {q:"The cable used for the cathode section traditionally has:",o:["One central core","Two central cores","Three central cores","Five central cores"],a:2,e:"The cathode cable traditionally has three central cores (for the two filaments and common connection)."},
+  {q:"The three cathode cores are associated with:",o:["Three different generators","Broad focus, fine focus and central filament connection","Three earth connections","Three outer cable covers"],a:1,e:"They serve the broad-focus filament, fine-focus filament and the common return."},
+  {q:"The central conductors are insulated from one another by:",o:["A high-grade plastic insulator","The gland nut","The earth braid alone","The socket groove"],a:0,e:"High-grade plastic insulation separates the individual conductors."},
+  {q:"Modern cables described in the material are made with:",o:["One core only","Two cores only","Three cores","Five cores"],a:2,e:"Modern high-tension cables are commonly three-core designs."},
+  {q:"One reason for using three-core cables nowadays is:",o:["Increased cost of production","Ease of replacement","Increased voltage leakage","Reduced insulation"],a:1,e:"Three-core cables simplify stock-holding and replacement."},
+  {q:"Another reason for the modern three-core design is:",o:["Reduction in production cost","Increased cable weight","Increased resistance","Increased voltage loss"],a:0,e:"Standardising on three-core cables also reduces manufacturing cost."},
+
+  {q:"Around the plastic cores is a:",o:["Thin metallic wire","Thick inner insulating covering","Second generator","Socket pin"],a:1,e:"A thick layer of inner insulation surrounds the plastic-insulated cores."},
+  {q:"Increasing the thickness of the inner insulation makes the cable:",o:["Smaller","Bulkier","More flexible","Cheaper"],a:1,e:"Thicker insulation increases the overall diameter and bulk of the cable."},
+  {q:"A thicker inner insulating covering makes the cable:",o:["Less expensive","More expensive","Weightless","Electrically exposed"],a:1,e:"More insulation material increases the cost of the cable."},
+  {q:"According to the material, increasing insulation thickness makes the cable:",o:["More flexible","Less flexible","Shorter","More conductive"],a:1,e:"Thicker insulation reduces flexibility."},
+  {q:"Which combination is correct regarding thicker insulation?",o:["Less bulky, cheaper, more flexible","Bulkier, more expensive, less flexible","Smaller, cheaper, less flexible","Bulkier, cheaper, more flexible"],a:1,e:"Thicker insulation produces a bulkier, more expensive and less flexible cable."},
+
+  {q:"The layer surrounding the inner insulating covering is the:",o:["Central conductor","Earth cable braid","Plastic core","Gland nut"],a:1,e:"The earth cable braid surrounds the inner insulation."},
+  {q:"The earth cable braid is usually made from:",o:["Several strands of woven wire","A single plastic tube","Copper tubing only","Cotton fibres only"],a:0,e:"It consists of many strands of woven wire forming a flexible braid."},
+  {q:"The earth cable braid is connected to:",o:["The patient","Earth","The filament only","The control panel only"],a:1,e:"The braid is connected to earth (ground)."},
+  {q:"The earth cable braid forms an:",o:["Earthed metal screen","X-ray generator","Exposure switch","Insulating plug"],a:0,e:"It creates a continuous earthed metallic screen around the high-voltage conductors."},
+  {q:"What is the main protective role of the earth cable braid?",o:["To carry the main X-ray beam","To form a protective earthed metallic screen","To generate heat","To increase voltage loss"],a:1,e:"The earthed braid acts as a safety screen that prevents external leakage of high voltage."},
+
+  {q:"The outer cable cover is the:",o:["Innermost component","Outermost covering","Central conductor","Earth connection only"],a:1,e:"The outer cover is the final protective layer of the cable."},
+  {q:"The outer cable cover may be made of:",o:["Plastic or cotton braid","Copper or iron only","Glass only","Aluminium only"],a:0,e:"Traditional covers used cotton braid; modern covers use plastic."},
+  {q:"Which material is stated to be used nowadays for the outer cable cover?",o:["Cotton","Plastic","Glass","Wood"],a:1,e:"Modern high-tension cables use a durable plastic outer cover."},
+  {q:"Plastic is used for the outer cover mainly because of its:",o:["Conductivity","Durability","Ability to generate X-rays","High voltage production"],a:1,e:"Plastic provides good mechanical durability and protection."},
+  {q:"The outer cable cover protects the:",o:["X-ray tube filament","Flexible earth cable braid","Patient","Generator tank only"],a:1,e:"Its main job is to protect the earth braid from mechanical damage."},
+
+  {q:"High-tension cables are connected to the X-ray tube housing and generator tank through a:",o:["Light switch","High-tension socket","Fuse","Transformer core"],a:1,e:"Connection is made via high-tension sockets on the tube housing and generator."},
+  {q:"The high-tension socket consists of:",o:["One pin","Two pins","Three pins","Five pins"],a:2,e:"The socket has three pins corresponding to the three conductors."},
+  {q:"The three socket pins correspond to the:",o:["Three central conductors","Three outer covers","Three earth braids","Three gland nuts"],a:0,e:"Each pin connects to one of the three central conductors."},
+  {q:"The outer acceptor groove of the socket indicates:",o:["Cable colour","Cable orientation","Cable temperature","Cable resistance"],a:1,e:"The groove ensures the cable is inserted in the correct orientation."},
+  {q:"What component helps cover the bore into which the cable socket fits?",o:["Central conductor","Snap ring","Earth braid","Inner insulation"],a:1,e:"A snap ring helps retain and seal the connection."},
+  {q:"The body of the high-tension plug is connected to the:",o:["Outer cable cover only","Earth cable braid","Filament only","Patient table"],a:1,e:"The metal body of the plug is bonded to the earth braid."},
+  {q:"The overhanging metal screw cap is called the:",o:["Snap ring","Gland nut","Central conductor","Earth screen"],a:1,e:"The gland nut is the large screw cap that secures the connection."},
+  {q:"The gland nut is used primarily to:",o:["Produce X-rays","Screw the cable and socket into place","Increase voltage","Insulate the central conductor"],a:1,e:"It screws the plug firmly into the socket, locking the connection."},
+  {q:"The gland nut slides loosely over the:",o:["Central conductor","Outer cable covering","X-ray tube filament","Earth terminal only"],a:1,e:"The gland nut slides over the outer cable covering before being tightened."},
+  {q:"The cable screw makes contact with the:",o:["Inner insulation","Earth cable braid","Copper filament","Plastic core"],a:1,e:"The cable screw contacts the earth braid to complete the earth path."},
+  {q:"Contact between the cable screw and earth braid helps form a:",o:["High-voltage generator","Continuous earthed metal screen","Filament circuit","Cooling system"],a:1,e:"It maintains continuity of the earthed metallic screen."},
+  {q:"The continuous earthed metal screen is continuous with the body of the:",o:["X-ray tube and high-tension generator","Patient and table","Control panel and exposure switch only","Radiographer and patient"],a:0,e:"The earth screen is continuous with the metal housings of the tube and generator."},
+  {q:"Which sequence correctly represents the major layers of a high-tension cable from inside to outside?",o:["Outer cover → earth braid → insulation → conductor","Conductor → inner insulation → earth braid → outer cover","Earth braid → conductor → outer cover → insulation","Insulation → outer cover → conductor → earth braid"],a:1,e:"Correct order from centre outwards: central conductor(s) → inner insulation → earth braid → outer cover."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('ht_cables_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/50';
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('ht_cables_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of High-Tension Cables, Plugs and Sockets! You have a strong grasp of construction, insulation, earth braid and connections. Superb work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review the cable layers and the function of the gland nut/earth braid to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on the sequence of cable layers, the difference between anode and cathode cables, and how the earth screen is maintained. Practice will raise your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this topic has many construction details. Go through the explanations carefully, revise the key points, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 10, 22, 27, 37, 50];
+  var sectionNames = [
+    "A: Purpose & Requirements",
+    "B: Cable Construction",
+    "C: Insulation",
+    "D: Earth Braid & Outer Cover",
+    "E: Plugs, Sockets & Connections"
+  ];
+
+  for (var s = 0; s < 5; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('ht_cables_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('ht_cables_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('ht_cables_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
