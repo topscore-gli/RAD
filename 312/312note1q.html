@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>General Introduction to X-ray Equipment Engineering</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:14px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="exit()">←</button>
+      <h1>X-ray Equipment Engineering</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 20:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 1200, PASS: 60 };
+
+const SECTIONS = {
+  0: "A: Aim & Basic X-ray Production",
+  9: "B: Power Supplies (Linear & SMPS)",
+  24: "C: High Voltage, Tube & Filament",
+  33: "D: Mains & Filament Circuits",
+  46: "E: Rotating Anode, Rectifiers & Timer"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  {q:"What is the main aim of equipment engineering in X-ray imaging?",o:["To study patient positioning only","To identify components that make X-ray generation possible","To calculate patient weight","To design examination rooms"],a:1,e:"Equipment engineering focuses on identifying the components that enable X-ray generation."},
+  {q:"X-radiation is produced when fast-moving electrons:",o:["Pass through the control panel","Hit a target","Enter the transformer","Strike the filament"],a:1,e:"X-rays are produced when high-speed electrons strike a target (anode)."},
+  {q:"Which two types of X-rays are mentioned in the material?",o:["Primary and secondary radiation","Scatter and leakage radiation","Bremsstrahlung and characteristic X-rays","Alpha and beta radiation"],a:2,e:"The two types produced in the tube are bremsstrahlung and characteristic X-rays."},
+  {q:"Which sequence correctly represents the basic X-ray production process?",o:["X-ray tube → Controls → Power supply → X-rays","Controls → Power supply → X-rays → X-ray tube","Power supply → Controls → X-ray tube → X-rays","X-rays → Power supply → Controls → X-ray tube"],a:2,e:"Power supply feeds the controls, which feed the X-ray tube, which produces X-rays."},
+  {q:"Which of the following is normally visible in a modern X-ray room?",o:["High-tension cable only","X-ray tube and housing","Step-up transformer only","Rectifier only"],a:1,e:"The X-ray tube and its housing are visible components in the room."},
+  {q:"Which component is used to position the patient during an examination?",o:["Control panel","High-tension cable","X-ray examination couch","Rectifier"],a:2,e:"The examination couch (table) is used to position the patient."},
+  {q:"The X-ray circuit is primarily designed to convert:",o:["X-rays into electrical energy","Electrical energy into X-rays","Heat into electricity","Mechanical energy into sound"],a:1,e:"The circuit converts electrical energy into X-rays."},
+  {q:"What type of current is normally supplied by the mains?",o:["Direct current","Alternating current","Static current","Pulsed current only"],a:1,e:"The mains supply is alternating current (AC)."},
+  {q:"The power supply converts mains AC into suitable:",o:["Mechanical energy","DC power","Sound energy","Magnetic energy only"],a:1,e:"It converts mains AC into the required form of DC power."},
+
+  {q:"Which two types of power supplies are identified in the material?",o:["AC and DC supplies","Linear and switch-mode power supplies","Primary and secondary supplies","Filament and exposure supplies"],a:1,e:"The two types are linear and switch-mode power supplies (SMPS)."},
+  {q:"A linear power supply uses a transformer, rectifier and:",o:["Timer","Filter","Filament","Autotransformer only"],a:1,e:"A linear supply includes a transformer, rectifier and filter."},
+  {q:"SMPS stands for:",o:["Standard Main Power System","Switch Mode Power Supply","Secondary Mains Protection System","Switching Mechanical Power Source"],a:1,e:"SMPS = Switch Mode Power Supply."},
+  {q:"SMPS operates mainly using:",o:["Low-frequency mechanical switching","High-frequency switching","Chemical reactions","Heat conduction"],a:1,e:"SMPS uses high-frequency electronic switching."},
+  {q:"Which electronic component is specifically mentioned as being used for switching in an SMPS?",o:["MOSFET","Diaphragm","Photocathode","Ammeter"],a:0,e:"MOSFETs are commonly used as the switching devices."},
+  {q:"What is the first stage of an SMPS when the input is AC?",o:["Transformation","Filtering","Input rectification","Output regulation"],a:2,e:"The first stage is input rectification of the AC supply."},
+  {q:"What is the purpose of high-frequency switching in an SMPS?",o:["To heat the X-ray tube","To control the flow of current to the transformer","To produce X-rays directly","To measure tube current"],a:1,e:"High-frequency switching controls the current delivered to the transformer."},
+  {q:"In the transformation stage of an SMPS, the transformer can:",o:["Only increase voltage","Only decrease voltage","Step voltage up or down","Convert X-rays to electricity"],a:2,e:"The transformer can step the voltage either up or down as required."},
+  {q:"What is the purpose of filtering in an SMPS?",o:["To increase patient dose","To reduce noise and smooth the voltage","To heat the filament","To increase the size of the transformer"],a:1,e:"Filtering reduces noise and smooths the output voltage."},
+  {q:"One major advantage of SMPS is:",o:["Low efficiency","Large size","High efficiency","Inability to regulate voltage"],a:2,e:"SMPS are highly efficient."},
+  {q:"Why can SMPS systems use smaller transformers?",o:["They operate at high frequencies","They use no electricity","They eliminate rectification","They operate only at 50 Hz"],a:0,e:"High-frequency operation allows much smaller transformers."},
+  {q:"Which of the following is an advantage of SMPS?",o:["Wide input voltage range","Very large size","Poor voltage regulation","High heat production only"],a:0,e:"SMPS can accept a wide range of input voltages."},
+  {q:"According to the material, SMPS can accommodate mains supplies such as:",o:["12 V and 24 V","50 V and 60 V","110 V and 230 V","500 V and 1000 V only"],a:2,e:"They can handle common mains supplies of 110 V and 230 V."},
+  {q:"Stable power is particularly important in X-ray equipment because it helps ensure:",o:["Uniform X-ray production","Faster patient movement","Larger examination rooms","Lower room temperature"],a:0,e:"Stable power produces consistent and uniform X-ray output."},
+  {q:"Which of the following is a limitation of SMPS?",o:["Electromagnetic interference","High efficiency","Compact size","Wide input range"],a:0,e:"A known limitation is the generation of electromagnetic interference (EMI)."},
+
+  {q:"What is the approximate high-voltage range supplied to the X-ray tube according to the material?",o:["1–5 kV","10–20 kV","40–150 kV","500–1000 kV"],a:2,e:"The high-voltage range is typically 40–150 kV."},
+  {q:"The high-voltage generator converts standard mains voltage into:",o:["Low filament current","Required high voltage","Sound energy","Mechanical energy"],a:1,e:"It converts mains voltage into the high kV needed by the tube."},
+  {q:"Which of the following exposure factors can be selected on the control panel?",o:["kVp, mA and exposure time","Temperature, humidity and pressure","Patient height and weight only","Filtration and room size only"],a:0,e:"The main selectable factors are kVp, mA and exposure time."},
+  {q:"What is the main function of the filament circuit?",o:["To rotate the anode","To heat the filament and release electrons","To measure kVp","To rectify the mains supply"],a:1,e:"The filament circuit heats the filament so that electrons are released by thermionic emission."},
+  {q:"The filament is located in the:",o:["Anode","Control panel","Cathode","High-tension cable"],a:2,e:"The filament is part of the cathode assembly."},
+  {q:"The release of electrons from a heated filament is called:",o:["Ionization","Rectification","Thermionic emission","Electromagnetic induction"],a:2,e:"The process is called thermionic emission."},
+  {q:"In the X-ray tube, electrons travel from the:",o:["Anode to cathode","Cathode to anode","Transformer to filament","Control panel to anode"],a:1,e:"Electrons travel from the negative cathode to the positive anode."},
+  {q:"The component that serves as the target for accelerated electrons is the:",o:["Filament","Cathode","Anode","Rectifier"],a:2,e:"The anode is the target that the electrons strike."},
+  {q:"What is the function of high-tension cables?",o:["To position the patient","To transmit high voltage between the generator and X-ray tube","To regulate room temperature","To measure exposure time"],a:1,e:"High-tension cables carry the high voltage from the generator to the tube."},
+
+  {q:"How many major circuits are identified in the X-ray machine setup?",o:["One","Two","Three","Four"],a:1,e:"There are two major circuits: the mains circuit and the filament circuit."},
+  {q:"The two major circuits are the:",o:["Primary and secondary circuits","Mains and filament circuits","Exposure and timer circuits","Anode and cathode circuits"],a:1,e:"The two major circuits are the mains circuit and the filament circuit."},
+  {q:"The mains circuit controls the:",o:["Heat of the filament only","Potential difference between cathode and anode","Speed of the patient couch","Temperature of the room"],a:1,e:"The mains circuit controls the kV (potential difference) across the tube."},
+  {q:"The mains circuit is divided into:",o:["Filament and anode sections","Primary/low-voltage and secondary/high-voltage sections","AC and mechanical sections","Exposure and preparation sections only"],a:1,e:"It is divided into primary (low-voltage) and secondary (high-voltage) sections."},
+  {q:"What separates the primary and secondary sections of the mains circuit?",o:["Filament","High-tension step-up transformer","Control panel","Circuit breaker"],a:1,e:"The high-tension step-up transformer separates the two sections."},
+  {q:"What is the function of the line voltage compensator?",o:["To correct variations in mains voltage","To heat the filament","To produce characteristic radiation","To rotate the anode"],a:0,e:"It corrects fluctuations in the incoming mains voltage."},
+  {q:"Which component allows adjustment of the voltage supplied to the primary winding of the high-tension transformer?",o:["Filament ammeter","Autotransformer","Rectifier","Timer"],a:1,e:"The autotransformer is used to select the voltage applied to the primary of the HT transformer."},
+  {q:"The kVp selector is associated with the:",o:["Autotransformer","Filament ammeter only","High-tension cable only","Examination couch"],a:0,e:"The kVp selector works with the autotransformer."},
+  {q:"What determines how long the X-ray circuit remains closed?",o:["kVp selector","Timer","Filament stabilizer","Step-down transformer"],a:1,e:"The timer determines the duration for which the circuit remains closed."},
+  {q:"The high-tension transformer:",o:["Steps voltage down","Steps voltage up","Measures filament current","Stops thermionic emission"],a:1,e:"It is a step-up transformer that produces the high kV."},
+  {q:"What is the function of the filament stabilizer?",o:["To correct variations in line voltage","To increase exposure time","To rotate the anode","To produce high voltage"],a:0,e:"The filament stabilizer corrects variations that would affect filament heating."},
+  {q:"The step-down transformer in the filament circuit:",o:["Steps voltage up and current down","Steps voltage down and current up","Steps both voltage and current down","Has no effect on voltage or current"],a:1,e:"It steps the voltage down and increases the current to heat the filament."},
+  {q:"Which instrument measures filament current?",o:["kVp meter","Filament ammeter","Circuit breaker","Timer"],a:1,e:"A filament ammeter measures the current flowing through the filament."},
+
+  {q:"Which type of X-ray tube has an anode that spins during exposure?",o:["Stationary anode tube","Rotating anode tube","Fixed cathode tube","Linear tube"],a:1,e:"A rotating-anode tube has an anode that spins during exposure."},
+  {q:"The two stages of exposure in a rotating anode X-ray tube are:",o:["Heat and cool","Prepare and expose","Start and stop","Charge and discharge"],a:1,e:"The two stages are “prepare” (anode acceleration) and “expose”."},
+  {q:"Why are rectifiers necessary in the X-ray circuit?",o:["To allow the voltage polarity to reverse","To maintain the required direction/polarity of the electrical supply","To heat the filament","To increase exposure time"],a:1,e:"Rectifiers ensure that the high voltage applied to the tube has the correct polarity."},
+  {q:"What happens when the selected exposure time expires?",o:["The timer breaks/opens the circuit and X-ray production stops","The voltage continues increasing indefinitely","The filament becomes permanently heated","The anode becomes the cathode"],a:0,e:"The timer opens the circuit, terminating X-ray production."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('xray_intro_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/50';
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('xray_intro_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of the General Introduction to X-ray Equipment Engineering! You have a strong grasp of power supplies, circuits and tube operation. Superb work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review SMPS stages and the difference between mains and filament circuits to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on the sequence of X-ray production, the advantages of SMPS, and the roles of the autotransformer and filament circuit. Practice will raise your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this is a foundational topic with many important concepts. Go through the explanations carefully, revise the key points, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 9, 24, 33, 46, 50];
+  var sectionNames = [
+    "A: Aim & Basic X-ray Production",
+    "B: Power Supplies (Linear & SMPS)",
+    "C: High Voltage, Tube & Filament",
+    "D: Mains & Filament Circuits",
+    "E: Rotating Anode, Rectifiers & Timer"
+  ];
+
+  for (var s = 0; s < 5; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('xray_intro_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('xray_intro_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('xray_intro_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
