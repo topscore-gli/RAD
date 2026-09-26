@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exposure Factor Selection</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:15px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="exit()">←</button>
+      <h1>Exposure Factor Selection</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 20:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 1200, PASS: 60 };
+
+const SECTIONS = {
+  0: "A: Exposure Factors & X-ray Basics",
+  6: "B: Kilovoltage Effects",
+  12: "C: Autotransformer",
+  20: "D: Major/Minor Selectors & Variac",
+  28: "E: Voltage Losses",
+  40: "F: kV Compensation & Indicators"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  {q:"Which of the following is NOT listed as an exposure factor?",o:["Kilovoltage","Milliamperage","Exposure time","Wavelength"],a:3,e:"The three main exposure factors are kV, mA and time. Wavelength is a property of the radiation, not a selectable exposure factor."},
+  {q:"The three major exposure factors mentioned in the material are:",o:["kV, mA and time","kV, resistance and power","mA, resistance and wavelength","Time, frequency and wavelength"],a:0,e:"The three major exposure factors are kilovoltage (kV), milliamperage (mA) and exposure time."},
+  {q:"According to the material, X-rays occupy approximately what wavelength range?",o:["0.01–10 μm","10–100 μm","100–1000 μm","0.1–1 mm"],a:0,e:"X-rays have wavelengths in the approximate range of 0.01–10 μm."},
+  {q:"The photon energy range given for X-rays is approximately:",o:["1–10 eV","10–50 eV","100 eV–100 keV","1–10 MeV"],a:2,e:"X-ray photon energies typically range from about 100 eV to 100 keV."},
+  {q:"Soft X-rays are described in the material as being used for:",o:["Airport security only","X-ray crystallography and mammography","Radiotherapy only","Industrial welding"],a:1,e:"Soft X-rays are used for applications such as X-ray crystallography and mammography."},
+  {q:"Hard X-rays are used for all of the following EXCEPT:",o:["Routine radiography","Radiotherapy","Airport baggage inspection","Measuring blood pressure"],a:3,e:"Hard X-rays are used in radiography, radiotherapy and baggage inspection, but not for measuring blood pressure."},
+
+  {q:"When kilovoltage is selected, the potential difference is established between the:",o:["Filament and rotor","Cathode and anode","Stator and rotor","Transformer and rectifier"],a:1,e:"Selecting kV sets the potential difference between the cathode and the anode of the X-ray tube."},
+  {q:"Increasing the potential difference between the cathode and anode causes electrons to:",o:["Lose kinetic energy","Move more slowly","Gain more kinetic energy","Stop moving"],a:2,e:"A higher potential difference accelerates the electrons more strongly, giving them greater kinetic energy."},
+  {q:"The maximum energy of an X-ray photon is limited by the:",o:["Size of the filament","Kinetic energy of the incident electron","Exposure time alone","Resistance of the control panel"],a:1,e:"The maximum photon energy cannot exceed the kinetic energy of the electrons striking the target."},
+  {q:"The kV selection primarily determines the:",o:["Penetrating power of the X-ray beam","Size of the X-ray tube","Exposure room temperature","Filament colour"],a:0,e:"Kilovoltage is the main factor controlling the penetrating power of the X-ray beam."},
+  {q:"A radiograph produced using excessively low kV may be described as:",o:["Overpenetrated","Underpenetrated","Overexposed only","Magnified"],a:1,e:"Low kV produces insufficient penetration, resulting in an underpenetrated radiograph."},
+  {q:"A radiograph produced using excessively high kV may be described as:",o:["Underpenetrated","Overpenetrated","Unexposed","Distorted"],a:1,e:"High kV produces excessive penetration, resulting in an overpenetrated radiograph."},
+
+  {q:"The kV selector is located at the:",o:["X-ray tube","Autotransformer","Filament","Collimator"],a:1,e:"The kV selector is part of the autotransformer in the control circuit."},
+  {q:"An autotransformer consists of:",o:["Two completely separate windings","One winding serving as both primary and secondary","Three secondary windings only","A rectifier and capacitor only"],a:1,e:"An autotransformer has a single winding that acts as both primary and secondary."},
+  {q:"Why is voltage controlled before it is stepped up to very high voltage?",o:["To increase exposure time","To reduce the size of the X-ray tube","Because controlling it before stepping up is safer","To eliminate the need for rectification"],a:2,e:"It is safer and more practical to control the voltage at the low-voltage side before it is stepped up."},
+  {q:"In an autotransformer, tapings are made at:",o:["Specific locations along the winding","Only at the centre of the winding","The X-ray tube anode","The filament"],a:0,e:"Tapings are taken at specific points along the single winding to obtain different voltages."},
+  {q:"Which of the following may be used to control the tap selection?",o:["Control knob","Push button","Touch screen","All of the above"],a:3,e:"Tap selection can be controlled by a knob, push buttons or a touch screen."},
+  {q:"An autotransformer has 1000 turns and is supplied with 415 V. Approximately how many turns are required to obtain 200 V?",o:["200 turns","350 turns","482 turns","800 turns"],a:2,e:"Using the turns ratio: (200/415) × 1000 ≈ 482 turns."},
+  {q:"The formula used in the material for transformer turns and voltage is:",o:["Wp/Ws = Vs/Vp","Wp/Ws = Vp/Vs","Wp × Ws = Vp × Vs","Wp + Ws = Vp + Vs"],a:1,e:"The correct relationship is Wp/Ws = Vp/Vs."},
+  {q:"If 200 V is to be stepped up to 40 kV, the approximate turns ratio given is:",o:["1:20","1:50","1:100","1:200"],a:3,e:"40 000 V / 200 V = 200, so the turns ratio is approximately 1:200."},
+
+  {q:"The major kV selector typically changes the kilovoltage in:",o:["Smaller increments than the minor selector","Larger increments than the minor selector","No increments","Random increments"],a:1,e:"The major selector changes kV in larger steps than the minor selector."},
+  {q:"The example given for the major kV selector is an increment of:",o:["1 kV","5 kV","10 kV","20 kV"],a:2,e:"The material gives 10 kV as the typical major selector increment."},
+  {q:"The example given for the minor kV selector is an increment of:",o:["1 kV","5 kV","10 kV","15 kV"],a:0,e:"The minor selector typically changes kV in 1 kV steps."},
+  {q:"The spacing between tap points of the major selector is generally:",o:["Smaller than the minor selector","Greater than the minor selector","Equal to zero","Unrelated to the selector"],a:1,e:"Major selector taps are spaced further apart than those of the minor selector."},
+  {q:"Continuous adjustment of kV during exposure is particularly encountered during:",o:["Fluoroscopic procedures","Mammography only","Dental examinations only","Bone densitometry only"],a:0,e:"Continuous kV adjustment is commonly required during fluoroscopy."},
+  {q:"A Variac is a:",o:["Fixed-voltage transformer","Variable-voltage autotransformer","Rectifier","High-tension cable"],a:1,e:"A Variac is a continuously variable autotransformer."},
+  {q:"Instead of fixed tapings, a Variac uses a:",o:["Carbon brush slider","Copper plate","Lead shield","Tungsten target"],a:0,e:"A Variac uses a carbon brush that slides along the winding to select different voltages."},
+  {q:"Moving the carbon brush slider on a Variac changes the:",o:["Effective number of turns","Size of the X-ray tube","Target material","Exposure room temperature"],a:0,e:"Moving the brush changes the effective number of turns in the circuit, thereby changing the voltage."},
+
+  {q:"Which of the following is NOT one of the three reasons for kV reduction during exposure?",o:["Transformer losses","Tube current","Rectification","Patient positioning"],a:3,e:"The three causes of voltage drop are transformer losses, tube current and rectification. Patient positioning is not a cause."},
+  {q:"In a real transformer, energy may be lost through:",o:["Eddy currents and hysteresis","Sound and light only","Radiation and gravity","Filament evaporation only"],a:0,e:"Transformer losses include eddy currents and hysteresis losses."},
+  {q:"Transformer losses can cause the actual kV obtained to be:",o:["Exactly equal to the theoretical value in every case","Different from the theoretical value","Always twice the theoretical value","Zero"],a:1,e:"Because of losses, the actual kV delivered is usually different from the calculated theoretical value."},
+  {q:"The relationship between power, current and voltage is:",o:["P = I + V","P = I/V","P = IV","P = V − I"],a:2,e:"Power (P) equals current (I) multiplied by voltage (V): P = IV."},
+  {q:"If power is constant, increasing current causes voltage to:",o:["Increase","Decrease","Remain exactly the same","Become zero immediately"],a:1,e:"When power is constant, voltage and current are inversely related; higher current means lower voltage."},
+  {q:"Tube current in an X-ray tube is determined by the selected:",o:["kV","mA","Exposure room temperature","Wavelength"],a:1,e:"Tube current (mA) is set by the mA selector."},
+  {q:"Increasing mA causes the filament to release:",o:["Fewer electrons","More electrons","No electrons","Only photons"],a:1,e:"Higher mA increases filament heating and therefore thermionic emission of more electrons."},
+  {q:"The release of electrons from the filament due to heating is called:",o:["Rectification","Thermionic emission","Hysteresis","Induction"],a:1,e:"The process is called thermionic emission."},
+  {q:"Increasing mA can cause the kV across the tube to:",o:["Increase without limit","Decrease","Remain unaffected under all circumstances","Become negative"],a:1,e:"Higher tube current increases the voltage drop, so the actual kV across the tube decreases."},
+  {q:"The material gives an example in which 40 kV may reduce to approximately:",o:["20 kV","25 kV","36 kV","50 kV"],a:2,e:"The material illustrates that 40 kV may fall to about 36 kV because of losses."},
+  {q:"The rectification process contributes to voltage loss because rectifiers:",o:["Act like added resistance","Produce unlimited voltage","Remove all current","Increase the filament temperature only"],a:0,e:"Rectifiers introduce a voltage drop similar to additional resistance in the circuit."},
+  {q:"The total voltage drop is the sum of:",o:["Transformer loss + rectification loss + tube-current loss","kV + mA + time","Resistance + wavelength + frequency","Filament loss + patient loss + room loss"],a:0,e:"Total voltage drop = transformer losses + rectification losses + tube-current losses."},
+
+  {q:"If the desired tube voltage is 40 kV and the expected total voltage drop is 10 kV, the initial voltage should theoretically be:",o:["10 kV","30 kV","40 kV","50 kV"],a:3,e:"To end up with 40 kV after a 10 kV drop, the initial selected voltage must be 50 kV."},
+  {q:"The purpose of kV compensation is to:",o:["Eliminate the need for a filament","Ensure the desired voltage remains across the tube despite expected losses","Reduce the number of X-ray photons to zero","Increase patient positioning accuracy"],a:1,e:"kV compensation pre-adjusts the selected voltage so that the desired kV is obtained at the tube despite known losses."},
+  {q:"Which voltage loss varies particularly with the selected mA?",o:["Tube-current loss","Hysteresis loss only","Rectification loss only","None of them"],a:0,e:"Tube-current loss varies with the chosen mA; higher mA produces a larger voltage drop."},
+  {q:"Transformer and rectification losses are described in the material as usually:",o:["Constant","Completely absent","Dependent only on patient thickness","Equal to exposure time"],a:0,e:"Transformer and rectification losses are relatively constant, while tube-current loss varies with mA."},
+  {q:"A kV compensator may be ______ to the mA selector.",o:["disconnected","ganged","insulated from","removed from"],a:1,e:"The kV compensator is often mechanically or electrically ganged to the mA selector."},
+  {q:"When the mA selector is increased, the ganged kV compensator:",o:["Decreases the number of autotransformer turns","Increases the number of autotransformer turns","Disconnects the transformer","Stops the exposure timer"],a:1,e:"Increasing mA causes the compensator to select more turns so that a higher initial voltage compensates for the greater drop."},
+  {q:"The purpose of a kilovoltage indicator is to:",o:["Indicate the selected/expected kV","Measure patient weight","Measure exposure room temperature","Control the filament directly"],a:0,e:"The kV indicator shows the selected or expected kilovoltage."},
+  {q:"Which two methods of displaying kilovoltage are discussed?",o:["Calibrated autotransformer and pre-reading kilovolt meter","Ammeter and stopwatch","Variac and filament meter","Rectifier and timer"],a:0,e:"The two methods are a calibrated autotransformer scale and a pre-reading kilovolt meter."},
+  {q:"In a calibrated autotransformer, the kV marking takes into account:",o:["Expected voltage drops","Patient height only","Exposure room size","X-ray film size only"],a:0,e:"The scale is marked so that the indicated kV already allows for the expected voltage drops."},
+  {q:"In a pre-reading kilovolt meter, the meter is calibrated so that its reading:",o:["Ignores voltage losses","Takes expected voltage drops into consideration","Measures only the filament current","Measures exposure time instead of voltage"],a:1,e:"A pre-reading kV meter is calibrated to display the expected tube voltage after allowing for losses."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('exposure_factor_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/50';
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('exposure_factor_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of Exposure Factor Selection! You have a strong command of kV, mA, compensation and indicators. Keep up the great work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Good knowledge overall. Review the sections on voltage losses and compensation to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus especially on autotransformers, voltage drop causes and kV compensation. Consistent practice will improve your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t be discouraged. This topic has many important technical details. Go through the detailed explanations carefully, revise the key points, and try again. You can master this!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 6, 12, 20, 28, 40, 50];
+  var sectionNames = [
+    "A: Exposure Factors & X-ray Basics",
+    "B: Kilovoltage Effects",
+    "C: Autotransformer",
+    "D: Major/Minor Selectors & Variac",
+    "E: Voltage Losses",
+    "F: kV Compensation & Indicators"
+  ];
+
+  for (var s = 0; s < 6; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('exposure_factor_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('exposure_factor_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('exposure_factor_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
