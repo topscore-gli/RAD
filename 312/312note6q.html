@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High-Tension Transformers</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:15px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="exit()">←</button>
+      <h1>High-Tension Transformers</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 20:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 1200, PASS: 60 };
+
+const SECTIONS = {
+  0: "A: Purpose & Construction",
+  11: "B: Voltage Ratios, kVp & RMS",
+  17: "C: Transformer Core Types",
+  30: "D: Transformer Oil & Losses",
+  38: "E: Load Effects, Regulation & Efficiency"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  {q:"What is the main purpose of a high-tension transformer in an X-ray machine?",o:["To reduce voltage to zero","To step up the voltage","To convert AC to DC","To reduce current only"],a:1,e:"The high-tension transformer steps up the low mains voltage to the high kilovoltage required by the X-ray tube."},
+  {q:"A low-power X-ray machine may obtain its mains supply from a wall socket at approximately:",o:["12 V","24 V","240 V","1200 V"],a:2,e:"Low-power units commonly use a standard 240 V wall socket supply."},
+  {q:"Medium- to high-powered X-ray equipment may use a mains supply of:",o:["110 V","240 V","415 V","20 kV"],a:2,e:"Higher-powered generators often take a 415 V three-phase supply."},
+  {q:"Which combination makes up the high-tension generator?",o:["Transformer, battery and fuse","Transformer, rectifiers and voltage-stabilizing components","Capacitor, resistor and fuse","Motor, generator and battery"],a:1,e:"The high-tension generator consists of the transformer, rectifiers and voltage-stabilizing components."},
+  {q:"A transformer consists principally of:",o:["A battery and capacitor","An iron core and primary and secondary windings","A fuse and circuit breaker","A cathode and anode"],a:1,e:"A transformer has an iron core with primary and secondary windings wound on it."},
+  {q:"What happens when electricity passes through the primary winding?",o:["It produces a magnetic field","It stops all current","It destroys the iron core","It produces mechanical movement only"],a:0,e:"Current in the primary winding produces a magnetic field in the core."},
+  {q:"The secondary winding receives electrical energy mainly through:",o:["Direct physical contact with the primary","Magnetic induction","Battery action","Resistance heating"],a:1,e:"Energy is transferred from primary to secondary by magnetic induction (mutual induction)."},
+  {q:"The voltage relationship between the windings is related to the:",o:["Length of the transformer","Number of turns in the windings","Temperature of the room only","Weight of the transformer"],a:1,e:"The voltage ratio equals the turns ratio of the windings."},
+  {q:"A transformer with more turns in its secondary winding than in its primary winding is called a:",o:["Step-down transformer","Step-up transformer","Current transformer","Regulating transformer"],a:1,e:"More secondary turns produce a higher secondary voltage → step-up transformer."},
+  {q:"A transformer with more turns in its primary winding than its secondary winding is called a:",o:["Step-up transformer","Step-down transformer","High-tension transformer","Shell transformer"],a:1,e:"Fewer secondary turns produce a lower secondary voltage → step-down transformer."},
+  {q:"High-tension transformers used in X-ray equipment are primarily:",o:["Step-down transformers","Step-up transformers","Isolation transformers only","Current transformers"],a:1,e:"X-ray high-tension transformers are step-up transformers that produce the required kV."},
+
+  {q:"If a transformer changes 400 V to 120,000 V, the voltage ratio is:",o:["30","100","300","400"],a:2,e:"120 000 ÷ 400 = 300, so the voltage ratio is 300."},
+  {q:"In the 400 V to 120 kV example, for every one primary turn, the secondary has:",o:["30 turns","100 turns","300 turns","1,200 turns"],a:2,e:"The turns ratio is the same as the voltage ratio: 300 secondary turns per primary turn."},
+  {q:"In X-ray equipment, kVp means:",o:["Kilovoltage power","Kilovoltage peak","Kilovoltage primary","Kilovoltage percentage"],a:1,e:"kVp stands for kilovoltage peak – the maximum voltage of the AC waveform."},
+  {q:"Why is X-ray tube voltage expressed as kVp?",o:["AC voltage rises and falls continuously","DC voltage is always zero","Current cannot be measured","Transformers only operate at peak current"],a:0,e:"Because the voltage is alternating and continuously rising and falling, the peak value is quoted."},
+  {q:"RMS voltage is obtained by:",o:["Multiplying peak voltage by √2","Dividing peak voltage by √2","Dividing peak voltage by 2","Adding √2 to peak voltage"],a:1,e:"RMS = peak / √2 (approximately peak × 0.707)."},
+  {q:"If the peak voltage is 100 kV, the RMS value is approximately:",o:["50.0 kV","70.7 kV","100 kV","141.4 kV"],a:1,e:"100 kV ÷ √2 ≈ 70.7 kV."},
+
+  {q:"Which type of transformer core has no material between the primary and secondary windings?",o:["Shell core","Closed core","Air core","Rectangular core"],a:2,e:"An air-core transformer has no ferromagnetic material between the windings."},
+  {q:"An advantage of an air-core transformer is that it:",o:["Is always the most efficient","Can be very small","Produces no losses","Requires no winding"],a:1,e:"Air-core transformers can be made very compact."},
+  {q:"A major disadvantage of an air-core transformer is:",o:["Excessive magnetic coupling","Increased transformer losses","No magnetic field","Excessive voltage reduction only"],a:1,e:"Air cores have poorer magnetic coupling and therefore higher losses."},
+  {q:"In an open-core transformer, the primary and secondary windings are separated by:",o:["Water","Transformer oil only","Insulating material","Air pressure"],a:2,e:"The windings are separated by insulating material on an open core."},
+  {q:"Compared with an air-core transformer, the open-core type has:",o:["Greater transformer losses","Lesser transformer losses","No magnetic field","No secondary winding"],a:1,e:"The open-core design reduces losses compared with a pure air core."},
+  {q:"In a closed-core transformer, the windings are positioned:",o:["On opposite ends of the core","Outside the transformer","Inside the oil tank only","On the same wire"],a:0,e:"In a closed-core design the windings are placed on opposite limbs of the core."},
+  {q:"Which core design is identified in the material as the most efficient?",o:["Air core","Open core","Closed core","Shell type"],a:3,e:"The shell-type core is the most efficient of the designs discussed."},
+  {q:"In the shell-type design, the secondary winding is:",o:["Removed from the core","Wound over the primary winding","Wound outside the oil tank","Not present"],a:1,e:"In the shell type the secondary is wound directly over the primary."},
+  {q:"The magnetic core may be made from:",o:["Silicon-iron and nickel-iron","Aluminium and plastic","Copper and rubber","Lead and glass"],a:0,e:"Cores are typically made from silicon-iron or nickel-iron alloys."},
+  {q:"Eddy currents in the transformer core mainly result in:",o:["Cooling","Heat production","Increased efficiency","Increased insulation"],a:1,e:"Eddy currents circulate in the core and produce unwanted heat."},
+  {q:"Eddy currents can be reduced by:",o:["Making the core from thick solid metal only","Laminating the core","Removing the windings","Increasing resistance"],a:1,e:"Laminating the core interrupts the eddy-current paths and reduces losses."},
+  {q:"Why are transformer cores laminated?",o:["To increase eddy-current losses","To reduce eddy-current losses","To increase the weight","To eliminate magnetic flux"],a:1,e:"Lamination is done specifically to minimise eddy-current losses."},
+  {q:"The humming sound associated with transformers is related to:",o:["Mechanical effects associated with magnetization of the core","The X-ray tube rotating","The oil boiling","The wall socket"],a:0,e:"The hum is caused by magnetostriction and mechanical vibration of the core as it magnetises and demagnetises."},
+
+  {q:"Transformer oil serves primarily as:",o:["A fuel and lubricant","A coolant and insulator","A conductor and resistor","A rectifier and capacitor"],a:1,e:"Transformer oil cools the windings and provides electrical insulation."},
+  {q:"The high-tension transformer in an X-ray room is immersed in:",o:["Water","Alcohol","Oil","Mercury"],a:2,e:"The HT transformer is immersed in insulating oil."},
+  {q:"Transformer losses can broadly be divided into:",o:["Mechanical and thermal losses","Magnetic and electrical losses","Primary and tertiary losses","Voltage and current losses"],a:1,e:"Losses are classified as magnetic (core) losses and electrical (copper) losses."},
+  {q:"Heat loss in the windings occurs because of:",o:["Resistance of the wire","Absence of magnetic flux","Lack of insulation only","Low voltage only"],a:0,e:"I²R heating occurs because of the resistance of the copper windings."},
+  {q:"The formula for electrical power loss in a resistance is:",o:["P = IR","P = I/R","P = I²R","P = R/I"],a:2,e:"Power loss due to resistance is given by P = I²R."},
+  {q:"Which material is mentioned as offering relatively low resistance for transformer windings?",o:["Copper","Rubber","Glass","Plastic"],a:0,e:"Copper is used for the windings because of its low resistivity."},
+  {q:"Hysteresis loss is associated with:",o:["Constant changes in the direction of magnetic flux","Current flowing through the external load only","The oil tank","The X-ray tube window"],a:0,e:"Hysteresis loss arises from the continuous reversal of the magnetic domains in the core."},
+  {q:"Hysteresis losses can be reduced by using:",o:["Special alloys","Plastic cores","Longer wires","Higher resistance"],a:0,e:"Special magnetic alloys with narrow hysteresis loops reduce hysteresis losses."},
+
+  {q:"When a load is connected to the secondary winding, the secondary current:",o:["Increases","Becomes zero","Always decreases","Cannot flow"],a:0,e:"Connecting a load allows secondary current to flow; the current increases with load."},
+  {q:"When the load on the transformer increases, the secondary voltage generally:",o:["Increases indefinitely","Remains exactly constant","Falls","Becomes zero immediately"],a:2,e:"Increased load causes a voltage drop; secondary voltage falls."},
+  {q:"In an X-ray machine, increasing mA while attempting to maintain a selected 60 kV may cause the actual kV to:",o:["Increase","Decrease","Become infinite","Remain completely unaffected"],a:1,e:"Higher tube current increases the voltage drop, so the actual kV falls unless compensated."},
+  {q:"The component used to help maintain constant kV as mA changes is the:",o:["Fuse","Voltage compensator","Circuit breaker","Rectifier alone"],a:1,e:"A voltage compensator adjusts the primary voltage to keep kV constant as mA changes."},
+  {q:"Transformer regulation describes the difference between:",o:["Primary and secondary currents only","No-load and full-load voltage","AC and DC current","Input and output resistance only"],a:1,e:"Regulation is the change in secondary voltage from no-load to full-load conditions."},
+  {q:"The formula for percentage regulation given in the material is:",o:["(Full-load – No-load)/No-load × 100","(No-load – Full-load)/No-load × 100","Full-load / No-load × 100","No-load / Full-load × 100"],a:1,e:"Percentage regulation = (No-load voltage – Full-load voltage) / No-load voltage × 100."},
+  {q:"Transformer efficiency is calculated as:",o:["Input power ÷ output power × 100","Output power ÷ input power × 100","Output voltage ÷ current × 100","Current ÷ resistance × 100"],a:1,e:"Efficiency = (Output power / Input power) × 100 %."},
+  {q:"According to the material, normal transformers have an efficiency of approximately:",o:["10%","25%","50%","90%"],a:3,e:"Well-designed transformers typically achieve efficiencies around 90 % or higher."},
+  {q:"Transformer rating refers to:",o:["The colour of the transformer","The amount of load a transformer can carry for a given time","The number of turns only","The size of the X-ray room"],a:1,e:"The rating states the load (kVA) the transformer can safely carry for a specified time."},
+  {q:"Operating a transformer beyond its rating may cause:",o:["Cooling of the transformer","Overheating and destruction of insulation","Increased insulation strength","Elimination of transformer losses"],a:1,e:"Overloading produces excessive heat that can destroy the insulation."},
+  {q:"Which type of operation involves a lower current over a sustained period?",o:["Conventional radiography","Fluoroscopy","Instantaneous radiography only","High-tension switching"],a:1,e:"Fluoroscopy uses a lower continuous current for a prolonged period."},
+  {q:"Why can a transformer provide a much higher current instantaneously than continuously?",o:["Instantaneous operation produces no heat","Heat generated instantaneously can be dissipated more easily than sustained heat","Continuous operation has no current","The transformer becomes more efficient at high temperature"],a:1,e:"Short, high-current pulses produce heat that can be dissipated between exposures, whereas continuous high current would overheat the transformer."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('ht_transformers_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/50';
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('ht_transformers_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent mastery of High-Tension Transformers! You have a strong understanding of construction, losses, regulation and efficiency. Superb work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review core types, eddy-current/hysteresis losses and regulation to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on transformer ratios, core designs, oil functions and load effects. Consistent practice will raise your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t be discouraged. This is a technical topic with many important details. Go through the explanations carefully, revise the key concepts, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 11, 17, 30, 38, 50];
+  var sectionNames = [
+    "A: Purpose & Construction",
+    "B: Voltage Ratios, kVp & RMS",
+    "C: Transformer Core Types",
+    "D: Transformer Oil & Losses",
+    "E: Load Effects, Regulation & Efficiency"
+  ];
+
+  for (var s = 0; s < 5; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('ht_transformers_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('ht_transformers_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('ht_transformers_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
