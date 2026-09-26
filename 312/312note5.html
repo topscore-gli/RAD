@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAD 312 - Fuses, Switches & Circuit Breakers</title>
+  <title>RAD 312 - Fuses, Switches and Circuit Breakers</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
     :root{
@@ -61,7 +61,7 @@
       text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
       background:rgba(29,185,84,.1)
     }
-    .main-header h1{font-size:18px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header h1{font-size:17px;margin-bottom:8px;color:var(--accent);font-weight:900}
     .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
 
     .section-card{
@@ -70,7 +70,7 @@
       margin-bottom:24px;border-left:4px solid var(--accent)
     }
     .section-card h2{
-      font-size:17px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      font-size:16px;margin-bottom:14px;color:var(--accent);font-weight:900;
       display:flex;align-items:center;gap:8px
     }
     .section-card h3{
@@ -158,289 +158,426 @@
     <div class="content">
       <div class="main-header">
         <h1>⚡ Fuses, Switches & Circuit Breakers</h1>
-        <p>Electrical Protection • Slow/Fast Fuses • Thermal & Electromagnetic Breakers</p>
+        <p>Protection • Slow/Fast Fuses • Thermal & Electromagnetic Breakers • Magnetic Relays</p>
       </div>
 
       <!-- ONE-SENTENCE SUMMARY -->
       <div class="section-card">
         <h2>📋 One-Sentence Summary</h2>
-        <p>Fuses, circuit breakers and switches protect X-ray equipment from excessive current by interrupting the circuit when necessary, while switches also control the making and breaking of electrical connections.</p>
+        <p>Fuses and circuit breakers protect X-ray equipment from overcurrent by interrupting the circuit (fuses melt, breakers trip and can be reset), while switches (knife switches and magnetic relays) control making and breaking of circuits for isolation and operation.</p>
 
         <div class="memory-tip">
-          <strong>🧠 Ultimate Memory Line</strong>
+          <strong>🧠 One-line Memory Aid</strong>
           <p>Fuse melts • Breaker trips • Switch controls • Relay uses magnetism<br>
           Thermal = Heat → Bend → Trip<br>
           Electromagnetic = Magnet → Pull → Trip</p>
         </div>
       </div>
 
-      <!-- 1. Why protection is needed -->
+      <!-- PAGE 1 -->
       <div class="section-card">
-        <h2>1️⃣ Why Protection is Needed</h2>
-        <p>X-ray equipment is supplied from the electrical mains. Voltage spikes and fluctuations can cause current to rise higher than components can safely handle.</p>
-
+        <h2>1️⃣ Why Protection is Needed & Fuses</h2>
+        <p>X-ray equipment is supplied from the electrical mains. Voltage spikes and fluctuations can cause the current flowing through components to become higher than the components are designed to handle.</p>
         <p>Excessive current can:</p>
         <ul>
-          <li>Overheat components</li>
-          <li>Damage equipment</li>
-          <li>Cause failure</li>
+          <li>Overheat electrical components</li>
+          <li>Damage components</li>
+          <li>Cause equipment failure</li>
           <li>Create electrical safety hazards</li>
         </ul>
-
-        <div class="highlight-box">
-          <p>The two major protective devices are <strong>fuses</strong> and <strong>circuit breakers</strong>. Their main purpose is to disconnect the equipment when excessive current occurs.</p>
-        </div>
+        <p>Therefore protective devices are required. The two major protective devices are <strong>fuses</strong> and <strong>circuit breakers</strong>. Their main purpose is to disconnect the equipment from the power supply when excessive current occurs.</p>
 
         <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Electrical current is like water flowing through a pipe. If too much water suddenly enters, the pipe could burst. A protective device acts like an automatic valve that stops the flow before serious damage occurs.</p>
+          <strong>💡 Analogy</strong>
+          <p>Think of electrical current as water flowing through a pipe. If too much water suddenly enters the pipe, the pipe could burst. A protective device acts like an automatic valve that stops the flow before serious damage occurs.</p>
         </div>
-      </div>
 
-      <!-- 2. Fuses -->
-      <div class="section-card">
-        <h2>2️⃣ Fuses</h2>
-        <p>A fuse is a protective device that protects a circuit from overcurrent by melting and breaking the circuit when excessive current flows.</p>
+        <h3>What is a fuse?</h3>
+        <p>A fuse is a protective device designed to protect an electrical circuit from overcurrent. It works by melting and breaking the circuit when excessive current flows through it.</p>
 
-        <h3>How a fuse works</h3>
-        <p>Current through the fuse element generates heat. If the current becomes excessively high, the heat melts the element (“the fuse blows”).</p>
-
+        <h3>How does a fuse work?</h3>
+        <p>When current passes through the fuse element, heat is generated. The heat depends on the amount of current flowing and the resistance of the fuse material. If the current becomes excessively high, enough heat is produced to melt the fuse element. The fuse is then said to have “blown.”</p>
         <div class="highlight-box">
           <p>Excessive current → Fuse heats → Fuse melts → Circuit opens → Equipment is protected</p>
         </div>
 
-        <h3>Correct connection</h3>
-        <p>A fuse must always be connected <strong>in series</strong> with the circuit it protects.</p>
-        <div class="highlight-box">
-          <p>Power supply → Fuse → Equipment</p>
+        <div class="memory-tip">
+          <strong>💡 Simple Analogy</strong>
+          <p>Imagine a very thin piece of ice placed in a water channel. Normally the water flow is gentle and the ice remains intact. But if something causes excessive heat, the ice melts and interrupts the intended pathway. The fuse behaves similarly, except it uses electrical heating rather than external heat.</p>
         </div>
-        <p>If connected in parallel, current could still flow through another path and protection would fail.</p>
 
-        <h3>Types of fuses</h3>
+        <h3>Types of fuses mentioned</h3>
         <ul>
-          <li><strong>Resettable (PTC) fuses</strong> – can return to operation after cooling (reduce downtime)</li>
-          <li><strong>Glass or ceramic cartridge fuses</strong> – common in older or simpler systems</li>
-          <li><strong>HRC fuses</strong> (High-Rupturing Capacity) – used for higher currents; contain silica sand to quench the arc</li>
+          <li><strong>Resettable fuses</strong> (including polymer-based PTC fuses) – Can return to operation after cooling down. Advantage: they reduce downtime because they do not necessarily need to be physically replaced after every overcurrent event.</li>
+          <li><strong>Glass or ceramic cartridge fuses</strong> – Commonly associated with older X-ray equipment; still used in simpler or lower-cost systems.</li>
+          <li><strong>HRC fuses</strong> (High-Rupturing Capacity) – Used where higher currents are involved. They provide improved protection and reliability for critical applications.</li>
         </ul>
+
+        <h3>Correct connection of a fuse</h3>
+        <p>A very important point: <strong>A fuse must be connected in series with the circuit it protects.</strong></p>
+        <p>Why? Because the current flowing to the equipment must pass through the fuse. If the current becomes excessive, the fuse melts and interrupts the entire circuit.</p>
+        <div class="highlight-box">
+          <p>Series connection: Power supply → Fuse → Equipment<br>
+          If the fuse blows: Power supply → X → Equipment (equipment is disconnected)</p>
+        </div>
+        <p>Why not parallel? A parallel fuse arrangement would provide another path for current. If one fuse blows, current could potentially continue through another path. Therefore it would not provide the required protection.</p>
+
+        <h3>Fuse replacement</h3>
+        <p>Fuses are often placed in spring-loaded receptacles. This makes them easy to access, easy to remove and easy to replace after failure. Modern equipment can also have fuse monitoring systems that alert operators when a fuse has blown. This helps with fault diagnosis, maintenance and reducing troubleshooting time.</p>
       </div>
 
-      <!-- 3. Slow-blow vs Fast-acting -->
+      <!-- PAGE 2 -->
       <div class="section-card">
-        <h2>3️⃣ Slow-Blow vs Fast-Acting Fuses</h2>
+        <h2>2️⃣ Slow-Blow and Fast-Acting Fuses</h2>
+        <p>Fuses can be designed to respond at different speeds depending on the circuit they protect. The material discusses two important categories: Slow-blow fuses and Fast-acting fuses.</p>
 
-        <h3>Slow-Blow Fuses</h3>
-        <p>Designed to tolerate a brief increase in current without immediately blowing. Useful for equipment that draws a high starting current (motors, transformers, some X-ray components).</p>
+        <h3>1. Slow-Blow Fuses</h3>
+        <p>A slow-blow fuse is designed to tolerate a brief increase in current without immediately blowing. This is useful because some electrical equipment naturally draws a high current for a short period when starting.</p>
+        <p>Some equipment has a high starting or startup current. Examples given include electric motors, transformers and certain X-ray machine components. During startup the current may briefly become high. If an ordinary fast fuse were used, it might interpret this normal startup surge as a fault and blow unnecessarily.</p>
+
+        <h4>How does it work?</h4>
+        <p>Slow-blow fuses may use thicker fuse wires or dual-element designs. One element responds to sustained current while another responds to prolonged overcurrent.</p>
 
         <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>A security guard who sees someone running quickly does not immediately assume danger. The guard waits to see if the unusual activity continues. Brief surge → wait. Persistent overcurrent → disconnect.</p>
+          <strong>💡 Analogy</strong>
+          <p>Imagine a security guard at a building. A person running quickly through the entrance might not automatically be considered dangerous. The guard waits to see whether the unusual activity continues. A slow-blow fuse behaves similarly: Brief surge → “Wait”; Persistent excessive current → “Disconnect!”</p>
+        </div>
+        <p><strong>Main purpose:</strong> Slow-blow fuses help prevent unnecessary power interruptions caused by temporary current surges.</p>
+
+        <h3>2. Fast-Acting Fuses</h3>
+        <p>Fast-acting fuses are designed to respond very quickly to dangerous overcurrent. Examples include semiconductor fuses and HRC fuses. They have relatively low thermal inertia, allowing them to respond rapidly to dangerous current levels.</p>
+        <p>Why are they important? Some electrical components are very sensitive to excessive current (diodes, transistors, integrated circuits). These components can be damaged very quickly by a fault. Therefore the protection must also act quickly.</p>
+
+        <h3>HRC fuse</h3>
+        <p>An HRC fuse uses an arc-quenching medium such as silica sand. When the fuse element breaks, an electrical arc can form. The silica sand absorbs energy from the fault and helps suppress the arc.</p>
+        <div class="memory-tip">
+          <strong>💡 Analogy</strong>
+          <p>Imagine cutting an electrical wire carrying a large amount of energy. The electricity may try to “jump” across the gap. The silica sand acts like a material that helps smother that electrical jump.</p>
         </div>
 
-        <h3>Fast-Acting Fuses</h3>
-        <p>Respond very quickly to dangerous overcurrent. Essential for protecting sensitive components such as diodes, transistors and integrated circuits.</p>
-        <p>HRC fuses use silica sand as an arc-quenching medium.</p>
-      </div>
-
-      <!-- 4. Fuse components & ratings -->
-      <div class="section-card">
-        <h2>4️⃣ Fuse Components & Ratings</h2>
-
-        <h3>Main parts</h3>
-        <ul>
-          <li><strong>Fuse element</strong> – the sacrificial part that melts</li>
-          <li><strong>Fuse link</strong> (or fuse block) – houses the element (glass or ceramic)</li>
-          <li><strong>Fuse powder</strong> – helps prevent arcing (chalk, dust, POP, ground ceramic)</li>
-          <li><strong>Fuse cap</strong></li>
-        </ul>
-
-        <h3>Ratings</h3>
-        <div class="table-container">
-          <table class="summary-table">
-            <tr>
-              <th>Rating</th>
-              <th>Meaning</th>
-            </tr>
-            <tr>
-              <td><strong>Current rating</strong></td>
-              <td>Maximum current the fuse can carry without blowing</td>
-            </tr>
-            <tr>
-              <td><strong>Voltage rating</strong></td>
-              <td>Maximum voltage it can safely interrupt without dangerous arcing</td>
-            </tr>
-          </table>
-        </div>
-
+        <h3>Parts of a Fuse</h3>
+        <p>The material identifies four parts: Fuse cap, Fuse element, Fuse link and Fuse powder.</p>
         <div class="highlight-box">
-          <p>Using a fuse with too low a rating causes unnecessary interruptions.<br>
-          Using a fuse with too high a rating fails to protect the circuit.</p>
+          <p>Simplified arrangement:<br>
+          FUSE<br>
+          ┌───────────┐<br>
+          │ Fuse cap  │<br>
+          │     │     │<br>
+          │  Element  │ ← melts during overcurrent<br>
+          │     │     │<br>
+          │   Powder  │ ← helps quench arc<br>
+          └───────────┘<br>
+          Fuse link</p>
         </div>
       </div>
 
-      <!-- 5. Circuit Breakers -->
+      <!-- PAGE 3 -->
       <div class="section-card">
-        <h2>5️⃣ Circuit Breakers</h2>
-        <p>A circuit breaker is a reusable protective device. It interrupts current during overload or fault and can afterwards be reset.</p>
+        <h2>3️⃣ Fuse Components, Ratings and Circuit Breakers</h2>
+
+        <h3>1. Fuse Element</h3>
+        <p>The fuse element is the actual part that melts. It may be made from thin wire or flat foil. Its current-carrying capacity determines the fuse’s rating. Remember: Fuse element = sacrificial part. It sacrifices itself to protect the equipment.</p>
+
+        <h3>2. Fuse Link</h3>
+        <p>The fuse link houses the fuse element. It may be made from glass, ceramic or other suitable insulating material. A transparent fuse link is desirable because it allows an operator to visually determine whether the fuse has blown. The material should not be flammable and should have a high melting point. Another name given for the fuse link is fuse block.</p>
+
+        <h3>3. Fuse Powder</h3>
+        <p>Some HRC fuses have the fuse link filled with powder. The material mentions chalk, dust, POP and ground ceramic. The powder helps prevent arcing when the fuse blows.</p>
+
+        <h3>Fuse Ratings</h3>
+        <p>A fuse has specific ratings that determine where it can safely be used. The two major ratings discussed are current rating and voltage rating.</p>
+
+        <h4>Current Rating</h4>
+        <p>The current rating indicates the maximum current the fuse is designed to conduct without blowing under its specified operating conditions. It depends on factors such as fuse material and thickness of the fuse element.</p>
+        <p>Example: Suppose you have a 10 A fuse. The fuse is intended for a circuit whose normal current is around that rating; excessive current causes the element to heat and melt.</p>
+        <div class="highlight-box">
+          <p><strong>Important!</strong> Using a fuse with a lower rating than required may cause unnecessary interruptions. Using a fuse with a higher rating may fail to provide adequate protection. The fuse rating must be appropriate for the circuit.</p>
+        </div>
+
+        <h4>Voltage Rating</h4>
+        <p>The voltage rating specifies the maximum voltage that the fuse can safely interrupt without creating a dangerous electrical arc. This becomes particularly important in high-voltage applications. When a fuse melts there is a gap between the two ends of the melted element. At sufficiently high voltage, electricity may try to jump across this gap (arcing). Therefore high-voltage fuses require special design considerations (fuse length must be appropriately designed; silica sand may be used to quench the arc). Higher-voltage fuses are used in high-potential systems such as advanced X-ray, fluoroscopy, angiography and CT systems.</p>
+
+        <h3>Circuit Breakers</h3>
+        <p>A circuit breaker is another protective device. Unlike a fuse, a circuit breaker is reusable. It interrupts current when an overload or fault occurs and can subsequently be reset.</p>
 
         <div class="table-container">
           <table class="summary-table">
             <tr>
-              <th>Feature</th>
               <th>Fuse</th>
               <th>Circuit Breaker</th>
             </tr>
             <tr>
-              <td>Action</td>
-              <td>Melts</td>
-              <td>Trips / opens</td>
+              <td>Melts during operation</td>
+              <td>Trips/opens during fault</td>
             </tr>
             <tr>
-              <td>After fault</td>
               <td>Usually needs replacement</td>
               <td>Can be reset</td>
             </tr>
             <tr>
-              <td>Nature</td>
-              <td>Sacrificial</td>
-              <td>Reusable</td>
+              <td>Sacrificial device</td>
+              <td>Reusable device</td>
+            </tr>
+            <tr>
+              <td>Simple construction</td>
+              <td>More complex mechanism</td>
             </tr>
           </table>
         </div>
 
         <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>A fuse is a breakable emergency link — once it breaks you replace it.<br>
-          A circuit breaker is an automatic door that closes during danger and can later be opened/reset.</p>
+          <strong>💡 Analogy</strong>
+          <p>Think of a fuse as a breakable emergency link. Once it breaks, you replace it. A circuit breaker is like an automatic door that closes during danger and can later be opened/reset.</p>
         </div>
       </div>
 
-      <!-- 6. Thermal Circuit Breakers -->
+      <!-- PAGE 4 -->
       <div class="section-card">
-        <h2>6️⃣ Thermal Circuit Breakers</h2>
-        <p>Mainly used for low-voltage sections. They use a <strong>bimetallic strip</strong> (two different metals joined together).</p>
+        <h2>4️⃣ Circuit Breaker Applications and Thermal Circuit Breakers</h2>
 
-        <p>When heated, the two metals expand differently, so the strip bends.</p>
+        <h3>Applications in X-ray departments</h3>
+        <p>Circuit breakers are important in the power distribution systems of X-ray departments. They are installed in the mains isolator box supplying power to the equipment. They help protect X-ray equipment, operators, high-tension generators and low-voltage circuits. They are commonly installed in the mains distribution board and are permanently installed because they can be reused.</p>
 
+        <h3>Thermal Circuit Breakers</h3>
+        <p>Thermal circuit breakers are mainly used for low-voltage sections. They use a bimetallic strip.</p>
+
+        <h4>What is a bimetallic strip?</h4>
+        <p>It consists of two different metals joined together. When heated, the two metals expand differently. As a result, the strip bends.</p>
+
+        <h4>How a thermal circuit breaker works</h4>
         <div class="highlight-box">
           <p>High current → Heating → Bimetallic strip bends → Spring mechanism operates → Switch opens → Circuit interrupted</p>
         </div>
+        <p>The bimetallic strip has a fixed end and a free end. When excessive current causes heating, the strip bends and operates a spring-loaded switch.</p>
 
-        <p>After tripping, some thermal breakers cannot be reset until the strip has cooled.</p>
+        <h4>Different response times</h4>
+        <p>Some thermal breakers operate almost instantaneously, some have a delay before tripping, and some heat gradually and trip after a period of time. This makes them useful where occasional overloads are expected but should not continue for too long.</p>
+
+        <h4>Why does it sometimes take time to reset?</h4>
+        <p>After the thermal breaker operates, the bimetallic strip may still be hot. Some breakers therefore cannot be reset until the strip has cooled.</p>
+
+        <div class="memory-tip">
+          <strong>💡 Analogy</strong>
+          <p>Imagine a metal ruler being heated on one side. It bends because the materials expand differently. The bimetallic strip uses essentially this physical principle to operate the breaker.</p>
+        </div>
       </div>
 
-      <!-- 7. Electromagnetic Circuit Breakers -->
+      <!-- PAGE 5 -->
       <div class="section-card">
-        <h2>7️⃣ Electromagnetic Circuit Breakers</h2>
-        <p>Often used for high-voltage circuits. They rely on electromagnetism rather than heat.</p>
+        <h2>5️⃣ Electromagnetic Circuit Breakers and Switches</h2>
 
+        <h3>Electromagnetic Circuit Breakers</h3>
+        <p>Electromagnetic circuit breakers are often used for high-voltage circuits. Instead of depending primarily on heating and bending, they use electromagnetism.</p>
+
+        <h4>How they work</h4>
         <div class="highlight-box">
           <p>High current → Electromagnet becomes strongly magnetized → Armature is attracted → Spring-loaded switch trips → Circuit opens</p>
         </div>
+        <p>The magnetic field becomes strong enough when the current is sufficiently high to pull the armature. This movement causes the switch to open and disconnect the circuit.</p>
 
-        <p>Advantage: can usually be reset immediately without waiting for cooling. Many have a reset button.</p>
+        <h4>Advantage over thermal breaker</h4>
+        <p>One important advantage is that an electromagnetic breaker can be reset without waiting for a bimetallic strip to cool. Many have a reset button. Pressing the reset button restores the breaker to its operating position and closes the circuit.</p>
+
+        <h3>Classification of Circuit Breakers</h3>
+        <p>Circuit breakers can be classified according to several factors:</p>
+        <ul>
+          <li><strong>Application:</strong> Outdoor breakers, Indoor breakers</li>
+          <li><strong>Operating mechanism:</strong> Spring-loaded, Pneumatic, Hydraulic</li>
+          <li><strong>Voltage rating:</strong> High voltage, Medium voltage, Low voltage</li>
+        </ul>
+
+        <h3>Circuit Breakers vs Fuses</h3>
+        <p>A major advantage of circuit breakers is reusability. A fuse must generally be replaced after it blows. A circuit breaker can be reset. Therefore circuit breakers are described as a more economical and environmentally friendly solution in applications where repeated operation may occur. They may be permanently installed in critical sections such as high-tension generators and low-voltage sections of X-ray machines.</p>
+
+        <h3>Switches</h3>
+        <p>A switch is a device used for making and breaking an electrical circuit. In other words, a switch controls whether a circuit is closed or open. The material notes that switches are mainly used in exposure switching systems, but here the focus is on switches used for mains isolation. Two types are introduced: Large manually operated switches and Magnetic relays.</p>
       </div>
 
-      <!-- 8. Switches -->
+      <!-- PAGE 6 -->
       <div class="section-card">
-        <h2>8️⃣ Switches</h2>
-        <p>A switch makes or breaks an electrical circuit (controls whether the circuit is closed or open).</p>
+        <h2>6️⃣ Mains Supply Switch & Knife Switch</h2>
 
-        <h3>Mains Supply Switch (Knife Switch)</h3>
-        <p>Usually a knife-type switch mounted on the wall near the generator or control panel. Isolates the X-ray unit from the mains supply.</p>
+        <h3>Mains Supply Switch</h3>
+        <p>The mains supply switch is usually mounted on a wall close to the X-ray generator and the control panel. Its main function is to act as a central switch for isolating the X-ray unit from the main electrical supply. It can also isolate other components such as Bucky table and Bucky stand.</p>
+
+        <h3>Knife Switch</h3>
+        <p>The mains switch is usually a knife-type switch. It consists of a heavy metal moving part, an insulated handle and metallic contacts. The operator moves the metal part into or out of the contacts to close or open the circuit.</p>
+
+        <h4>Types according to number of circuits</h4>
+        <p>A knife switch may be one-pole, two-pole, three-pole or four-pole. The number depends on the number of circuits it operates.</p>
+
+        <h4>Limitation of the Knife Switch</h4>
+        <p>The operator controls the speed at which the switch moves. Because the switching speed depends on the operator, knife switches are not used for high-voltage switching. Why? Because slow movement can contribute to arcing. The contact area is lubricated with grease to help reduce arcing and heat generation.</p>
+
+        <h4>Advantages</h4>
         <ul>
-          <li>Consists of a heavy metal moving part, insulated handle and metallic contacts</li>
-          <li>May be one-, two-, three- or four-pole</li>
+          <li>Cheap</li>
+          <li>Easy to operate</li>
+          <li>Easy to replace</li>
         </ul>
 
-        <div class="highlight-box">
-          <p><strong>Limitation:</strong> Switching speed depends on the operator. Slow movement can cause arcing, so knife switches are not used for high-voltage switching.</p>
-        </div>
+        <h4>Disadvantages</h4>
+        <ul>
+          <li>It cannot be used for high-voltage switching</li>
+          <li>Over time the contacts can lose their grip. This may create spaces between the moving pole and the contact, potentially resulting in contact welding or burning</li>
+        </ul>
 
         <h3>Magnetic Relays</h3>
-        <p>Use electromagnetism to perform switching. Contain two circuits:</p>
+        <p>Magnetic relays use electromagnetism to perform switching. They consist of an electromagnet, a movable iron arm called the armature, and a pair of opposed contacts. One contact is attached to the armature while the other remains stationary.</p>
+      </div>
+
+      <!-- PAGE 7 -->
+      <div class="section-card">
+        <h2>7️⃣ Magnetic Relay Operation</h2>
+        <p>A magnetic relay contains two circuits: Magnetic/control circuit and Switch circuit. This separation is very important. A relatively small control circuit can control another circuit through electromagnetic action.</p>
+
+        <div class="memory-tip">
+          <strong>💡 Analogy</strong>
+          <p>Imagine a person pressing a small button that causes a powerful machine to turn on. The person doesn’t have to physically handle the large electrical power. The small control action causes the relay to operate the larger circuit.</p>
+        </div>
+
+        <h3>Types of Magnetic Relays</h3>
         <ul>
-          <li>Magnetic / control circuit</li>
-          <li>Switch circuit</li>
+          <li><strong>Normally Closed (NC)</strong> – In its default state the contacts are closed. When the iron core is energized it attracts the armature and causes the contacts to open. Think: No power → CLOSED; Power applied → OPEN</li>
+          <li><strong>Normally Open (NO)</strong> – In its default state the contacts are open. When the electromagnet is energized it attracts the armature and closes the contacts. Think: No power → OPEN; Power applied → CLOSED</li>
         </ul>
 
-        <p>A small control signal can operate a larger power circuit.</p>
+        <h3>Operation of a Normally Open Magnetic Relay</h3>
+        <ol>
+          <li>Control switch is pressed → The magnetic circuit becomes complete</li>
+          <li>Control coil is energized → The coil magnetizes the iron core</li>
+          <li>Armature is attracted → The magnetic core pulls the armature toward it</li>
+          <li>Switch contacts close → The switch circuit becomes complete</li>
+          <li>Equipment is energized → The equipment is now on load</li>
+          <li>Control switch is released → The magnetic circuit is broken</li>
+          <li>Iron core loses magnetism → The armature is released</li>
+          <li>Switch circuit opens → The equipment is switched off</li>
+        </ol>
+      </div>
 
-        <div class="table-container">
-          <table class="summary-table">
-            <tr>
-              <th>Type</th>
-              <th>Default State</th>
-              <th>When Energized</th>
-            </tr>
-            <tr>
-              <td><strong>Normally Closed (NC)</strong></td>
-              <td>Contacts closed</td>
-              <td>Contacts open</td>
-            </tr>
-            <tr>
-              <td><strong>Normally Open (NO)</strong></td>
-              <td>Contacts open</td>
-              <td>Contacts close</td>
-            </tr>
-          </table>
+      <!-- CONCEPT MAP -->
+      <div class="section-card">
+        <h2>🧠 Complete Concept Map</h2>
+        <div class="highlight-box">
+          <p>ELECTRICAL PROTECTION<br>
+          ├─ FUSES<br>
+          │   ├─ Slow-blow (startup surges)<br>
+          │   └─ Fast-acting (sensitive circuits) / HRC<br>
+          └─ CIRCUIT BREAKERS<br>
+              ├─ Thermal (bimetal strip)<br>
+              └─ Electromagnetic (magnet + armature)<br><br>
+          SWITCHES<br>
+          ├─ Mains supply switch (Knife switch)<br>
+          └─ Magnetic relay<br>
+              ├─ NC<br>
+              └─ NO</p>
         </div>
       </div>
 
       <!-- HIGH-YIELD -->
       <div class="section-card">
-        <h2>⭐ High-Yield Points</h2>
+        <h2>⭐ High-Yield Exam Points</h2>
         <div class="quick-facts">
           <ul>
-            <li>Fuse must be connected in series</li>
-            <li>Slow-blow → tolerates brief startup surges</li>
-            <li>Fast-acting → protects sensitive semiconductor circuits</li>
-            <li>HRC fuse uses silica sand to quench the arc</li>
-            <li>Current rating = max continuous current</li>
-            <li>Voltage rating = max safe interrupting voltage</li>
-            <li>Thermal breaker: Heat → Bend → Trip</li>
-            <li>Electromagnetic breaker: Magnet → Pull → Trip</li>
-            <li>Circuit breakers are reusable; fuses are usually not</li>
-            <li>Knife switch = manual mains isolation (not for high voltage)</li>
-            <li>Magnetic relay: small control circuit operates larger switch circuit</li>
-            <li>NC = closed when no power; NO = open when no power</li>
+            <li><strong>Fuse definition:</strong> A protective device that interrupts a circuit by melting when excessive current flows. Key principle: Excess current → heating → melting → open circuit. Always connected in series.</li>
+            <li><strong>Main types:</strong> Slow-blow, Fast-acting, HRC, Resettable/PTC</li>
+            <li><strong>Slow-blow fuse:</strong> Allows short-duration current surges without blowing. Used for circuits with temporary startup currents (motors, transformers, certain X-ray components)</li>
+            <li><strong>Fast-acting fuse:</strong> Disconnects very quickly during dangerous overcurrent. Important for sensitive semiconductor/solid-state circuits</li>
+            <li><strong>HRC fuse:</strong> High-Rupturing Capacity. Important feature: silica sand helps quench electrical arc</li>
+            <li><strong>Fuse ratings:</strong> Current rating = how much current the fuse can carry; Voltage rating = maximum voltage at which it can safely interrupt the circuit without unacceptable arcing</li>
+            <li><strong>Circuit breaker definition:</strong> Reusable protective device that interrupts current during an overload or fault</li>
+            <li><strong>Thermal breaker:</strong> High current → Heat → Bimetal bends → Switch trips</li>
+            <li><strong>Electromagnetic breaker:</strong> High current → Strong magnetic field → Armature moves → Switch trips</li>
+            <li><strong>Switch main purpose:</strong> Make or break an electrical circuit</li>
+            <li><strong>Mains knife switch:</strong> Used to isolate the X-ray equipment from the mains</li>
+            <li><strong>Magnetic relay:</strong> Uses electromagnetism to control switching (NC or NO)</li>
           </ul>
         </div>
       </div>
 
-      <!-- CHECKLIST -->
+      <!-- QUICK REVISION TABLE -->
       <div class="section-card">
-        <h2>✅ Quick Revision Checklist</h2>
-        <div class="quick-facts">
-          <ul>
-            <li>Why electrical protection is needed</li>
-            <li>How a fuse works and why it must be in series</li>
-            <li>Slow-blow vs fast-acting fuses</li>
-            <li>Parts of a fuse and meaning of current & voltage ratings</li>
-            <li>Fuse vs circuit breaker comparison</li>
-            <li>Thermal circuit breaker operation</li>
-            <li>Electromagnetic circuit breaker operation</li>
-            <li>Purpose of the mains knife switch and its limitations</li>
-            <li>How a magnetic relay works (NO and NC)</li>
-          </ul>
+        <h2>📝 Quick Revision Table</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Device</th>
+              <th>Main principle</th>
+              <th>What happens during fault?</th>
+              <th>Reusable?</th>
+            </tr>
+            <tr>
+              <td>Fuse</td>
+              <td>Heating/melting</td>
+              <td>Element melts</td>
+              <td>Generally no</td>
+            </tr>
+            <tr>
+              <td>Slow-blow fuse</td>
+              <td>Delayed thermal response</td>
+              <td>Eventually melts during sustained overcurrent</td>
+              <td>Generally no</td>
+            </tr>
+            <tr>
+              <td>Fast-acting fuse</td>
+              <td>Rapid response</td>
+              <td>Quickly melts</td>
+              <td>Generally no</td>
+            </tr>
+            <tr>
+              <td>HRC fuse</td>
+              <td>Rapid interruption + arc quenching</td>
+              <td>Element melts and arc is suppressed</td>
+              <td>Generally no</td>
+            </tr>
+            <tr>
+              <td>Thermal circuit breaker</td>
+              <td>Bimetal heating</td>
+              <td>Strip bends and trips switch</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Electromagnetic breaker</td>
+              <td>Magnetic force</td>
+              <td>Armature trips switch</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Knife switch</td>
+              <td>Manual mechanical switching</td>
+              <td>Operator opens/closes circuit</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Magnetic relay</td>
+              <td>Electromagnetism</td>
+              <td>Armature changes contact state</td>
+              <td>Yes</td>
+            </tr>
+          </table>
         </div>
+      </div>
 
+      <!-- FINAL ANALOGY -->
+      <div class="section-card">
+        <h2>🎯 The Easiest Way to Remember Everything</h2>
         <div class="memory-tip">
-          <strong>🧠 Final Building Analogy</strong>
-          <p>Fuse = sacrificial security barrier<br>
-          Slow-blow = patient guard<br>
-          Fast fuse = highly sensitive guard<br>
-          HRC = fast fuse that safely handles the spark<br>
-          Circuit breaker = reusable automatic gate<br>
-          Thermal = heat & bend<br>
-          Electromagnetic = magnet & pull<br>
-          Knife switch = person operating the main gate<br>
-          Magnetic relay = small button that controls a powerful machine</p>
+          <strong>Think of an X-ray electrical system as a building</strong>
+          <p>Fuse: A sacrificial security barrier that destroys itself when danger occurs<br>
+          Slow-blow fuse: A patient security guard who allows brief unusual activity<br>
+          Fast fuse: A highly sensitive guard who reacts immediately<br>
+          HRC fuse: A fast fuse equipped to safely deal with the electrical “spark” produced when it interrupts a large fault<br>
+          Circuit breaker: A reusable automatic gate that closes during danger and can be reset<br>
+          Thermal breaker: Uses heat and bending<br>
+          Electromagnetic breaker: Uses magnetism and movement<br>
+          Knife switch: A person physically operates the main gate<br>
+          Magnetic relay: A small control switch uses a magnet to operate another electrical circuit</p>
         </div>
       </div>
 
       <!-- BUTTONS -->
-      <button class="explore-btn" onclick="window.location.href='note5q.html'">📝 Past Questions</button>
-      <button class="explore-btn secondary" onclick="window.location.href='note6.html'">Next Page →</button>
+      <button class="explore-btn" onclick="window.location.href='note4q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note5.html'">Next Page →</button>
 
     </div>
   </div>
