@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 312 - High-Tension Transformers</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:18px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:17px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{
+      background:var(--accent-tertiary);
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">RAD 312</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>⚡ High-Tension Transformers</h1>
+        <p>Step-up Voltage • Cores • Losses • Regulation • Rating • Efficiency</p>
+      </div>
+
+      <!-- ONE-SENTENCE SUMMARY -->
+      <div class="section-card">
+        <h2>📋 One-Sentence Summary</h2>
+        <p>The high-tension transformer is the step-up section of the X-ray generator. It uses electromagnetic induction and a large difference in the number of turns between primary and secondary windings to raise the relatively low mains voltage (240 V or 415 V) to the very high voltages (tens to over 100 kV) required by the X-ray tube.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Overall Flow</strong>
+          <p>Mains (240/415 V) → High-tension generator → High-tension transformer (step-up) → Very high voltage → X-ray tube</p>
+        </div>
+      </div>
+
+      <!-- 1. Why high voltage is needed -->
+      <div class="section-card">
+        <h2>1️⃣ Why Does an X-ray Machine Need Such High Voltage?</h2>
+        <p>The ordinary mains supply is far lower than the voltage required by the X-ray tube.</p>
+        <ul>
+          <li>Low-power equipment may take 240 V from a wall socket</li>
+          <li>Medium- to high-powered equipment may use 415 V</li>
+          <li>The X-ray tube itself may need 20 kV, 40 kV, or even 140 kV</li>
+        </ul>
+        <p>Therefore the machine needs a reliable method of converting the relatively low voltage into the very high voltage required. This is the job of the high-tension generator, which consists of:</p>
+        <ul>
+          <li>High-tension transformer</li>
+          <li>Rectifiers</li>
+          <li>Voltage-stabilizing components</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of the mains supply as standing at the bottom of a staircase. The X-ray tube needs to be much higher up. The high-tension generator provides the means of climbing from the low voltage to the very high voltage required.</p>
+        </div>
+      </div>
+
+      <!-- 2. What is a transformer -->
+      <div class="section-card">
+        <h2>2️⃣ What is a Transformer?</h2>
+        <p>A transformer is a device that can either step voltage up or step voltage down. It contains:</p>
+        <ul>
+          <li>An iron core</li>
+          <li>A primary winding</li>
+          <li>A secondary winding</li>
+        </ul>
+        <p>When current flows through the primary winding it produces a magnetic field. This magnetic field passes through the core and induces an electrical current in the secondary winding.</p>
+
+        <h3>Important principle – Turns Ratio</h3>
+        <p>The voltage depends on the number of turns of wire in the windings:</p>
+        <div class="highlight-box">
+          <p>More secondary turns → higher secondary voltage<br>
+          Fewer secondary turns → lower secondary voltage</p>
+        </div>
+
+        <h3>Types</h3>
+        <ul>
+          <li><strong>Step-up transformer</strong> – secondary has more turns than primary</li>
+          <li><strong>Step-down transformer</strong> – primary has more turns than secondary</li>
+        </ul>
+        <p>For X-ray high-tension applications we are primarily interested in the <strong>step-up transformer</strong>.</p>
+      </div>
+
+      <!-- 3. Transformer ratio example -->
+      <div class="section-card">
+        <h2>3️⃣ Transformer Ratio Example (400 V → 120 kV)</h2>
+        <p>Suppose we want to transform 400 V into 120 kV.</p>
+        <p>Voltage ratio = 120 000 V ÷ 400 V = 300</p>
+        <p>Therefore the secondary needs 300 times as many turns as the primary.</p>
+        <div class="highlight-box">
+          <p>1 turn on the primary corresponds to 300 turns on the secondary.</p>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine a bicycle with gears. A small gear driving a much larger gear changes the mechanical relationship between input and output. Similarly, changing the number of turns between primary and secondary changes the voltage relationship.</p>
+        </div>
+      </div>
+
+      <!-- 4. kVp and RMS -->
+      <div class="section-card">
+        <h2>4️⃣ kVp and RMS Voltage</h2>
+        <p>In X-ray equipment, voltage selection is normally expressed as <strong>kVp</strong> (kilovoltage peak).</p>
+        <p>Why “peak”? Because the incoming AC voltage does not remain constant. It rises from zero to a maximum value and then falls back toward zero in a sinusoidal pattern.</p>
+        <p>If an X-ray machine is set to 100 kVp, the 100 kV represents the peak voltage.</p>
+
+        <h3>RMS Voltage</h3>
+        <p>The root-mean-square (RMS) value is the effective or average AC voltage. For a sinusoidal AC voltage:</p>
+        <div class="highlight-box">
+          <p>RMS ≈ Peak × 0.707</p>
+        </div>
+        <p>So if the peak is 100 kV, the RMS value is approximately 70.7 kV.</p>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Term</th>
+              <th>Meaning</th>
+            </tr>
+            <tr>
+              <td><strong>kV</strong></td>
+              <td>General voltage value</td>
+            </tr>
+            <tr>
+              <td><strong>kVp</strong></td>
+              <td>Peak kilovoltage</td>
+            </tr>
+            <tr>
+              <td><strong>RMS</strong></td>
+              <td>Effective / average AC voltage</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 5. Types of transformer cores -->
+      <div class="section-card">
+        <h2>5️⃣ Types of Transformer Cores</h2>
+
+        <h3>1. Air-core type</h3>
+        <p>No magnetic material between primary and secondary windings.</p>
+        <ul>
+          <li><strong>Advantage:</strong> Can be very small; suitable for circuit-board applications</li>
+          <li><strong>Disadvantage:</strong> Not all magnetic flux from the primary reaches the secondary → increased transformer losses</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine trying to send water from one pipe to another. If the connection is poorly directed, some water is lost. With an air-core transformer some of the magnetic flux does not effectively reach the secondary winding.</p>
+        </div>
+
+        <h3>2. Open-core transformer</h3>
+        <p>Uses a rectangular bar core. The secondary winding is wound over the primary winding with insulating material between them. Has lower losses than the pure air-core type.</p>
+
+        <h3>3. Closed-core transformer</h3>
+        <p>Has a rectangular-shaped core with the windings positioned on opposite ends. The magnetic flux has to travel around the core from the primary side to the secondary side.</p>
+
+        <h3>4. Rectangular-core variation</h3>
+        <p>Both primary and secondary windings are associated with both sides of the core. The secondary winding is positioned above the primary winding.</p>
+
+        <h3>5. Shell-type transformer</h3>
+        <p>Identified as the <strong>most efficient</strong> of the designs discussed. The secondary winding is wound over the primary winding. This arrangement improves magnetic coupling between the windings and reduces energy wastage.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Easy way to remember</strong>
+          <p>The goal is to get as much of the magnetic field from the primary to the secondary as possible. Better magnetic coupling = less energy wasted.</p>
+        </div>
+      </div>
+
+      <!-- 6. Magnetic core, eddy currents, cooling -->
+      <div class="section-card">
+        <h2>6️⃣ Magnetic Core, Eddy Currents and Cooling</h2>
+
+        <h3>Magnetic core materials</h3>
+        <p>The magnetic core is made from iron alloys such as:</p>
+        <ul>
+          <li>Silicon-iron</li>
+          <li>Nickel-iron</li>
+        </ul>
+        <p>These materials help reduce eddy currents generated by the repeated magnetization of the core.</p>
+
+        <h3>What are eddy currents?</h3>
+        <p>Eddy currents are unwanted electrical currents generated within the magnetic core as the magnetic field changes. They result in:</p>
+        <ul>
+          <li>Heat production</li>
+          <li>Energy wastage</li>
+          <li>Possible damage to components</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine stirring water in a bucket. Instead of all the water moving in one useful direction, little circular currents form throughout the water. Eddy currents are similar – unwanted circulating currents develop within the transformer core.</p>
+        </div>
+
+        <h3>Laminating the core</h3>
+        <p>One method used to reduce eddy currents is to construct the iron core from thin sheets of metal placed together. These thin sheets restrict the paths available for eddy currents and therefore reduce energy loss.</p>
+
+        <h3>Why does the transformer hum?</h3>
+        <p>The laminated metal sheets are repeatedly magnetized and affected by the AC cycle. The sheets can repel one another during part of the AC cycle and come together again as the cycle changes. This produces the familiar humming sound associated with transformers.</p>
+
+        <h3>Transformer Oil</h3>
+        <p>Even after measures are taken to reduce losses, the windings and magnetic core still generate a considerable amount of heat. The transformer assembly is therefore immersed in oil.</p>
+        <p>The oil serves two major purposes:</p>
+        <ul>
+          <li><strong>Cooling</strong></li>
+          <li><strong>Electrical insulation</strong></li>
+        </ul>
+        <p>In an X-ray room the high-tension generator tank is an airtight metal container filled with oil, with the high-tension transformer immersed inside it.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Easy memory trick</strong>
+          <p>Transformer oil = <strong>C + I</strong><br>
+          C = Cooling<br>
+          I = Insulation</p>
+        </div>
+      </div>
+
+      <!-- 7. Transformer losses -->
+      <div class="section-card">
+        <h2>7️⃣ Transformer Losses</h2>
+        <p>A transformer is not ideal. The voltage/power obtained from the secondary is not exactly what would be expected from a perfectly lossless transformer.</p>
+        <p>There are two major circuits:</p>
+        <ul>
+          <li><strong>Electrical circuit</strong> – mainly the windings</li>
+          <li><strong>Magnetic circuit</strong> – mainly the magnetic core</li>
+        </ul>
+        <p>Therefore losses are divided into electrical losses and magnetic losses.</p>
+
+        <h3>Electrical (winding) losses</h3>
+        <p>The wire in the windings has resistance. When current flows through this resistance, electrical energy is converted into heat.</p>
+        <div class="highlight-box">
+          <p>Power loss (P) = I² × R<br>
+          where I = current and R = resistance</p>
+        </div>
+        <p>How can resistance losses be reduced?</p>
+        <ul>
+          <li>Smaller-diameter wires (where appropriate)</li>
+          <li>Shorter wire length</li>
+          <li>Materials with lower resistance such as copper</li>
+        </ul>
+
+        <h3>Magnetic losses</h3>
+        <p><strong>1. Hysteresis loss</strong><br>
+        Hysteresis produces heat in the magnetic core because the direction of magnetic flux is constantly changing. It can be reduced by using special alloys for the core.</p>
+
+        <p><strong>2. Eddy-current loss</strong><br>
+        Changing magnetic flux produces currents within the core. These currents are dissipated as heat. Eddy-current losses are reduced through:</p>
+        <ul>
+          <li>Special alloys</li>
+          <li>Lamination of the core</li>
+        </ul>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Loss</th>
+              <th>Main cause</th>
+              <th>Main effect</th>
+              <th>Reduction</th>
+            </tr>
+            <tr>
+              <td>Electrical</td>
+              <td>Resistance in windings</td>
+              <td>Heat</td>
+              <td>Suitable wire / material</td>
+            </tr>
+            <tr>
+              <td>Hysteresis</td>
+              <td>Repeated magnetic reversal</td>
+              <td>Heat</td>
+              <td>Special alloys</td>
+            </tr>
+            <tr>
+              <td>Eddy current</td>
+              <td>Induced currents in core</td>
+              <td>Heat</td>
+              <td>Laminated core + alloys</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 8. Transformer regulation and efficiency -->
+      <div class="section-card">
+        <h2>8️⃣ Transformer Regulation and Efficiency</h2>
+
+        <h3>Transformer regulation</h3>
+        <p>When a transformer has no load connected to the secondary, its output voltage is relatively close to the expected value (little current flows in the primary and essentially no current flows in the secondary).</p>
+        <p>When a load is connected, current increases and the voltage available at the secondary falls.</p>
+
+        <h4>X-ray example</h4>
+        <p>As the selected mA increases, the actual potential difference between the cathode and anode can decrease. Therefore a voltage compensator is required to help maintain the selected kV despite changes in mA.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine a water tank supplying several taps. If only one tap is open the pressure is relatively high. If many taps are opened simultaneously the pressure may drop. Increasing the electrical load can cause the transformer’s output voltage to fall in the same way.</p>
+        </div>
+
+        <p>Manufacturers describe the voltage drop between no-load and full-load conditions using <strong>percentage regulation</strong>.</p>
+        <p>Transformer regulation for radiographic exposures is higher than for fluoroscopy because:</p>
+        <ul>
+          <li>Radiography involves an instantaneous load</li>
+          <li>Fluoroscopy operates with a continuous load</li>
+        </ul>
+
+        <h3>Transformer efficiency</h3>
+        <p>Because some energy is lost, the output power is lower than the input power.</p>
+        <div class="highlight-box">
+          <p>Efficiency = (Output power ÷ Input power) × 100 %</p>
+        </div>
+        <p>Normal transformers have about 90 % efficiency. Larger, higher-rated transformers generally have greater efficiency than smaller, lower-rated transformers.</p>
+        <p><strong>Example:</strong> If input power is 100 units and output power is 90 units, efficiency is 90 %. The remaining 10 % represents energy lost mainly as heat and other transformer losses.</p>
+      </div>
+
+      <!-- 9. Transformer rating -->
+      <div class="section-card">
+        <h2>9️⃣ Transformer Rating</h2>
+        <p>Transformer rating refers to the amount of load a transformer can carry for a specified period of time. If operated beyond its capability it can overheat and damage or destroy its insulation.</p>
+
+        <h3>Why duration matters</h3>
+        <ul>
+          <li><strong>Fluoroscopy</strong> – lower current, sustained/continuous operation</li>
+          <li><strong>Conventional radiography</strong> – higher current, short/instantaneous operation</li>
+        </ul>
+        <p>A transformer can tolerate a large amount of current for a very short period more easily than the same current continuously.</p>
+
+        <h3>Three important rating specifications (expressed in kVA)</h3>
+        <ol>
+          <li><strong>Peak kilovoltage</strong> – the maximum kV obtainable when the transformer is not on load</li>
+          <li><strong>Maximum continuous current</strong> – the highest current the transformer can provide during continuous operation</li>
+          <li><strong>Maximum short-duration current</strong> – the maximum current the transformer can provide for a period of not less than 1 second</li>
+        </ol>
+
+        <h3>Why can instantaneous current be higher?</h3>
+        <p>During a short exposure the transformer generates heat but has less time for the heat to accumulate to a dangerous level. During continuous operation heat continues to build up.</p>
+        <p>Therefore radiographic transformers have higher ratings than fluoroscopy transformers because of the different current and operating-duration requirements of the two procedures.</p>
+      </div>
+
+      <!-- HIGH-YIELD -->
+      <div class="section-card">
+        <h2>⭐ High-Yield Points for Exams</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>A transformer changes voltage by electromagnetic induction</li>
+            <li>Main parts: primary winding, secondary winding, magnetic core</li>
+            <li>Step-up = more secondary turns; Step-down = more primary turns</li>
+            <li>X-ray high-tension transformers are step-up transformers</li>
+            <li>Voltage ratio is related to the turns ratio</li>
+            <li>kVp = kilovoltage peak; RMS ≈ Peak × 0.707</li>
+            <li>Shell-type core is the most efficient of the designs discussed</li>
+            <li>Silicon-iron and nickel-iron alloys are used for magnetic cores</li>
+            <li>Laminating the core reduces eddy-current losses</li>
+            <li>Transformer oil provides Cooling + Insulation (C + I)</li>
+            <li>Major losses: electrical/winding (I²R), hysteresis, eddy current</li>
+            <li>Transformer regulation describes the voltage drop from no-load to full-load</li>
+            <li>Increasing mA can reduce actual kV → voltage compensator needed</li>
+            <li>Efficiency ≈ 90 % for normal transformers</li>
+            <li>Rating depends on duration: continuous vs short-duration current</li>
+            <li>Radiographic transformers have higher ratings than fluoroscopy transformers</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="section-card">
+        <h2>✅ Quick Revision Checklist</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Why high voltage is needed and the role of the high-tension generator</li>
+            <li>Basic principle of a transformer and the turns-ratio relationship</li>
+            <li>Difference between step-up and step-down transformers</li>
+            <li>Meaning of kVp and RMS</li>
+            <li>Air-core, open-core, closed-core, rectangular and shell-type designs</li>
+            <li>Eddy currents, lamination and the reason for transformer hum</li>
+            <li>Two functions of transformer oil</li>
+            <li>Electrical losses, hysteresis losses and eddy-current losses</li>
+            <li>Transformer regulation and why voltage compensators are needed</li>
+            <li>Transformer efficiency formula and typical value</li>
+            <li>Three rating specifications and the difference between continuous and short-duration current</li>
+            <li>Why radiographic and fluoroscopy transformers have different ratings</li>
+          </ul>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 One-minute revision</strong>
+          <p>The high-tension transformer is the step-up section of the X-ray generator. It uses electromagnetic induction and different numbers of turns to increase voltage. Losses occur due to winding resistance, hysteresis and eddy currents. Laminated cores and transformer oil help control these problems. When a load is applied, output voltage can fall (regulation). Efficiency describes how much input power becomes useful output power, while rating describes how much load the transformer can safely handle for a specified time.</p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='note6q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note7.html'">Next Page →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
