@@ -327,6 +327,52 @@
     }
     @keyframes rot { to { transform: rotate(360deg); } }
 
+    .wip-overlay {
+      position: fixed; inset: 0; z-index: 90;
+      background: rgba(2, 6, 16, 0.72);
+      backdrop-filter: blur(8px);
+      display: grid; place-items: center;
+      padding: 24px;
+    }
+    .wip-overlay.hide {
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .wip-box {
+      position: relative;
+      width: min(420px, 100%);
+      background: var(--card);
+      border: 1px solid rgba(34, 211, 238, 0.28);
+      border-radius: 22px;
+      padding: 28px 24px 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+    .wip-close {
+      position: absolute; top: 12px; right: 12px;
+      width: 36px; height: 36px; border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--elev);
+      color: var(--text);
+      font-size: 20px; line-height: 1;
+      cursor: pointer;
+    }
+    .wip-close:hover { border-color: var(--cyan); color: var(--cyan); }
+    .wip-kicker {
+      color: var(--cyan); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .wip-box h3 {
+      font-family: Outfit, sans-serif;
+      font-size: 22px; letter-spacing: -0.03em; margin-bottom: 10px;
+    }
+    .wip-box p { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+    .wip-meter { height: 8px; background: #1e293b; border-radius: 99px; overflow: hidden; }
+    .wip-meter span {
+      display: block; height: 100%; width: 1%;
+      background: var(--grad-a);
+    }
+
     @media (max-width: 960px) {
       .nav-links { display: none; }
       .menu-btn { display: block; }
@@ -345,6 +391,15 @@
 </head>
 <body>
   <div class="loader" id="loader"><div class="spin"></div></div>
+  <div class="wip-overlay" id="wipOverlay" role="dialog" aria-modal="true" aria-labelledby="wipTitle">
+    <div class="wip-box">
+      <button class="wip-close" id="wipClose" type="button" aria-label="Cancel popup">✕</button>
+      <div class="wip-kicker">RadIQ notice</div>
+      <h3 id="wipTitle">Work still in progress (1%)</h3>
+      <p>The lab is early. You can keep browsing, then close this anytime.</p>
+      <div class="wip-meter" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
   <div class="scanlines"></div>
 
   <nav class="nav" id="nav">
@@ -660,6 +715,17 @@
       alert("On most phones: open the browser menu and choose Add to Home Screen.");
     }
     document.getElementById("installBtn").addEventListener("click", installApp);
+
+    function closeWip() {
+      document.getElementById("wipOverlay").classList.add("hide");
+    }
+    document.getElementById("wipClose").addEventListener("click", closeWip);
+    document.getElementById("wipOverlay").addEventListener("click", (e) => {
+      if (e.target.id === "wipOverlay") closeWip();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeWip();
+    });
   </script>
 </body>
 </html>
