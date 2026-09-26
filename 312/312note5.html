@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 312 - Fuses, Switches & Circuit Breakers</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:18px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:17px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{
+      background:var(--accent-tertiary);
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">RAD 312</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>⚡ Fuses, Switches & Circuit Breakers</h1>
+        <p>Electrical Protection • Slow/Fast Fuses • Thermal & Electromagnetic Breakers</p>
+      </div>
+
+      <!-- ONE-SENTENCE SUMMARY -->
+      <div class="section-card">
+        <h2>📋 One-Sentence Summary</h2>
+        <p>Fuses, circuit breakers and switches protect X-ray equipment from excessive current by interrupting the circuit when necessary, while switches also control the making and breaking of electrical connections.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Ultimate Memory Line</strong>
+          <p>Fuse melts • Breaker trips • Switch controls • Relay uses magnetism<br>
+          Thermal = Heat → Bend → Trip<br>
+          Electromagnetic = Magnet → Pull → Trip</p>
+        </div>
+      </div>
+
+      <!-- 1. Why protection is needed -->
+      <div class="section-card">
+        <h2>1️⃣ Why Protection is Needed</h2>
+        <p>X-ray equipment is supplied from the electrical mains. Voltage spikes and fluctuations can cause current to rise higher than components can safely handle.</p>
+
+        <p>Excessive current can:</p>
+        <ul>
+          <li>Overheat components</li>
+          <li>Damage equipment</li>
+          <li>Cause failure</li>
+          <li>Create electrical safety hazards</li>
+        </ul>
+
+        <div class="highlight-box">
+          <p>The two major protective devices are <strong>fuses</strong> and <strong>circuit breakers</strong>. Their main purpose is to disconnect the equipment when excessive current occurs.</p>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Electrical current is like water flowing through a pipe. If too much water suddenly enters, the pipe could burst. A protective device acts like an automatic valve that stops the flow before serious damage occurs.</p>
+        </div>
+      </div>
+
+      <!-- 2. Fuses -->
+      <div class="section-card">
+        <h2>2️⃣ Fuses</h2>
+        <p>A fuse is a protective device that protects a circuit from overcurrent by melting and breaking the circuit when excessive current flows.</p>
+
+        <h3>How a fuse works</h3>
+        <p>Current through the fuse element generates heat. If the current becomes excessively high, the heat melts the element (“the fuse blows”).</p>
+
+        <div class="highlight-box">
+          <p>Excessive current → Fuse heats → Fuse melts → Circuit opens → Equipment is protected</p>
+        </div>
+
+        <h3>Correct connection</h3>
+        <p>A fuse must always be connected <strong>in series</strong> with the circuit it protects.</p>
+        <div class="highlight-box">
+          <p>Power supply → Fuse → Equipment</p>
+        </div>
+        <p>If connected in parallel, current could still flow through another path and protection would fail.</p>
+
+        <h3>Types of fuses</h3>
+        <ul>
+          <li><strong>Resettable (PTC) fuses</strong> – can return to operation after cooling (reduce downtime)</li>
+          <li><strong>Glass or ceramic cartridge fuses</strong> – common in older or simpler systems</li>
+          <li><strong>HRC fuses</strong> (High-Rupturing Capacity) – used for higher currents; contain silica sand to quench the arc</li>
+        </ul>
+      </div>
+
+      <!-- 3. Slow-blow vs Fast-acting -->
+      <div class="section-card">
+        <h2>3️⃣ Slow-Blow vs Fast-Acting Fuses</h2>
+
+        <h3>Slow-Blow Fuses</h3>
+        <p>Designed to tolerate a brief increase in current without immediately blowing. Useful for equipment that draws a high starting current (motors, transformers, some X-ray components).</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>A security guard who sees someone running quickly does not immediately assume danger. The guard waits to see if the unusual activity continues. Brief surge → wait. Persistent overcurrent → disconnect.</p>
+        </div>
+
+        <h3>Fast-Acting Fuses</h3>
+        <p>Respond very quickly to dangerous overcurrent. Essential for protecting sensitive components such as diodes, transistors and integrated circuits.</p>
+        <p>HRC fuses use silica sand as an arc-quenching medium.</p>
+      </div>
+
+      <!-- 4. Fuse components & ratings -->
+      <div class="section-card">
+        <h2>4️⃣ Fuse Components & Ratings</h2>
+
+        <h3>Main parts</h3>
+        <ul>
+          <li><strong>Fuse element</strong> – the sacrificial part that melts</li>
+          <li><strong>Fuse link</strong> (or fuse block) – houses the element (glass or ceramic)</li>
+          <li><strong>Fuse powder</strong> – helps prevent arcing (chalk, dust, POP, ground ceramic)</li>
+          <li><strong>Fuse cap</strong></li>
+        </ul>
+
+        <h3>Ratings</h3>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Rating</th>
+              <th>Meaning</th>
+            </tr>
+            <tr>
+              <td><strong>Current rating</strong></td>
+              <td>Maximum current the fuse can carry without blowing</td>
+            </tr>
+            <tr>
+              <td><strong>Voltage rating</strong></td>
+              <td>Maximum voltage it can safely interrupt without dangerous arcing</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="highlight-box">
+          <p>Using a fuse with too low a rating causes unnecessary interruptions.<br>
+          Using a fuse with too high a rating fails to protect the circuit.</p>
+        </div>
+      </div>
+
+      <!-- 5. Circuit Breakers -->
+      <div class="section-card">
+        <h2>5️⃣ Circuit Breakers</h2>
+        <p>A circuit breaker is a reusable protective device. It interrupts current during overload or fault and can afterwards be reset.</p>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Feature</th>
+              <th>Fuse</th>
+              <th>Circuit Breaker</th>
+            </tr>
+            <tr>
+              <td>Action</td>
+              <td>Melts</td>
+              <td>Trips / opens</td>
+            </tr>
+            <tr>
+              <td>After fault</td>
+              <td>Usually needs replacement</td>
+              <td>Can be reset</td>
+            </tr>
+            <tr>
+              <td>Nature</td>
+              <td>Sacrificial</td>
+              <td>Reusable</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>A fuse is a breakable emergency link — once it breaks you replace it.<br>
+          A circuit breaker is an automatic door that closes during danger and can later be opened/reset.</p>
+        </div>
+      </div>
+
+      <!-- 6. Thermal Circuit Breakers -->
+      <div class="section-card">
+        <h2>6️⃣ Thermal Circuit Breakers</h2>
+        <p>Mainly used for low-voltage sections. They use a <strong>bimetallic strip</strong> (two different metals joined together).</p>
+
+        <p>When heated, the two metals expand differently, so the strip bends.</p>
+
+        <div class="highlight-box">
+          <p>High current → Heating → Bimetallic strip bends → Spring mechanism operates → Switch opens → Circuit interrupted</p>
+        </div>
+
+        <p>After tripping, some thermal breakers cannot be reset until the strip has cooled.</p>
+      </div>
+
+      <!-- 7. Electromagnetic Circuit Breakers -->
+      <div class="section-card">
+        <h2>7️⃣ Electromagnetic Circuit Breakers</h2>
+        <p>Often used for high-voltage circuits. They rely on electromagnetism rather than heat.</p>
+
+        <div class="highlight-box">
+          <p>High current → Electromagnet becomes strongly magnetized → Armature is attracted → Spring-loaded switch trips → Circuit opens</p>
+        </div>
+
+        <p>Advantage: can usually be reset immediately without waiting for cooling. Many have a reset button.</p>
+      </div>
+
+      <!-- 8. Switches -->
+      <div class="section-card">
+        <h2>8️⃣ Switches</h2>
+        <p>A switch makes or breaks an electrical circuit (controls whether the circuit is closed or open).</p>
+
+        <h3>Mains Supply Switch (Knife Switch)</h3>
+        <p>Usually a knife-type switch mounted on the wall near the generator or control panel. Isolates the X-ray unit from the mains supply.</p>
+        <ul>
+          <li>Consists of a heavy metal moving part, insulated handle and metallic contacts</li>
+          <li>May be one-, two-, three- or four-pole</li>
+        </ul>
+
+        <div class="highlight-box">
+          <p><strong>Limitation:</strong> Switching speed depends on the operator. Slow movement can cause arcing, so knife switches are not used for high-voltage switching.</p>
+        </div>
+
+        <h3>Magnetic Relays</h3>
+        <p>Use electromagnetism to perform switching. Contain two circuits:</p>
+        <ul>
+          <li>Magnetic / control circuit</li>
+          <li>Switch circuit</li>
+        </ul>
+
+        <p>A small control signal can operate a larger power circuit.</p>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Type</th>
+              <th>Default State</th>
+              <th>When Energized</th>
+            </tr>
+            <tr>
+              <td><strong>Normally Closed (NC)</strong></td>
+              <td>Contacts closed</td>
+              <td>Contacts open</td>
+            </tr>
+            <tr>
+              <td><strong>Normally Open (NO)</strong></td>
+              <td>Contacts open</td>
+              <td>Contacts close</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- HIGH-YIELD -->
+      <div class="section-card">
+        <h2>⭐ High-Yield Points</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Fuse must be connected in series</li>
+            <li>Slow-blow → tolerates brief startup surges</li>
+            <li>Fast-acting → protects sensitive semiconductor circuits</li>
+            <li>HRC fuse uses silica sand to quench the arc</li>
+            <li>Current rating = max continuous current</li>
+            <li>Voltage rating = max safe interrupting voltage</li>
+            <li>Thermal breaker: Heat → Bend → Trip</li>
+            <li>Electromagnetic breaker: Magnet → Pull → Trip</li>
+            <li>Circuit breakers are reusable; fuses are usually not</li>
+            <li>Knife switch = manual mains isolation (not for high voltage)</li>
+            <li>Magnetic relay: small control circuit operates larger switch circuit</li>
+            <li>NC = closed when no power; NO = open when no power</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="section-card">
+        <h2>✅ Quick Revision Checklist</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Why electrical protection is needed</li>
+            <li>How a fuse works and why it must be in series</li>
+            <li>Slow-blow vs fast-acting fuses</li>
+            <li>Parts of a fuse and meaning of current & voltage ratings</li>
+            <li>Fuse vs circuit breaker comparison</li>
+            <li>Thermal circuit breaker operation</li>
+            <li>Electromagnetic circuit breaker operation</li>
+            <li>Purpose of the mains knife switch and its limitations</li>
+            <li>How a magnetic relay works (NO and NC)</li>
+          </ul>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Final Building Analogy</strong>
+          <p>Fuse = sacrificial security barrier<br>
+          Slow-blow = patient guard<br>
+          Fast fuse = highly sensitive guard<br>
+          HRC = fast fuse that safely handles the spark<br>
+          Circuit breaker = reusable automatic gate<br>
+          Thermal = heat & bend<br>
+          Electromagnetic = magnet & pull<br>
+          Knife switch = person operating the main gate<br>
+          Magnetic relay = small button that controls a powerful machine</p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='note5q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note6.html'">Next Page →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
