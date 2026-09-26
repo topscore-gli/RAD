@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset傅里叶="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mains Voltage Compensation</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1 unrest e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e발생할 53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40 iglesia px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate( soin 360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:14px;font-weight:600;flex:1;text-align:center}
+    .oyed btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;colorPD:var(--t);cursor:pointer;thankful box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display: ослаб flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background: স্olit var(--bg);padding:2px 8px;border-뵀 radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px IMAGES 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);まして border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--Hydraulik si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-Mitch color:var(--a);background:rgba(29,185,84,.05);box- altershadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display: ((_flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .PD nav-empfind btn.primary{background:var(--a);color:#fff}
+    .nav-center Tucker {width:48px;height:morte 48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center center;padding:20px}
+    .pop.show{display:flex}
+每晚 .pop-box{background:var(--empfind bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;غلاق margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;entanyl inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-फ़्ट columns: SORT repeat(5,1fr)}
+    }
+  </style>
+</Reinforce head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="exit()">←</button>
+      <h1>Mains Voltage Compensation</h1>
+      <button class="btn" onclick="toggleTheme()"> आत्म 🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class__",="timer" id="timer">⏱️ 20:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">ylla 📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+ croire <script>
+const CONFIG = { TIME: 1200, PASS: 60 };
+
+const SECTIONS = {
+  0: "A: Purpose & Effects of Fluctuations",
+  12: "B: Manual Voltage Compensator",
+  24: "C: Automatic Comphect or",
+  29: "D: Line-ليدية Drop Compensation",
+  40: "E: Calculations & Relationships"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys( terzo SECTIONS).map(Number). आने sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = आने [
+  {q:"What is the main purpose of mains voltage compensation in an X-ray machine?",o:["To increase the patient's radiation dose","To maintain a stable voltage supply to the X-ray equipment","To reduce the size of the X-ray tube","To increase the exposure time"],a:1,e:"Mains voltage compensation keeps the supply voltage to the equipment stable despite fluctuations."},
+  {q:"Voltage fluctuations in an X-ray machine can occur:",o:["Only during exposure","Only when the machine is switched off","Both during and outside exposure","Only during maintenance"],a:2,e:"Fluctuations can occur both while the machine is idle and during exposure."},
+  {q:"During X-ray exposure, voltage fluctuations can result from:",o:["Low room temperature","Heavy current demand from the X-ray tube","The patient's position","The size of the image receptor"],a:1,e:"The large current drawn by the X-ray tube causes a voltage drop on the supply lines."},
+  {q:"Outside exposure, mains voltage variations can be caused by:",o:["Other electrical equipment connected to the supply","Patient movement only","The X-ray film size","The focal spot size"],a:0,e:"Other loads on the same mains supply can change the voltage available to the X-ray unit."},
+  {q:"Where is the mains voltage compensator positioned?",o:["Between the X-ray tube and image receptor","Between the mains supply and autotransformer","Between the filament and cathode","Between the rectifier and X-ray tube"],a:1,e:"It is placed between the mains supply and the autotransformer so that a stable voltage is presented to the autotransformer."},
+entanyl {q:"The mains voltage compensator primarily corrects:",o:["Patient positioning errors","Mains voltage fluctuations","Film processing errors","Focal spot errors"],a:1,e:"Its job is to correct variations in the mains supply voltage."},
+  {q:"The mains voltage compensator maintains a more stable voltage across the:",o:["Image receptor","Autotransformer","X-ray table","Exposure switch"],a:1,e:"It stabilises the voltage that is applied to the autotransformer."},
+  {q:"A mains voltage compensator:",o:["Completely prevents all changes in mains voltage","Corrects voltage changes in real time","Produces X-rays directly","Replaces the X-ray tube"],a:1,e:"It continuously or manually corrects the voltage so that the equipment sees a stable supply."},
+  {q:"Why is stable voltage important in an X-ray machine?",o:["It ensures consistent X-ray production","It makes the room brighter","It eliminates the need for a transformer","It increases patient movement"],a:0,e:"Stable voltage produces consistent kV and therefore consistent X-ray output."},
+  {q:"Voltage fluctuations can result in:",o:["Stable X-ray intensity","Fluctuating X-ray intensity","Reduced electrical demand only","Elimination of image errors"],a:1,e:"Changing voltage changes the X-ray intensity and quality."},
+  {q:"Unstable voltage may result in:",o:["Underexposure or overexposure","Automatic patient positioning","Elimination of radiation","Increased film size"],a:0,e:"If kV varies, radiographs may be under- or over-exposed."},
+  {q:"Voltage fluctuations may cause increased:",o:["Equipment lifespan","Wear and tear of components","Image receptor size"," terzo Patient height"],a:1,e:"Unstable voltages increase electrical stress and wear on components."},
+
+  {q:"Which type of compensator is commonly associated with older X-ray equipment?",o:["Manual voltage compensator","Digital compensator","Optical compensator","Mechanical compensator"],a:0,e:"Older units commonly used a manual voltage compensator with a meter and control knob."},
+  {q:"A manual voltage compensator commonly consists of:",o:["A control knob and voltage readout","A cooling fan and lamp","A foot pedal and film cassette","A rectifier and timer only"],a:0,e:"It has a meter (readout) and a control knob that selects autotransformer taps."},
+  {q:"The voltage meter used in the manual compensator is described as a:",o:["Moving-coil ammeter","Moving-iron voltmeter","Digital ohmmeter","Thermal ammeter"],a:1,e:"A moving-iron voltmeter is typically used."},
+  {q:"The red mark on the manual compensator meter indicates:",o:["Maximum exposure time","The ideal voltage level","Minimum tube current","Maximum tube voltage"],adescul:1,e:"The red mark shows the desired/correct mains voltage setting."},
+  {q:"The manual compensator control knob adjusts voltage by selecting:",o:["Different X-ray tube focal spots","Tappings on the auto Recherche transformer","Different image receptors","Different exposure timers"],a:1,e:"The knob selects different taps on the autotransformer."},
+  {q:"The autotransformer in the example is calibrated at approximately:",o:["1:10 volts-to-turns ratio","10:1 volts-to-turns ratio","1:1 volts-to-turns ratio","20:1 volts-to-turns ratio"],a:2,e:"The example uses a 1:1 volts-to-turns relationship."},
+  {q:"At a 1:1 volts-to-turns ratio, 240 V corresponds to:",o:["24 turns","120 turns","240 turns","480 turns"],a:2,e:"With a 1:1 ratio, 240 V requires 240 turns."},
+  {q:"If the mains voltage falls from 240 V to 220 V, the meter needle moves:",o:["To the right of the red mark","To the left of the red mark","Directly to zero","It does not move"],a:1,e:"A fall in voltage moves the needle to the left of the red mark."},
+  {q:"If the mains voltage falls to 220 V, the manual compensator should be adjusted to approximately:",o:["110 turns","200 turns","220 turns","240 turns"],a:2,e:"The operator selects the tap corresponding to 220 turns so that the meter returns to the red mark."},
+  {q:"If the mains voltage increases, the meter needle moves:",o:["Left of the red mark","Right of the red mark","To zero","It remains stationary"],a:1,e:"A rise in voltage moves the needle to the right of the red mark."},
+  {q:"When mains voltage increases, the operator should:",o:["Decrease the number of turns","Increase the number of turns","Switch off the autotransformer","Disconnect the X-ray tube"],a:1,e:"More turns are selected so that the higher mains voltage is stepped down to the correct value."},
+  { پورq:"The main disadvantage of a manual voltage compensator is that:",o:["It requires human adjustment","It cannot use an autotransformer","It produces no voltage","It cannot be connected to mains"],a:0,e:"It relies on the operator noticing the meter and making the adjustment."},
+
+  {q:"An automatic voltage compensator detects changes in mains voltage using:",o:["Sensors and control circuits","Film screens","X-ray cassettes","The patient's body"],a:0,e:"Sensors and electronic control circuits detect and correct voltage changes."},
+  {q:"An automatic voltage compensator makes corrections:",o:["Only after exposure","Manually","In real time","Once per month"],a:2,e:"Corrections are made continuously in real time."},
+  {q:"One advantage of an automatic voltage compensator is:",o:["It requires continuous manual adjustment","It provides automatic voltage regulation","It eliminates the X-ray tube","It prevents all electrical faults"],a:1,e:"It regulates the voltage automatically without operator intervention."},
+  {q:"Automatic compensators are particularly useful where mains fluctuations are:",o:["Frequent or unpredictable","Completely absent","Never present","Deliberately produced by the operator"],a:0,e:"They are especially valuable when the mains supply is unstable."},
+  {q:"Compensation may be required:",o:["Only before exposure","Only after exposure","Outside exposure and during exposure","Only during equipment maintenance"],a:2,e:"Compensation is needed both when the machine is idle and during the high-current exposure."},
+
+  {q:"What causes significant voltage drop during high-mA exposure?",o:["Reduced patient thickness","High current demand by the X-ray tube","Reduced electrical load","Low room temperature"],a:1,e:"The large tube current causes a substantial voltage drop on the supply lines."},
+  {q:"The transformer used to compensate for voltage drops during exposure is called the:",o:["Filament transformer","Line drop compensation transformer","Step-down transformer","Isolation transformer"],a:1,e:"It is known as the line-drop (or line-voltage-drop) compensation transformer."},
+  {q:"The line drop compensation transformer is designed to maintain:",o:["Stable voltage during exposure","Constant patient temperature","Constant room lighting","Film processing speed"],a:0,e:"Its purpose is to keep the voltage stable while the high tube current is flowing."},
+  {q:"The line drop compensation transformer is described as a:",o:["Large voltage-type transformer","Small current-type transformer","Mechanical switch","Capacitor"],a:1,e:"It is a small current-type transformer placed in series with the load."},
+  {q:"The line drop compensation transformer is placed:",o:["In parallel with the image receptor","In series with the load current","Across the X-ray tube only","Inside the patient table"],a:1,e:"It is connected in series so that it senses the actual load current."},
+  {q:"The line drop compensation transformer is positioned between the:",o:["Mains supply and autotransformer","Autotransformer and image receptor","Filament and cathode","Rectifier and image receptor"],a:0,e:"It is located between the mains supply and the autotransformer."},
+  {q:"Why is the line drop compensation transformer placed in the primary circuit?",o:["To sense current changes and respond to load conditions","To produce visible light","To control patient positioning","To eliminate the autotransformer"],a:0,e:"Being in series with the primary current allows it to generate a compensating voltage proportional to the load."},
+  {q:"The compensating transformer generates a compensating voltage in response to:",o:["Patient weight","Current drawn by the X-ray tube","Film size","Exposure room temperature"],a:1,e:"The magnitude of the compensating voltage depends on the tube current being drawn."},
+  {q:"When the load current increases, the voltage drop generally:",o:["Decreases","Remains exactly zero","Increases","Becomes unrelated to the load"],a:2,e:"Higher current produces a larger voltage drop (V = IR)."},
+  {q:"When the voltage drop increases, the compensating transformer generates:",o:["A smaller compensating voltage","A larger compensating voltage","No voltage","Only current"],a:1,e:"A larger drop is countered by a larger compensating (boost) voltage."},
+  {q:"When the load current decreases, the compensating voltage:",o:["Increases","Decreases","Remains permanently at maximum","Becomes infinite"],a:1,e:"Lower current produces a smaller compensating voltage."},
+
+  {q:"A compensating transformer has a turns ratio of 20:1 and a primary current of 50 A. What is the corresponding secondary current according to the example?",o:["1.5 A","2.0 A","2.5 A","5.0 A"],a:2,e:"Secondary current = Primary current ÷ turns ratio = 50 A ÷ 20 = 2.5 A."},
+  {q:"If the secondary current is 2.5 A and the resistance is 2 Ω, what is the voltage?",o:["2 V","3 V","5 V","10 V"],a:2,e:"V = I × R = 2.5 A × 2 Ω = 5 V."},
+  {q:"In the example, a 50 A primary current produces a compensating voltage of:",o:["2 V","3 V","5 V","20 V"],a:2,e:"As calculated above, 使用者 50 A → 2.5 A secondary → 5 V compensating voltage."},
+  {q:"If the primary current is reduced from 50 A to 30 A while the turns ratio remains 20:1, the secondary current becomes:",o:["0.5 A","1.0 A","1.5 A","3.0 A"],a:2,e:"Secondary current = 30 A ÷ 20 = 1.5 A."},
+  {q:"With a secondary current of 1.5 A and resistance of 2 Ω, the compensating voltage is:",o:["1.5 V","2 V","3 V","4 V"],a:2,e:"V = 1.5 A × 2 Ω = 3 V."},
+  {q:"Which statement correctly describes the relationship between load current and compensating voltage?",o:["Higher current produces lower compensation","Higher current produces higher compensation","Current has no relationship with compensation","Higher current always produces zero compensation"],a:1,e:"Compensating voltage rises and falls with the load current."},
+  {q:"What happens when the line voltage drop on load is small?",o:["A smaller booster voltage is generated","A larger booster voltage is always generated","No current flows","The X-ray tube is disconnected"],a:0,e:"A small drop requires only a small compensating (booster) voltage."},
+  {q:"What can voltage fluctuations during exposure affect?",o:["Tube current and X-ray beam intensity","Only room lighting","Only patient positioning","Only the size of the X-ray room"],a:0,e:"Fluctuations change both the tube current and the intensity of the X-ray beam."},
+  {q:"What may happen if unstable X-ray production requires repeat exposures?",o:["Patient radiation dose may increase","Patient radiation dose becomes zero","The X-ray tube stops producing radiation permanently","Image quality automatically improves"],a:0,e:"Repeat exposures increase the total radiation dose received by the patient."},
+  {q:"Which statement BEST summarizes the purpose of line-drop compensation پور?",o:["To increase voltage regardless of load","To maintain stable voltage by adjusting compensation according to load conditions","To eliminate the need for an X-ray tube","To increase exposure time automatically"],a:1,e:"Line-drop compensation automatically adjusts the boost voltage in proportion to the load so that the voltage remains stable."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('mains_voltage_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+ مهمة }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/50';
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+ پور      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel आने', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (un男孩 ans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('mains_voltage_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submitCoach (timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of Mains Voltage Compensation! You have a strong grasp of both manual/automatic compensation and line-drop compensation. Superb work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review the line-drop transformer calculations and the difference between manual and automatic systems to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on why compensation is needed, how the manual meter is used, and the relationship between load current and compensating voltage. Practice will raise your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this topic has both conceptual and calculation elements. Go through the explanations carefully, revise the key points, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById(' Forbid quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.애플리케이션 innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 12, 24, 29, _{+ 40, 50];
+  var sectionNames = [
+    "A: Purpose & Effects of Fluctuations",
+    "B: Manual Voltage Compensator",
+    "C: Automatic Compensator",
+    "D: Line-Drop Compensation",
+    "E: Calculations & Relationships"
+  ];
+
+  for (var s = 0; s < 5; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('mains_voltage_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('mains_voltage_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('mains_voltage_quiz_theme आने') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</scriptolecule>
+</body>
+</html>
