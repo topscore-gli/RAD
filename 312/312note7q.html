@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interlocking Circuits</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:15px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="exit()">←</button>
+      <h1>Interlocking Circuits</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 20:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 1200, PASS: 60 };
+
+const SECTIONS = {
+  0: "A: Purpose of Interlocking Circuits",
+  5: "B: Tube Stator Interlocks",
+  20: "C: Slug Relay Circuits",
+  30: "D: Overload Interlocks (Analog)",
+  45: "E: Mechanical Interlocks & Limitations"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  {q:"What is the primary purpose of an interlocking circuit in an X-ray machine?",o:["To increase tube current","To increase the speed of the anode","To prevent unintended damage to X-ray equipment","To increase exposure time"],a:2,e:"Interlocking circuits act as fail-safe mechanisms to prevent damage to the X-ray tube and equipment."},
+  {q:"Interlocking circuits are also known as:",o:["Exposure circuits","Fail-safe mechanisms","Rectifier circuits","Compensation circuits"],a:1,e:"They are commonly called fail-safe mechanisms because they prevent unsafe operation."},
+  {q:"Which of the following can cause damage to an X-ray tube?",o:["Selecting exposure factors beyond the tube rating","Using a low exposure factor","Reducing the timer setting","Reducing the kV"],a:0,e:"Selecting factors that exceed the tube rating can cause overheating and damage."},
+  {q:"Why are ordinary fuses and circuit breakers unsuitable for protection of the high-tension circuit?",o:["They cannot conduct electricity","They are too small","They would be bulky, cumbersome and expensive","They increase anode speed"],a:2,e:"High-tension fuses/breakers would be impractically large, bulky and costly."},
+  {q:"Which of the following is NOT one of the two major interlock categories discussed?",o:["Tube stator interlocks","Overload interlocks","Rectifier interlocks","Both A and B"],a:2,e:"The two major categories are tube stator interlocks and overload interlocks. Rectifier interlocks are not mentioned."},
+
+  {q:"What component accelerates the anode in a rotating-anode X-ray tube?",o:["Rectifier","Stator","Rheostat","Capacitor"],a:1,e:"The stator windings produce the rotating magnetic field that accelerates the anode."},
+  {q:"Approximately how fast can the rotating anode reach its maximum speed?",o:["350 RPM","1,000 RPM","3,500 RPM","35,000 RPM"],a:2,e:"Typical maximum anode speed is about 3,500 RPM."},
+  {q:"Approximately how long does the stator require to accelerate the anode from 0 to 3500 RPM?",o:["0.1 second","1.8–2 seconds","10 seconds","20 seconds"],a:1,e:"Acceleration from rest to full speed takes roughly 1.8–2 seconds."},
+  {q:"Why does the anode rotate during exposure?",o:["To increase kV","To reduce filament current","To distribute heat over the anode","To increase exposure time"],a:2,e:"Rotation spreads the heat load over a larger area of the anode disc."},
+  {q:"What can happen if an exposure is made while the anode is stationary or rotating too slowly?",o:["The image becomes brighter only","The anode may overheat and split","The kV automatically decreases","The timer stops permanently"],a:1,e:"A stationary or slow anode concentrates heat in one spot and can crack or split."},
+  {q:"How many stator windings are described in the material?",o:["One","Two","Three","Four"],a:1,e:"There are two stator windings: one for acceleration and one for maintaining speed."},
+  {q:"What is the function of the first stator winding?",o:["To maintain anode speed","To cool the anode","To accelerate the anode to maximum velocity","To control the timer"],a:2,e:"The first (accelerating) winding brings the anode up to full speed."},
+  {q:"What is the function of the second stator winding?",o:["To maintain the anode's velocity","To increase exposure time","To rectify AC","To control kV"],a:0,e:"The second winding maintains the anode at its operating speed during exposure."},
+  {q:"Which stator winding requires considerable power?",o:["The maintaining winding","The accelerating winding","Both require exactly the same power","Neither requires power"],a:1,e:"The accelerating winding draws significant power to spin the anode up quickly."},
+  {q:"The tube stator interlock ensures that:",o:["Only the timer is energized","Both stator windings are energized before exposure","Only the accelerating winding operates","The kV is always maximum"],a:1,e:"Exposure is permitted only when both stator windings are properly energized."},
+  {q:"In the stator interlock circuit, stators S1 and S2 are connected to:",o:["Capacitors","Relay coils A and B","Rheostats","Rectifiers only"],a:1,e:"Each stator is linked to its own relay coil (A and B)."},
+  {q:"What do relay coils A and B operate?",o:["The timer","Spring-loaded contactors C1 and C2","The filament","The autotransformer"],a:1,e:"The relay coils close the spring-loaded contactors C1 and C2."},
+  {q:"What happens when both contactors C1 and C2 close?",o:["The exposure circuit is completed","The stators stop","The capacitor discharges immediately","The tube is disconnected permanently"],a:0,e:"Only when both contactors close is the exposure circuit completed (AND logic)."},
+  {q:"If an exposure button is pressed while either stator is not energized, what happens?",o:["Exposure automatically occurs","Exposure occurs at half power","No exposure occurs","The kV doubles"],a:2,e:"If either stator is not energized, the corresponding contactor stays open and no exposure takes place."},
+  {q:"The tube stator interlock is similar in logic to which type of logic gate?",o:["OR","NOT","AND","NOR"],a:2,e:"Both conditions (S1 and S2 energized) must be true before exposure is allowed – classic AND logic."},
+
+  {q:"Why is a delay required before exposure?",o:["The filament must cool down","The anode needs time to accelerate to an appropriate speed","The timer must reset","The kV must reach zero"],a:1,e:"A short delay is needed so the anode can reach a safe rotational speed."},
+  {q:"Which circuit automatically provides the delay needed for anode acceleration?",o:["Overload circuit","Slug relay circuit","Rectifier circuit","Filament circuit"],a:1,e:"The slug relay circuit introduces the required delay."},
+  {q:"Where is the slug relay circuit located?",o:["Between the autotransformer and stator windings","Between the tube and patient","Inside the filament","After the X-ray tube"],a:0,e:"It is placed between the autotransformer and the stator windings."},
+  {q:"Which of the following is NOT a component of the slug relay circuit?",o:["Rectifier","Capacitor","Relay coil","Percentage-load relay"],a:3,e:"The slug relay uses a rectifier, capacitor and relay coil. A percentage-load relay is not part of it."},
+  {q:"What is the purpose of the capacitor in the slug relay circuit?",o:["To increase kV","To provide the delay required for anode acceleration","To rotate the anode directly","To decrease exposure time"],a:1,e:"The capacitor charging time creates the necessary delay for anode spin-up."},
+  {q:"When the Prepare button is initially pressed, the capacitor:",o:["Immediately becomes fully charged","Starts charging","Explodes","Discharges completely"],a:1,e:"Pressing Prepare starts the capacitor charging process."},
+  {q:"Why is the relay coil initially too weak to close the contactor?",o:["The capacitor draws heavy current","The transformer is disconnected","The timer is at zero","The stator is overheated"],a:0,e:"While the capacitor is charging it draws heavy current, leaving insufficient current for the relay coil."},
+  {q:"What happens after the capacitor becomes fully charged?",o:["The relay coil receives adequate current","The stators stop rotating","The exposure circuit permanently opens","The kV falls to zero"],a:0,e:"Once the capacitor is charged, more current reaches the relay coil, allowing it to close the contactor."},
+  {q:"The time required for the capacitor to charge corresponds approximately to:",o:["Filament heating time","Anode acceleration time","Exposure time","Cooling time"],a:1,e:"The designed charging time matches the time needed for the anode to reach safe speed."},
+  {q:"Why is the rheostat optional in some slug relay circuits?",o:["Some older equipment allows selection of the anode acceleration time","It controls patient positioning","It increases tube voltage","It replaces the capacitor"],a:0,e:"In older units the rheostat could be adjusted to vary the acceleration delay."},
+
+  {q:"What is the main purpose of an overload interlock?",o:["To increase anode rotation","To ensure exposure factors do not exceed tube rating","To increase exposure time","To increase filament temperature"],a:1,e:"Overload interlocks prevent selection of exposure factors that would exceed the tube’s rating."},
+  {q:"Which three exposure factors are coordinated by overload interlocks?",o:["Distance, time and filtration","kV, mA and time","kV, distance and filtration","mA, distance and focal spot size"],a:1,e:"The interlocks monitor the combination of kV, mA and exposure time."},
+  {q:"Where are overload interlocks located?",o:["In the primary circuit of the X-ray generator","Inside the patient","Only in the high-tension circuit","Inside the image receptor"],a:0,e:"They are located in the primary (low-voltage) side of the generator."},
+  {q:"What may happen when an unsafe exposure combination is selected?",o:["The knob may stop turning or an alarm may sound","The patient is automatically exposed","The anode stops permanently","The tube voltage doubles"],a:0,e:"An unsafe combination typically locks the selector or triggers an audible/visual alarm."},
+  {q:"What are the two overload interlocking systems discussed?",o:["Digital and optical","Analog and mechanical","Hydraulic and pneumatic","Magnetic and optical"],a:1,e:"The material discusses analog and mechanical overload interlocks."},
+  {q:"What does an analog interlock use to perform its electronic additional sum?",o:["A special transformer","A motor","A fuse","A capacitor alone"],a:0,e:"An analog interlock uses a special transformer to add the effects of the selected factors."},
+  {q:"In the analog interlock, the primary winding is connected to the:",o:["Filament transformer","Autotransformer","Timer","Stator"],a:1,e:"The primary of the special transformer is fed from the autotransformer."},
+  {q:"The tapping arm of the primary winding is linked to the:",o:["mA selector","Timer selector","kV selector","Exposure button only"],a:2,e:"The primary tapping arm moves with the kV selector."},
+  {q:"When kV is increased, what happens to the primary winding?",o:["Fewer windings are tapped","More windings are tapped","It becomes disconnected","It becomes a capacitor"],a:1,e:"Higher kV selects more primary turns."},
+  {q:"The movable tapping mechanism on the secondary winding is linked to the:",o:["kV selector","mA selector","Timer only","Prepare switch"],a:1,e:"The secondary tapping arm is linked to the mA selector."},
+  {q:"What happens when mA is increased in the analog interlock?",o:["The number of secondary windings selected increases","The secondary winding is disconnected","The timer resistance increases","The anode stops rotating"],a:0,e:"Higher mA selects more secondary turns."},
+  {q:"What does the rectifier in the analog interlock do?",o:["Converts AC to DC","Converts DC to AC","Increases anode speed","Decreases tube voltage"],a:0,e:"The rectifier converts the AC output to DC for the subsequent circuit."},
+  {q:"The rheostat is connected in series after the:",o:["Stator","Rectifier","Anode","Relay contactor"],a:1,e:"The rheostat follows the rectifier in the circuit."},
+  {q:"What happens to rheostat resistance when the selected exposure time increases?",o:["Resistance increases","Resistance decreases","Resistance becomes infinite","Resistance remains permanently zero"],a:1,e:"Longer exposure time reduces the rheostat resistance, allowing more current."},
+  {q:"What component acts as a switch in the analog overload interlock?",o:["Capacitor","Transistor","Fuse","Stator"],a:1,e:"A transistor functions as the electronic switch that blocks or allows the exposure circuit."},
+
+  {q:"Mechanical interlocks work mainly by:",o:["Increasing electrical voltage","Physical obstruction of a selector","Cooling the anode","Increasing exposure time"],a:1,e:"Mechanical interlocks physically prevent a selector from being moved into an unsafe position."},
+  {q:"Mechanical interlocks are described as being:",o:["A very modern method","A very old method","Used only in CT scanners","Used only in MRI systems"],a:1,e:"They are an older mechanical approach to protection."},
+  {q:"Which component converts rotational motion into linear motion in the mechanical interlock?",o:["Rectifier","Cam","Capacitor","Transistor"],a:1,e:"A cam converts the rotational movement of a selector into linear blocking motion."},
+  {q:"What major limitation of the older interlocks is identified in the material?",o:["They cannot control kV","They do not consider accumulated anode heat","They cannot control mA","They cannot use a timer"],a:1,e:"Older interlocks only look at the instantaneous combination of factors and ignore heat already stored in the anode."},
+  {q:"Modern electronic interlocks can prevent exposure when:",o:["The anode is overheated, even if exposure factors are within normal limits","The patient is positioned correctly","The kV is low","The timer is switched off"],a:0,e:"Modern systems monitor actual anode heat and can forbid exposure even when the selected factors appear safe."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('interlocking_circuits_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/50';
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('interlocking_circuits_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of Interlocking Circuits! You have a strong grasp of stator interlocks, slug relays and overload protection. Great job!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review the analog overload and mechanical interlock sections to strengthen any weak points.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on the stator interlock logic, slug-relay delay and how analog overload interlocks work. Practice will raise your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this is a technical topic. Go through the detailed explanations carefully, revise the key circuits, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 5, 20, 30, 45, 50];
+  var sectionNames = [
+    "A: Purpose of Interlocking Circuits",
+    "B: Tube Stator Interlocks",
+    "C: Slug Relay Circuits",
+    "D: Overload Interlocks (Analog)",
+    "E: Mechanical Interlocks & Limitations"
+  ];
+
+  for (var s = 0; s < 5; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('interlocking_circuits_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('interlocking_circuits_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('interlocking_circuits_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
