@@ -2,578 +2,664 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAD 312 - General Introduction to Equipment Engineering</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>RadIQ — Master Radiography. Think Like an Expert.</title>
+
+  <meta name="description" content="RadIQ is the learning platform for radiography students and radiographers. Anatomy, positioning, physics, image critique, CT, MRI, ultrasound, and board-style mocks — built to make you exam-ready and clinic-ready." />
+  <meta name="theme-color" content="#0891b2" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="RadIQ" />
+
+  <link rel="icon" type="image/svg+xml" href="#logo" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="RadIQ — Master Radiography" />
+  <meta property="og:description" content="Case-based learning, positioning labs, radiation physics, and mock boards for radiography students and radiographers worldwide." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
-    :root{
-      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
-      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
-      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
-      --card-bg:#2a2a3f
+    :root {
+      --cyan: #22d3ee;
+      --cyan-deep: #0891b2;
+      --teal: #14b8a6;
+      --mint: #5eead4;
+      --accent: #38bdf8;
+      --warn: #fbbf24;
+      --bg: #05080f;
+      --bg-2: #0a101c;
+      --card: #0e1624;
+      --elev: #141e30;
+      --line: rgba(148, 163, 184, 0.12);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --dim: #64748b;
+      --grad-a: linear-gradient(135deg, #0891b2 0%, #22d3ee 55%, #5eead4 100%);
+      --grad-b: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      --r-sm: 12px;
+      --r-md: 18px;
+      --r-lg: 28px;
     }
-    body.light{
-      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
-      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
-    }
-    body{
-      background:var(--background);color:var(--text-primary);
-      display:flex;justify-content:center;align-items:center;
-      min-height:100vh;overflow-x:hidden
-    }
-    .container{
-      width:100%;max-width:420px;height:750px;overflow-y:auto;
-      background:var(--background);border-radius:20px;
-      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
-      padding-top:70px;padding-bottom:80px;position:relative
-    }
-    .neumorphic{
-      background:var(--background);
-      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
-      border-radius:15px
-    }
-    .neumorphic-btn{
-      background:var(--background);border:none;border-radius:50%;
-      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
-      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
-      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
-    }
-    .neumorphic-btn:active{
-      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
-      transform:scale(.95)
-    }
-    .top-bar{
-      position:fixed;top:0;width:100%;max-width:420px;
-      background:var(--background);padding:15px;
-      display:flex;align-items:center;justify-content:space-between;
-      box-shadow:0 5px 10px var(--shadow-in);z-index:20
-    }
-    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
-    .top-bar .right-icons{display:flex;gap:10px}
-    .progress-container{
-      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
-      background:var(--shadow-in);z-index:15
-    }
-    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
 
-    .content{padding:20px 16px;line-height:1.7}
-    .main-header{
-      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
-      background:rgba(29,185,84,.1)
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
-    .main-header h1{font-size:20px;margin-bottom:8px;color:var(--accent);font-weight:900}
-    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
 
-    .section-card{
-      background:var(--card-bg);padding:24px 18px;border-radius:20px;
-      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
-      margin-bottom:24px;border-left:4px solid var(--accent)
+    .scanlines {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 15% 10%, rgba(8, 145, 178, 0.18), transparent 55%),
+        radial-gradient(ellipse 60% 40% at 90% 20%, rgba(20, 184, 166, 0.1), transparent 50%),
+        radial-gradient(ellipse 50% 40% at 70% 90%, rgba(56, 189, 248, 0.08), transparent 50%);
     }
-    .section-card h2{
-      font-size:18px;margin-bottom:14px;color:var(--accent);font-weight:900;
-      display:flex;align-items:center;gap:8px
+    .scanlines::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(255, 255, 255, 0.012) 3px,
+        rgba(255, 255, 255, 0.012) 4px
+      );
+      opacity: 0.5;
     }
-    .section-card h3{
-      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
-      padding-left:12px;border-left:3px solid var(--accent-tertiary)
-    }
-    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
-    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
-    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
-    .section-card li{margin-bottom:7px;font-size:14px}
 
-    .quick-facts{
-      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
-      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 14px 24px;
+      background: rgba(5, 8, 15, 0.72);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
     }
-    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
-    .quick-facts li{font-size:13px}
+    .nav.scrolled { padding: 10px 24px; background: rgba(5, 8, 15, 0.92); }
+    .nav-inner {
+      max-width: 1180px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+    .mark {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: var(--grad-a);
+      display: grid; place-items: center;
+      box-shadow: 0 0 28px rgba(34, 211, 238, 0.35);
+    }
+    .brand-name {
+      font-family: Outfit, sans-serif;
+      font-weight: 800; font-size: 22px; letter-spacing: -0.04em;
+    }
+    .brand-name span { color: var(--cyan); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 22px; border-radius: 12px; font-weight: 600; font-size: 14px;
+      border: 0; cursor: pointer; text-decoration: none; transition: 0.25s ease;
+    }
+    .btn-primary {
+      background: var(--grad-a); color: #042f2e;
+      box-shadow: 0 8px 24px rgba(8, 145, 178, 0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(34, 211, 238, 0.4); }
+    .btn-ghost {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .btn-ghost:hover { border-color: var(--cyan); background: rgba(34, 211, 238, 0.06); }
+    .menu-btn { display: none; background: none; border: 0; color: var(--text); font-size: 22px; }
 
-    .highlight-box{
-      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
-      border-left:3px solid var(--accent-tertiary)
+    .hero {
+      position: relative; z-index: 1;
+      padding: 128px 24px 88px;
+      max-width: 1180px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center;
     }
-    .memory-tip{
-      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
-      border-left:4px solid var(--accent-secondary)
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 999px;
+      border: 1px solid rgba(34, 211, 238, 0.28);
+      background: rgba(8, 145, 178, 0.12);
+      color: var(--mint); font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; margin-bottom: 20px;
     }
-    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
-    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+    h1 {
+      font-family: Outfit, sans-serif;
+      font-size: clamp(38px, 5.6vw, 68px);
+      line-height: 1.05; letter-spacing: -0.04em; font-weight: 800;
+      margin-bottom: 18px;
+    }
+    h1 em {
+      font-style: normal;
+      background: var(--grad-a);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .lede { color: var(--muted); font-size: 18px; max-width: 520px; margin-bottom: 32px; }
+    .stats { display: flex; gap: 28px; margin-bottom: 32px; flex-wrap: wrap; }
+    .stat-n {
+      font-family: Outfit, sans-serif; font-size: 32px; font-weight: 800; color: var(--cyan);
+    }
+    .stat-l { font-size: 12px; color: var(--dim); }
+    .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
 
-    .jamb-alert{
-      background:linear-gradient(135deg,rgba(255,193,7,.15),rgba(255,152,0,.1));
-      border:1px solid rgba(255,193,7,.4);border-radius:12px;padding:16px;margin:18px 0
+    .viewer {
+      position: relative;
+      background: linear-gradient(180deg, #101a2c, #0a1220);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      min-height: 520px;
+      overflow: hidden;
     }
-    .jamb-alert h4{color:#ffc107;margin-bottom:8px;font-size:15px;font-weight:900}
-    .jamb-alert li{font-size:13px}
+    .viewer-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px; color: var(--dim); font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .dots { display: flex; gap: 6px; }
+    .dots i { width: 8px; height: 8px; border-radius: 50%; background: #334155; display: block; }
+    .dots i:first-child { background: #22d3ee; }
+    .film {
+      height: 280px; border-radius: 16px; position: relative; overflow: hidden;
+      background:
+        radial-gradient(circle at 42% 48%, rgba(226,232,240,0.16) 0 18%, transparent 19%),
+        radial-gradient(circle at 58% 46%, rgba(226,232,240,0.12) 0 14%, transparent 15%),
+        linear-gradient(180deg, #0b1220, #152033);
+      border: 1px solid rgba(34, 211, 238, 0.15);
+    }
+    .film::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0%, rgba(34,211,238,0.08) 48%, rgba(94,234,212,0.18) 50%, rgba(34,211,238,0.08) 52%, transparent 100%);
+      animation: sweep 3.6s ease-in-out infinite;
+    }
+    .film-label {
+      position: absolute; left: 14px; bottom: 12px; z-index: 2;
+      font-size: 11px; color: #cbd5e1; letter-spacing: 0.08em;
+    }
+    @keyframes sweep {
+      0% { transform: translateX(-60%); opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { transform: translateX(60%); opacity: 0.2; }
+    }
+    .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .mini {
+      background: var(--elev); border: 1px solid var(--line); border-radius: 14px; padding: 12px;
+    }
+    .mini h4 { font-size: 13px; margin-bottom: 4px; }
+    .mini p { font-size: 11px; color: var(--dim); }
+    .pill {
+      display: inline-block; margin-top: 8px; font-size: 10px; font-weight: 700;
+      padding: 3px 8px; border-radius: 999px; background: rgba(34,211,238,0.12); color: var(--cyan);
+    }
 
-    .table-container{
-      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
-      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    section { position: relative; z-index: 1; padding: 88px 24px; }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    .center { text-align: center; max-width: 640px; margin: 0 auto 52px; }
+    .kicker {
+      color: var(--cyan); font-size: 12px; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; margin-bottom: 10px;
     }
-    .summary-table{
-      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    h2 {
+      font-family: Outfit, sans-serif; font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 12px;
     }
-    .summary-table th{
-      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
-    }
-    .summary-table td{
-      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
-    }
-    .summary-table tr:last-child td{border-bottom:none}
-    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
-    .table-scroll-hint{font-size:11px;color:var(--text-secondary);text-align:center;margin-top:4px;font-style:italic}
+    .sub { color: var(--muted); }
 
-    .nav-bar{
-      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
-      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 26px; transition: 0.3s ease;
     }
-    .nav-bar .nav-item{text-align:center}
-    .nav-bar .nav-item.center button{
-      width:50px;height:50px;font-size:24px;background:var(--accent);
-      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
-      color:#000
+    .card:hover { transform: translateY(-6px); border-color: rgba(34,211,238,0.3); }
+    .ico {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: grid; place-items: center; margin-bottom: 16px;
+      background: var(--elev); border: 1px solid var(--line); font-size: 22px;
     }
-    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+    .card h3 { font-size: 18px; margin-bottom: 8px; }
+    .card p { color: var(--muted); font-size: 14px; }
 
-    .explore-btn{
-      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
-      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
-      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    .mods { background: var(--bg-2); }
+    .mod-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
     }
-    .explore-btn:active{
-      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
-      transform:scale(.98)
+    .mod {
+      background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+      padding: 22px 16px; text-align: center; text-decoration: none; color: inherit;
+      transition: 0.25s ease;
     }
-    .explore-btn.secondary{
-      background:var(--accent-tertiary);
+    .mod:hover { border-color: var(--cyan); transform: translateY(-4px); }
+    .mod .big { font-size: 28px; margin-bottom: 8px; }
+    .mod h3 { font-size: 15px; margin-bottom: 4px; }
+    .mod span { font-size: 12px; color: var(--dim); }
+
+    .cta-band {
+      text-align: center;
+      background:
+        radial-gradient(ellipse at center, rgba(8,145,178,0.18), transparent 60%);
+    }
+    .clock { display: flex; justify-content: center; gap: 14px; margin: 28px 0 32px; flex-wrap: wrap; }
+    .tick {
+      min-width: 86px; background: var(--elev); border: 1px solid var(--line);
+      border-radius: 16px; padding: 16px 12px;
+    }
+    .tick b { display: block; font-family: Outfit, sans-serif; font-size: 30px; color: var(--cyan); }
+    .tick s { text-decoration: none; font-size: 11px; color: var(--dim); letter-spacing: 0.12em; text-transform: uppercase; }
+
+    .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .quote { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 26px; }
+    .stars { color: var(--warn); letter-spacing: 2px; margin-bottom: 12px; }
+    .quote p { color: var(--muted); font-size: 14.5px; margin-bottom: 18px; }
+    .who { display: flex; align-items: center; gap: 10px; }
+    .av { width: 42px; height: 42px; border-radius: 50%; background: var(--grad-a); display: grid; place-items: center; color: #042f2e; font-weight: 800; }
+    .who small { color: var(--dim); display: block; }
+
+    .install { background: var(--bg-2); }
+    .install-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .checks { display: grid; gap: 12px; margin: 22px 0 28px; }
+    .checks li { list-style: none; display: flex; gap: 10px; align-items: center; color: var(--muted); }
+    .ok {
+      width: 22px; height: 22px; border-radius: 50%; background: var(--teal);
+      color: #042f2e; display: grid; place-items: center; font-size: 12px; font-weight: 800; flex-shrink: 0;
+    }
+    .phone {
+      width: 270px; height: 540px; margin: 0 auto;
+      background: #020617; border-radius: 36px; padding: 10px;
+      border: 1px solid var(--line); box-shadow: var(--shadow);
+    }
+    .screen {
+      height: 100%; border-radius: 28px; background: #0b1324;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    }
+    .app-ico {
+      width: 92px; height: 92px; border-radius: 22px; background: var(--grad-a);
+      display: grid; place-items: center; box-shadow: 0 12px 30px rgba(8,145,178,0.4);
+    }
+
+    footer {
+      position: relative; z-index: 1;
+      padding: 56px 24px 28px; border-top: 1px solid var(--line);
+    }
+    .fgrid { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 36px; max-width: 1180px; margin: 0 auto 36px; }
+    footer p, footer a { color: var(--muted); font-size: 14px; text-decoration: none; }
+    footer a:hover { color: var(--cyan); }
+    .flinks { display: grid; gap: 10px; }
+    .ftitle { color: var(--text); font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+    .copy { max-width: 1180px; margin: 0 auto; padding-top: 20px; border-top: 1px solid var(--line); color: var(--dim); font-size: 13px; }
+
+    .banner {
+      position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(160%);
+      z-index: 60; display: flex; align-items: center; gap: 14px;
+      background: var(--elev); border: 1px solid var(--line); border-radius: 18px;
+      padding: 12px 16px; box-shadow: var(--shadow); max-width: 92%;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .banner.on { transform: translateX(-50%) translateY(0); }
+
+    .loader {
+      position: fixed; inset: 0; background: var(--bg); z-index: 80;
+      display: grid; place-items: center; transition: 0.4s ease;
+    }
+    .loader.hide { opacity: 0; visibility: hidden; }
+    .spin {
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 3px solid rgba(34,211,238,0.2); border-top-color: var(--cyan);
+      animation: rot 0.8s linear infinite;
+    }
+    @keyframes rot { to { transform: rotate(360deg); } }
+
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .menu-btn { display: block; }
+      .hero, .install-grid, .fgrid { grid-template-columns: 1fr; }
+      .hero { text-align: center; padding-top: 110px; }
+      .lede { margin-left: auto; margin-right: auto; }
+      .stats, .hero-cta { justify-content: center; }
+      .grid-3, .quotes { grid-template-columns: 1fr; }
+      .mod-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 520px) {
+      .mod-grid { grid-template-columns: 1fr 1fr; }
+      .tick { min-width: 68px; }
     }
   </style>
 </head>
-<body class="dark">
-  <div class="container" id="scroll-container">
-    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
-    
-    <div class="top-bar neumorphic">
-      <button class="neumorphic-btn" onclick="history.back()">←</button>
-      <div class="header">RAD 312</div>
-      <div class="right-icons">
-        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
-        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+<body>
+  <div class="loader" id="loader"><div class="spin"></div></div>
+  <div class="scanlines"></div>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top">
+        <div class="mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" fill="#042f2e"/>
+            <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="#042f2e" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brand-name">Rad<span>IQ</span></div>
+      </a>
+      <div class="nav-links">
+        <a href="#learn">Learn</a>
+        <a href="#modalities">Modalities</a>
+        <a href="#boards">Boards</a>
+        <a href="#voices">Voices</a>
+        <a class="btn btn-primary" href="./312.html">Get Started</a>
+      </div>
+      <button class="menu-btn" onclick="window.location.href='./312.html'">☰</button>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <div class="eyebrow">For radiography students & radiographers</div>
+      <h1>See more.<br>Miss less.<br><em>Think in images.</em></h1>
+      <p class="lede">RadIQ is the focused learning lab for projection radiography, CT, MRI, ultrasound, radiation physics, positioning, and image critique — built so you walk into clinic and boards already fluent.</p>
+      <div class="stats">
+        <div><div class="stat-n">180+</div><div class="stat-l">Countries reached</div></div>
+        <div><div class="stat-n">12k</div><div class="stat-l">Clinical cases</div></div>
+        <div><div class="stat-n">40k</div><div class="stat-l">Practice items</div></div>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="./312.html">Get Started →</a>
+        <a class="btn btn-ghost" href="#learn">How RadIQ works</a>
       </div>
     </div>
-
-    <div class="content">
-      <div class="main-header">
-        <h1>⚡ General Introduction to Equipment Engineering</h1>
-        <p>X-ray Circuit • Power Supply • Filament Circuit • Rectification • High-yield Summary</p>
+    <div class="viewer" aria-hidden="true">
+      <div class="viewer-bar">
+        <span>PA Chest · 120 kVp · 2.5 mAs</span>
+        <div class="dots"><i></i><i></i><i></i></div>
       </div>
-
-      <!-- HIGH-YIELD SUMMARY -->
-      <div class="section-card">
-        <h2>📋 One-Sentence Summary</h2>
-        <p>An X-ray machine converts electrical energy into X-rays by heating the cathode filament to release electrons, accelerating those electrons across a high-voltage potential toward the anode, and controlling the process with appropriate voltage, current, rectification, and exposure timing.</p>
-
-        <div class="memory-tip">
-          <strong>🧠 Memory Map</strong>
-          <p>POWER → CONTROL → HEAT → RELEASE → ACCELERATE → COLLIDE → X-RAY</p>
-        </div>
+      <div class="film">
+        <div class="film-label">LIVE CRITIQUE · WINDOW / LEVEL</div>
       </div>
-
-      <!-- 1. What is Equipment Engineering -->
-      <div class="section-card">
-        <h2>1️⃣ What is Equipment Engineering?</h2>
-        <p>The main aim is to understand the components that make X-ray production possible.</p>
-        
-        <div class="highlight-box">
-          <p><strong>Basic principle:</strong> Fast-moving electrons strike a target → X-rays are produced.</p>
+      <div class="case-grid">
+        <div class="mini">
+          <h4>Today’s case</h4>
+          <p>Right lower-lobe consolidation vs. collapse</p>
+          <span class="pill">Image critique</span>
         </div>
-
-        <p>Two major types of X-radiation can be produced:</p>
-        <ul>
-          <li>Bremsstrahlung radiation</li>
-          <li>Characteristic radiation</li>
-        </ul>
-
-        <p>Although the idea sounds simple, an X-ray machine needs a carefully controlled environment. Several electrical and mechanical factors must remain stable for useful and safe X-ray production.</p>
-
-        <div class="quick-facts">
-          <h4>Basic Sequence</h4>
-          <p>Power supply → Controls → X-ray tube → X-rays</p>
+        <div class="mini">
+          <h4>Physics drill</h4>
+          <p> collimation, SID, and dose trade-offs</p>
+          <span class="pill">5 min</span>
         </div>
-
-        <div class="memory-tip">
-          <strong>🧠 Easy Analogy</strong>
-          <p>Think of an X-ray machine like a water supply system:<br>
-          • Power supply = water source/pump<br>
-          • Control panel = taps and valves<br>
-          • X-ray tube = the place where the process occurs<br>
-          • X-rays = the final product</p>
+        <div class="mini">
+          <h4>Positioning lab</h4>
+          <p>Horizontal beam lateral hip checklist</p>
+          <span class="pill">Trauma series</span>
+        </div>
+        <div class="mini">
+          <h4>Board sprint</h4>
+          <p>20 items · radiation protection</p>
+          <span class="pill">Mock</span>
         </div>
       </div>
-
-      <!-- 2. Major Components -->
-      <div class="section-card">
-        <h2>2️⃣ Major Visible Components of an X-ray Room</h2>
-        
-        <h3>Visible components</h3>
-        <ul>
-          <li><strong>X-ray tube and housing</strong> – Usually positioned above the examination couch. This is where X-rays are generated.</li>
-          <li><strong>X-ray examination couch</strong> – Where the patient is positioned.</li>
-          <li><strong>Control panel</strong> – Where the radiographer selects exposure factors (kVp, mA, time).</li>
-        </ul>
-
-        <h3>Hidden components</h3>
-        <ul>
-          <li>High-tension generator</li>
-          <li>High-tension cables</li>
-        </ul>
-
-        <p>The purpose of studying the equipment is to follow the journey of electrical current and voltage from the power source until X-rays are finally produced inside the tube.</p>
-      </div>
-
-      <!-- 3. The X-ray Circuit -->
-      <div class="section-card">
-        <h2>3️⃣ The X-ray Circuit</h2>
-        <p>The X-ray circuit converts <strong>electrical energy → X-ray energy</strong>.</p>
-        <p>The mains supply normally provides alternating current (AC), but the X-ray equipment requires suitable direct current (DC).</p>
-
-        <h3>Two major types of power supply</h3>
-        
-        <div class="highlight-box">
-          <p><strong>1. Linear Power Supply</strong><br>
-          Uses transformer + rectifier + filter to convert AC into suitable DC.</p>
-        </div>
-
-        <div class="highlight-box">
-          <p><strong>2. Switch-Mode Power Supply (SMPS)</strong><br>
-          Uses high-frequency switching to achieve the required conversion. It can take power from AC mains or DC sources.</p>
-        </div>
-      </div>
-
-      <!-- 4. How SMPS Works -->
-      <div class="section-card">
-        <h2>4️⃣ How SMPS Works (4 Stages)</h2>
-
-        <h3>Stage 1: Input Rectification</h3>
-        <p>If the input is AC, it is first converted into DC using a rectifier (AC → Rectifier → DC). If the input is already DC, this stage is skipped.</p>
-
-        <h3>Stage 2: High-frequency Switching</h3>
-        <p>A high-frequency oscillator controls transistors that switch ON and OFF rapidly. This controls the flow of current to the transformer.</p>
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Think of a very fast electrical gate that repeatedly opens and closes.</p>
-        </div>
-
-        <h3>Stage 3: Transformation and Rectification</h3>
-        <p>The switched current passes through a transformer (which can step voltage up or down). After transformation, it is rectified again to produce DC.</p>
-
-        <h3>Stage 4: Filtering and Output Regulation</h3>
-        <p>Capacitors and filters smooth the voltage, reducing noise, fluctuations and ripple. The output is regulated so the required voltage remains stable.</p>
-      </div>
-
-      <!-- 5. Advantages & Limitations of SMPS -->
-      <div class="section-card">
-        <h2>5️⃣ Advantages & Limitations of SMPS</h2>
-
-        <h3>Advantages</h3>
-        <ul>
-          <li><strong>High efficiency</strong> – Operates at high frequencies (tens to hundreds of kHz)</li>
-          <li><strong>Small and lightweight</strong> – Smaller transformers can be used</li>
-          <li><strong>Wide input voltage range</strong> – Works with 110 V or 230 V systems</li>
-          <li><strong>Better heat management</strong> – Less energy wasted as heat</li>
-          <li><strong>Stable output voltage</strong> – Critical for consistent X-ray production</li>
-        </ul>
-
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>If an oven temperature keeps fluctuating (180°C → 150°C → 200°C), the cakes will not come out consistently. A regulated SMPS keeps the “oven temperature” stable for X-ray production.</p>
-        </div>
-
-        <h3>Limitations</h3>
-        <ul>
-          <li>Electromagnetic interference</li>
-          <li>More complex design</li>
-          <li>Some residual ripple and noise</li>
-        </ul>
-      </div>
-
-      <!-- 6. Components of the X-ray Circuit -->
-      <div class="section-card">
-        <h2>6️⃣ Major Components of the X-ray Circuit</h2>
-
-        <h3>1. Power Supply / High-voltage Generator</h3>
-        <p>Provides the high voltage required by the X-ray tube (typical range: <strong>40 kV – 150 kV</strong>). It converts ordinary mains voltage (240 V or 415 V) into the much higher voltage needed.</p>
-
-        <h3>2. Control Panel</h3>
-        <p>The radiographer selects:</p>
-        <ul>
-          <li>kVp</li>
-          <li>mA</li>
-          <li>Exposure time</li>
-        </ul>
-      </div>
-
-      <!-- 7. Filament Circuit & X-ray Tube -->
-      <div class="section-card">
-        <h2>7️⃣ Filament Circuit & X-ray Tube</h2>
-
-        <h3>Filament Circuit</h3>
-        <p>Supplies low voltage to the filament inside the cathode. Its purpose is to heat the filament so that electrons are released by <strong>thermionic emission</strong>.</p>
-
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Think of an electric stove. When current passes through the heating element, electrical energy turns into heat. When the filament is hot enough, electrons are released.</p>
-        </div>
-
-        <h3>X-ray Tube</h3>
-        <p>The core component where X-rays are produced. It contains two major electrodes:</p>
-        <ul>
-          <li><strong>Cathode</strong> – Contains the filament. Produces and releases electrons.</li>
-          <li><strong>Anode</strong> – Serves as the target. Electrons strike the anode to produce X-rays.</li>
-        </ul>
-
-        <div class="highlight-box">
-          <p><strong>Basic process:</strong><br>
-          Heated cathode → electrons released → high voltage accelerates electrons → electrons hit anode → X-rays produced</p>
-        </div>
-
-        <h3>High-tension Cables</h3>
-        <p>Transmit the high voltage between the high-tension generator and the X-ray tube. Because the voltage is extremely high, the cables must be properly insulated.</p>
-      </div>
-
-      <!-- 8. Two Major Circuits -->
-      <div class="section-card">
-        <h2>8️⃣ Two Major Circuits</h2>
-
-        <div class="table-container">
-          <table class="summary-table">
-            <tr>
-              <th>Circuit</th>
-              <th>Main Role</th>
-            </tr>
-            <tr>
-              <td><strong>Mains Circuit</strong></td>
-              <td>Controls the potential difference between cathode and anode (accelerates electrons)</td>
-            </tr>
-            <tr>
-              <td><strong>Filament Circuit</strong></td>
-              <td>Controls heating of the filament (determines number of electrons available)</td>
-            </tr>
-          </table>
-        </div>
-
-        <h3>Mains Circuit Sections</h3>
-        <ul>
-          <li><strong>Primary / Low-voltage section</strong></li>
-          <li><strong>Secondary / High-voltage section</strong></li>
-        </ul>
-        <p>These two sections are separated by the high-tension step-up transformer.</p>
-      </div>
-
-      <!-- 9. Journey of Electricity -->
-      <div class="section-card">
-        <h2>9️⃣ Journey of Electricity Through the Circuit</h2>
-
-        <h3>Step 1: Power enters</h3>
-        <p>Electrical power comes from the mains supply and passes through the mains switch.</p>
-
-        <h3>Step 2: Circuit breaker</h3>
-        <p>Protects the equipment. If excessive voltage or current is detected, it opens the circuit (like a security guard).</p>
-
-        <h3>Step 3: Line voltage compensator</h3>
-        <p>Corrects variations in the incoming mains voltage.</p>
-
-        <h3>Step 4: Autotransformer</h3>
-        <p>Uses self-induction to adjust the voltage supplied to the primary winding of the high-tension transformer. Controlled by the kVp selector (major + minor) and monitored by the kVp meter.</p>
-
-        <h3>Step 5: Exposure & Timing controls</h3>
-        <p>The exposure control closes the circuit. The timer determines how long the circuit stays closed (how long X-rays are produced).</p>
-
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Opening a tap = starting X-ray production<br>
-          Keeping it open = duration of exposure<br>
-          Closing it = stopping X-ray production</p>
-        </div>
-
-        <h3>Step 6: Step-up transformer & Rectifiers</h3>
-        <p>Voltage is increased by the high-tension step-up transformer, then passed through rectifiers before reaching the X-ray tube.</p>
-      </div>
-
-      <!-- 10. Filament Circuit Components -->
-      <div class="section-card">
-        <h2>🔟 Filament Circuit Components</h2>
-        <p>The filament circuit starts from the autotransformer and includes:</p>
-        <ul>
-          <li><strong>Filament stabilizer</strong> – Corrects line voltage variations</li>
-          <li><strong>mA selector</strong> – Determines current to the filament (approx. 3–5 A at 6–10 V)</li>
-          <li><strong>Filament ammeter</strong> – Measures filament current</li>
-          <li><strong>Space-charge compensator</strong> – Maintains filament current as kVp changes</li>
-          <li><strong>Step-down transformer</strong> – Reduces voltage and increases current for the filament</li>
-          <li><strong>Focal spot selector</strong> – Selects which filament/focal spot is used</li>
-        </ul>
-      </div>
-
-      <!-- 11. Stationary vs Rotating Anode -->
-      <div class="section-card">
-        <h2>1️⃣1️⃣ Stationary vs Rotating Anode Tubes</h2>
-
-        <div class="table-container">
-          <table class="summary-table">
-            <tr>
-              <th>Type</th>
-              <th>Key Features</th>
-            </tr>
-            <tr>
-              <td><strong>Stationary anode</strong></td>
-              <td>Low-power units. One-step exposure system.</td>
-            </tr>
-            <tr>
-              <td><strong>Rotating anode</strong></td>
-              <td>Higher power handling. Two-step exposure: <strong>Prepare → Expose</strong></td>
-            </tr>
-          </table>
-        </div>
-
-        <h3>Prepare Stage (Rotating Anode)</h3>
-        <ul>
-          <li>Rotating anode is energized and reaches maximum speed</li>
-          <li>Filament circuit is closed and the filament is heated</li>
-          <li>Thermionic emission begins</li>
-        </ul>
-
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Like starting a car: start the engine and allow it to reach operating condition before driving. Prepare → anode spins + filament heats → then Expose.</p>
-        </div>
-      </div>
-
-      <!-- 12. Rectification -->
-      <div class="section-card">
-        <h2>1️⃣2️⃣ Why Rectification is Necessary</h2>
-        <p>Alternating current has a sinusoidal waveform that alternates between positive half-cycle, zero, and negative half-cycle. The direction of voltage therefore changes periodically.</p>
-
-        <p>The X-ray tube needs the polarity to remain correct at all times:</p>
-        <div class="highlight-box">
-          <p><strong>Cathode = negative</strong> → <strong>Anode = positive</strong><br>
-          So electrons always travel from cathode to anode.</p>
-        </div>
-
-        <h3>What happens without rectification?</h3>
-        <ul>
-          <li>During the negative half-cycle the polarity reverses</li>
-          <li>Cathode becomes positive and anode becomes negative</li>
-          <li>Electrons could travel in the wrong direction</li>
-          <li>This can damage the filament and stop useful X-ray production</li>
-        </ul>
-
-        <p>Rectifiers ensure the voltage/current stays in the required direction so electrons always move correctly from filament to anode.</p>
-      </div>
-
-      <!-- 13. Final Sequence -->
-      <div class="section-card">
-        <h2>1️⃣3️⃣ Complete Sequence of X-ray Production</h2>
-        <ol>
-          <li>Filament is heated</li>
-          <li>Thermionic emission releases electrons</li>
-          <li>High voltage creates potential difference between cathode and anode</li>
-          <li>Electrons are accelerated across the tube</li>
-          <li>Electrons strike the anode/target</li>
-          <li>X-rays are produced</li>
-          <li>Process continues until the selected exposure time ends</li>
-          <li>Timer opens the circuit</li>
-          <li>X-ray production stops</li>
-        </ol>
-      </div>
-
-      <!-- HIGH-YIELD POINTS -->
-      <div class="section-card">
-        <h2>⭐ High-Yield Points to Remember</h2>
-        <div class="quick-facts">
-          <ul>
-            <li>Basic principle: Fast-moving electrons striking a target produce X-rays</li>
-            <li>Two types of radiation: Bremsstrahlung + Characteristic</li>
-            <li>Basic sequence: Power supply → Controls → X-ray tube → X-rays</li>
-            <li>Two major circuits: Mains circuit + Filament circuit</li>
-            <li>Mains circuit → controls tube voltage → accelerates electrons</li>
-            <li>Filament circuit → heats filament → produces electrons (thermionic emission)</li>
-            <li>Cathode = electron source | Anode = target</li>
-            <li>High-tension transformer steps voltage UP</li>
-            <li>Step-down transformer reduces voltage for the filament</li>
-            <li>Rectifier keeps correct polarity (cathode negative, anode positive)</li>
-            <li>Timer controls how long X-rays are produced</li>
-            <li>kVp = quality (penetrating power) | mA = quantity of X-rays</li>
-            <li>Rotating anode uses Prepare → Expose sequence</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- CHECKLIST -->
-      <div class="section-card">
-        <h2>✅ Quick Revision Checklist</h2>
-        <div class="quick-facts">
-          <ul>
-            <li>Purpose of equipment engineering</li>
-            <li>Visible and hidden components of an X-ray room</li>
-            <li>Linear vs Switch-Mode Power Supply</li>
-            <li>Four stages of SMPS</li>
-            <li>Advantages and limitations of SMPS</li>
-            <li>Mains circuit vs Filament circuit</li>
-            <li>Journey of electricity (mains switch → circuit breaker → compensator → autotransformer → timer → step-up transformer → rectifiers → tube)</li>
-            <li>Components of the filament circuit</li>
-            <li>Stationary vs rotating anode (Prepare → Expose)</li>
-            <li>Why rectification is needed</li>
-            <li>Complete sequence of X-ray production</li>
-          </ul>
-        </div>
-
-        <div class="memory-tip">
-          <strong>🧠 Final Memory Line</strong>
-          <p>Power → Control → Heat → Release → Accelerate → Collide → X-ray</p>
-        </div>
-      </div>
-
-      <!-- BUTTONS -->
-      <button class="explore-btn" onclick="window.location.href='note1q.html'">📝 Past Questions</button>
-      <button class="explore-btn secondary" onclick="window.location.href='note2.html'">Next Page →</button>
-
     </div>
-  </div>
+  </header>
 
-  <div class="nav-bar">
-    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
-    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
-    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  <section id="learn">
+    <div class="wrap">
+      <div class="center">
+        <div class="kicker">The method</div>
+        <h2>Clinic skills, not just flashcards</h2>
+        <p class="sub">Every module is built the way radiographers actually work: protocol, position, expose, critique, decide what happens next.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="ico">🩻</div>
+          <h3>Image critique rooms</h3>
+          <p>Judge collimation, rotation, inspiration, exposure index, and pathology clues on real-style films — then compare with expert notes.</p>
+        </article>
+        <article class="card">
+          <div class="ico">📐</div>
+          <h3>Positioning labs</h3>
+          <p>Step-by-step projections with centering points, IR placement, breathing instructions, and common errors that ruin a study.</p>
+        </article>
+        <article class="card">
+          <div class="ico">⚛️</div>
+          <h3>Radiation physics that sticks</h3>
+          <p>kVp, mAs, grids, AEC, inverse square, attenuation, and digital processing — drilled with numbers you will actually use.</p>
+        </article>
+        <article class="card">
+          <div class="ico">🛡️</div>
+          <h3>Protection & ethics</h3>
+          <p>ALARA, shielding, pregnancy protocols, justification, and professional communication in high-pressure rooms.</p>
+        </article>
+        <article class="card">
+          <div class="ico">🧠</div>
+          <h3>Case pathways</h3>
+          <p>Follow a patient from request form to report-ready images. Learn when to adapt technique and when to stop and call.</p>
+        </article>
+        <article class="card">
+          <div class="ico">⏱️</div>
+          <h3>Board-style mocks</h3>
+          <p>Timed papers that mirror national and international radiography exams, with explanations written by working radiographers.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="mods" id="modalities">
+    <div class="wrap">
+      <div class="center">
+        <div class="kicker">Curriculum</div>
+        <h2>Every modality. One sharp brain.</h2>
+        <p class="sub">Start with the core, then specialise. Built for first-year students, intern radiographers, and clinicians refreshing a modality.</p>
+      </div>
+      <div class="mod-grid">
+        <a class="mod" href="./312.html"><div class="big">🦴</div><h3>Anatomy</h3><span>Skeletal · systems · cross-section</span></a>
+        <a class="mod" href="./312.html"><div class="big">📷</div><h3>General radiography</h3><span>2,800+ projections & critiques</span></a>
+        <a class="mod" href="./312.html"><div class="big">💡</div><h3>Physics & equipment</h3><span>X-ray tube to PACS</span></a>
+        <a class="mod" href="./312.html"><div class="big">🛡️</div><h3>Radiation protection</h3><span>Dose, law, practical ALARA</span></a>
+        <a class="mod" href="./312.html"><div class="big">🌀</div><h3>CT</h3><span>Protocols, artifacts, contrast</span></a>
+        <a class="mod" href="./312.html"><div class="big">🧲</div><h3>MRI</h3><span>Sequences, safety, anatomy</span></a>
+        <a class="mod" href="./312.html"><div class="big">📡</div><h3>Ultrasound</h3><span>Knobology & scanning planes</span></a>
+        <a class="mod" href="./312.html"><div class="big">✨</div><h3>Fluoro & IR</h3><span>Screening, sterile technique</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band" id="boards">
+    <div class="wrap">
+      <div class="kicker">Exam season never really ends</div>
+      <h2>Mock boards are live.<br>Treat them like the real room.</h2>
+      <p class="sub" style="max-width:560px;margin:0 auto;">Timed papers, image-heavy items, and scoring that shows exactly which projections and physics topics are leaking marks.</p>
+      <div class="clock" id="clock">
+        <div class="tick"><b id="d">00</b><s>Days</s></div>
+        <div class="tick"><b id="h">00</b><s>Hours</s></div>
+        <div class="tick"><b id="m">00</b><s>Minutes</s></div>
+        <div class="tick"><b id="s">00</b><s>Seconds</s></div>
+      </div>
+      <a class="btn btn-primary" href="./312.html" style="padding:16px 28px;font-size:16px;">Get Started — sit a mock paper</a>
+    </div>
+  </section>
+
+  <section id="voices">
+    <div class="wrap">
+      <div class="center">
+        <div class="kicker">From the department</div>
+        <h2>What learners say after the shift</h2>
+        <p class="sub">Students and radiographers using RadIQ to prepare for clinic, internships, and professional exams.</p>
+      </div>
+      <div class="quotes">
+        <article class="quote">
+          <div class="stars">★★★★★</div>
+          <p>“The image critique rooms changed how I look at a chest X-ray. I stopped guessing and started naming the fault — rotation, under-inspiration, grid cutoff.”</p>
+          <div class="who">
+            <div class="av">AO</div>
+            <div><strong>Ada O.</strong><small>B.Sc Radiography · Lagos</small></div>
+          </div>
+        </article>
+        <article class="quote">
+          <div class="stars">★★★★★</div>
+          <p>“Physics used to be the paper I feared. Short daily drills on kVp/mAs and AEC made the numbers feel like tools, not tricks.”</p>
+          <div class="who">
+            <div class="av">JM</div>
+            <div><strong>Jordan M.</strong><small>Student radiographer · Manchester</small></div>
+          </div>
+        </article>
+        <article class="quote">
+          <div class="stars">★★★★★</div>
+          <p>“I use RadIQ between lists. Five-minute positioning refreshers before a trauma hip have already saved me a repeat.”</p>
+          <div class="who">
+            <div class="av">SK</div>
+            <div><strong>Sana K.</strong><small>Radiographer · Nairobi</small></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="install" id="start">
+    <div class="wrap install-grid">
+      <div>
+        <div class="kicker">Get RadIQ</div>
+        <h2>Keep the lab in your pocket</h2>
+        <p class="sub">Install RadIQ on your phone or laptop. Jump into a case between lectures, or run a mock on night duty. Built as a fast web app you can add to your home screen.</p>
+        <ul class="checks">
+          <li><span class="ok">✓</span> Daily cases and physics sprints</li>
+          <li><span class="ok">✓</span> Positioning checklists you can open in the room</li>
+          <li><span class="ok">✓</span> Progress by modality, not just a single score</li>
+          <li><span class="ok">✓</span> Works in the browser — no app-store maze</li>
+        </ul>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a class="btn btn-primary" href="./312.html">Get Started</a>
+          <button class="btn btn-ghost" id="installBtn" type="button">Add to home screen</button>
+        </div>
+      </div>
+      <div>
+        <div class="phone">
+          <div class="screen">
+            <div class="app-ico">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="3.2" fill="#042f2e"/>
+                <path d="M12 2.8v3.2M12 18v3.2M2.8 12h3.2M18 12h3.2M6 6l2.2 2.2M15.8 15.8 18 18M18 6l-2.2 2.2M8.2 15.8 6 18" stroke="#042f2e" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:24px;">RadIQ</div>
+            <div style="color:var(--dim);font-size:13px;">Tap to open the lab</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fgrid">
+      <div>
+        <a class="brand" href="#top">
+          <div class="mark">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="3" fill="#042f2e"/>
+              <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="#042f2e" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="brand-name">Rad<span>IQ</span></div>
+        </a>
+        <p style="margin-top:14px;max-width:320px;">A learning lab for people who make medical images — and the people learning to make them well.</p>
+      </div>
+      <div>
+        <div class="ftitle">Learn</div>
+        <div class="flinks">
+          <a href="#learn">Method</a>
+          <a href="#modalities">Modalities</a>
+          <a href="#boards">Mock boards</a>
+          <a href="#start">Install</a>
+        </div>
+      </div>
+      <div>
+        <div class="ftitle">Tracks</div>
+        <div class="flinks">
+          <a href="#modalities">General radiography</a>
+          <a href="#modalities">CT & MRI</a>
+          <a href="#modalities">Ultrasound</a>
+          <a href="#learn">Image critique</a>
+        </div>
+      </div>
+      <div>
+        <div class="ftitle">Note</div>
+        <div class="flinks">
+          <a href="#start">Study tools only</a>
+          <a href="#learn">Not a clinical device</a>
+          <a href="#voices">Community</a>
+        </div>
+      </div>
+    </div>
+    <div class="copy">© 2026 RadIQ. Educational use. Always follow your department protocols and local radiation regulations.</div>
+  </footer>
+
+  <div class="banner" id="banner">
+    <div class="mark" style="width:40px;height:40px;border-radius:10px;">IQ</div>
+    <div>
+      <strong style="display:block;font-size:14px;">Install RadIQ</strong>
+      <span style="font-size:12px;color:var(--dim);">Home-screen access to cases and mocks</span>
+    </div>
+    <button class="btn btn-primary" type="button" onclick="installApp()" style="padding:8px 14px;">Install</button>
+    <button class="btn btn-ghost" type="button" onclick="document.getElementById('banner').classList.remove('on')" style="padding:8px 10px;">✕</button>
   </div>
 
   <script>
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
-    const container = document.getElementById('scroll-container');
-    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener("load", () => {
+      setTimeout(() => document.getElementById("loader").classList.add("hide"), 400);
+    });
 
-    function setTheme(theme) {
-      body.classList.remove('light', 'dark');
-      body.classList.add(theme);
-      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
-      localStorage.setItem('theme', theme);
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      nav.classList.toggle("scrolled", window.scrollY > 40);
+    });
+
+    function tick() {
+      const target = new Date("2026-11-01T09:00:00").getTime();
+      const gap = Math.max(0, target - Date.now());
+      const d = Math.floor(gap / 86400000);
+      const h = Math.floor((gap % 86400000) / 3600000);
+      const m = Math.floor((gap % 3600000) / 60000);
+      const s = Math.floor((gap % 60000) / 1000);
+      document.getElementById("d").textContent = String(d).padStart(2, "0");
+      document.getElementById("h").textContent = String(h).padStart(2, "0");
+      document.getElementById("m").textContent = String(m).padStart(2, "0");
+      document.getElementById("s").textContent = String(s).padStart(2, "0");
     }
+    tick();
+    setInterval(tick, 1000);
 
-    // Load saved theme or default to dark
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    setTheme(savedTheme);
-
-    themeToggle.addEventListener('click', () => {
-      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
-      setTheme(newTheme);
+    let deferredPrompt = null;
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      setTimeout(() => document.getElementById("banner").classList.add("on"), 4000);
     });
 
-    container.addEventListener('scroll', () => {
-      const scrollTop = container.scrollTop;
-      const scrollHeight = container.scrollHeight - container.clientHeight;
-      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
-    });
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt = null;
+        document.getElementById("banner").classList.remove("on");
+        return;
+      }
+      alert("On most phones: open the browser menu and choose Add to Home Screen.");
+    }
+    document.getElementById("installBtn").addEventListener("click", installApp);
   </script>
 </body>
 </html>
