@@ -160,7 +160,7 @@
   </div>
 
 <script>
-const CONFIG = { TIME: 1200, PASS: 60 }; // 20 minutes
+const CONFIG = { TIME: 1200, PASS: 60 };
 
 const SECTIONS = {
   0: "A: Exposure Control & Switching Basics",
@@ -172,15 +172,14 @@ const SECTIONS = {
 };
 
 function getSection(qIndex) {
-  const keys = Object.keys(SECTIONS).map(Number).sort((a, b) => b - a);
-  for (let k of keys) {
-    if (qIndex >= k) return SECTIONS[k];
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
   }
   return "Introduction";
 }
 
 const QUIZ_DATA = [
-  // Section A: Exposure Control & Switching Basics (1-10)
   {q:"In X-ray imaging, exposure refers to the:",o:["Voltage supplied to the X-ray tube","Length of time the image receptor remains within the X-ray beam","Amount of filtration used","Distance between the patient and tube"],a:1,e:"Exposure is defined as the length of time the image receptor is exposed to the X-ray beam."},
   {q:"An overexposed X-ray film is described in the material as appearing:",o:["Uniformly white","Grey","Uniformly dark or burnt out","Completely transparent"],a:2,e:"Overexposure results in a film that is uniformly dark or burnt out because too much radiation reaches the receptor."},
   {q:"An underexposed X-ray film appears:",o:["Very light or whitened","Very dark","Burnt out","Black with no contrast"],a:0,e:"Underexposure produces a very light or whitened image due to insufficient radiation reaching the film."},
@@ -192,7 +191,6 @@ const QUIZ_DATA = [
   {q:"Which of the following is classified as an exposure switching device?",o:["Mechanical contactor","Generator housing","Image intensifier","Collimator"],a:0,e:"Mechanical contactors are a classic type of exposure switching device."},
   {q:"Which of the following types of switches is identified as obsolete in the material?",o:["Electronic switch","Mechanical contactor","Both mechanical contactors and electronically controlled mechanical contactors","Thyristor"],a:2,e:"Both pure mechanical contactors and electronically controlled mechanical contactors are considered obsolete in modern equipment."},
 
-  // Section B: Mechanical Contactors (11-18)
   {q:"Mechanical contactors operate primarily through:",o:["Semiconductor action","Physical movement of contacts","Light energy","Magnetic resonance"],a:1,e:"They rely on the physical movement of metal contacts to open or close the circuit."},
   {q:"Mechanical contactors were commonly found in:",o:["Modern digital X-ray systems only","Very old X-ray equipment","MRI machines","Ultrasound equipment"],a:1,e:"They were typical of older X-ray generators and are rarely used today."},
   {q:"A mechanical contactor generally uses a:",o:["Spring-loaded mechanical contact","Silicon diode","Capacitor","Photodiode"],a:0,e:"Most mechanical contactors use spring-loaded contacts that open and close."},
@@ -202,7 +200,6 @@ const QUIZ_DATA = [
   {q:"Sparking in mechanical contactors may occur because of:",o:["Contact-related electrical effects","Low patient temperature","Excess filtration","Image receptor movement"],a:0,e:"Sparking is caused by the electrical effects that occur when contacts open or close under load."},
   {q:"Mechanical contactors are unsuitable when:",o:["Very fast switching is required","The exposure is long","The machine is switched off","The image receptor is digital"],a:0,e:"They cannot switch fast enough for modern short-exposure techniques."},
 
-  // Section C: Electronically Controlled Mechanical Contactors (19-26)
   {q:"Electronically controlled mechanical contactors differ from ordinary mechanical contactors because they include:",o:["An image intensifier","An electronic component such as a thyratron valve","A transformer only","A photomultiplier"],a:1,e:"They incorporate an electronic device (e.g. thyratron) to control the mechanical contacts more precisely."},
   {q:"The purpose of switching at zero current is primarily to reduce:",o:["Image size","Patient dose completely","Sparking and contact welding","Tube voltage"],a:2,e:"Switching at the zero-crossing point of the AC waveform minimises sparking and welding of the contacts."},
   {q:"Switching at the zero point of the AC waveform is called:",o:["Reverse bias","Forward bias","Phased switching","Doping"],a:2,e:"This technique is known as phased switching."},
@@ -212,7 +209,6 @@ const QUIZ_DATA = [
   {q:"Before exposure, the break contactor is:",o:["Open","Closed","Disconnected","Destroyed"],a:1,e:"The break contactor is closed before exposure and opens to terminate it."},
   {q:"When the selected exposure time expires, the break contactor:",o:["Closes to continue exposure","Pulls away to end exposure","Produces X-rays","Increases current"],a:1,e:"It opens (pulls away), interrupting the circuit and ending the exposure."},
 
-  // Section D: Electronic Switches & Semiconductors (27-40)
   {q:"Electronic switches differ from mechanical switches because electronic switches:",o:["Require more moving parts","Do not require moving components","Always use springs","Cannot control current"],a:1,e:"They have no moving parts; switching is performed by semiconductor action."},
   {q:"Electronic switches rely primarily on the properties of:",o:["Semiconductors","Wood","Glass only","Water"],a:0,e:"Semiconductors (silicon, etc.) are the key materials used in electronic switches."},
   {q:"The three terminals of a thyratron are:",o:["Emitter, base and collector","Anode, cathode and grid","Gate, drain and source","Positive, negative and neutral"],a:1,e:"A thyratron has an anode, cathode and control grid."},
@@ -228,7 +224,6 @@ const QUIZ_DATA = [
   {q:"A p-type semiconductor contains an increased number of:",o:["Electrons","Holes","Neutrons","Photons"],a:1,e:"p-type material has an excess of holes (positive charge carriers)."},
   {q:"Phosphorus is given as an example of a:",o:["Donor dopant","Acceptor dopant","Cathode","Gate"],a:0,e:"Phosphorus donates extra electrons and is therefore a donor (n-type) dopant."},
 
-  // Section E: P-N Junction & Diodes (41-46)
   {q:"A p-n junction is formed by combining:",o:["Two n-type materials","Two p-type materials","P-type and n-type semiconductors","A transistor and transformer"],a:2,e:"A p-n junction is the boundary created by joining p-type and n-type semiconductor material."},
   {q:"The depletion layer is also known as the:",o:["Space charge zone","Collector region","Gate region","Emission zone"],a:0,e:"The depletion layer is also called the space-charge zone."},
   {q:"In forward bias, the p-region is connected to the:",o:["Negative terminal","Positive terminal","Ground only","Cathode only"],a:1,e:"Forward bias connects the p-side to the positive terminal of the supply."},
@@ -236,14 +231,13 @@ const QUIZ_DATA = [
   {q:"In reverse bias, the depletion layer:",o:["Becomes narrower","Collapses immediately","Becomes wider","Disappears"],a:2,e:"Reverse bias widens the depletion layer, increasing the barrier to current flow."},
   {q:"In normal reverse bias, the p-n junction:",o:["Conducts freely","Blocks electrical conduction","Produces X-rays","Amplifies current"],a:1,e:"Under reverse bias the junction blocks current (apart from a tiny leakage current)."},
 
-  // Section F: Transistors & Thyristors (47-50)
   {q:"The three regions of a transistor are:",o:["Anode, cathode and gate","Emitter, base and collector","P, N and diode","Grid, plate and cathode"],a:1,e:"A bipolar transistor has three regions: emitter, base and collector."},
   {q:"Which of the following is a function of a transistor?",o:["Amplification","Cooling the X-ray tube","Producing ultrasound","Filtering the patient"],a:0,e:"One of the primary functions of a transistor is signal amplification."},
   {q:"How many main operating states does the material identify for a thyristor?",o:["Two","Three","Four","Five"],a:1,e:"A thyristor has three main operating states (off, on, and the transition)."},
   {q:"Which of the following is an advantage of electronic timers?",o:["They require many moving components","They have poor timing accuracy","They allow accurate timing of switching","They cannot perform phased switching"],a:2,e:"Electronic timers provide highly accurate control of exposure timing and can perform phased switching."}
 ];
 
-let state = {
+var state = {
   data: QUIZ_DATA,
   ans: new Array(QUIZ_DATA.length).fill(null),
   q: 0,
@@ -253,13 +247,13 @@ let state = {
 };
 
 function init() {
-  const loadEl = document.getElementById('load');
+  var loadEl = document.getElementById('load');
   if (loadEl) loadEl.classList.add('hide');
 
   try {
-    const saved = sessionStorage.getItem('exposure_switches_quiz_progress');
+    var saved = sessionStorage.getItem('exposure_switches_quiz_progress');
     if (saved) {
-      const d = JSON.parse(saved);
+      var d = JSON.parse(saved);
       if (Date.now() - d.ts < 86400000 && !d.submitted) {
         state.q = d.q;
         state.ans = d.ans;
@@ -275,7 +269,7 @@ function init() {
 
 function startTimer() {
   if (state.timer) clearInterval(state.timer);
-  state.timer = setInterval(() => {
+  state.timer = setInterval(function() {
     if (state.time > 0) {
       state.time--;
       updateTimer();
@@ -287,30 +281,33 @@ function startTimer() {
 }
 
 function updateTimer() {
-  const m = Math.floor(state.time / 60);
-  const s = state.time % 60;
-  const el = document.getElementById('timer');
-  el.textContent = `⏱️ \( {m}: \){s.toString().padStart(2, '0')}`;
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
   el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
 }
 
 function render() {
-  const q = state.data[state.q];
-  const done = state.ans.filter(x => x !== null).length;
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
   document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
-  document.getElementById('ptxt').textContent = `\( {done}/ \){state.data.length}`;
-  document.getElementById('stype').textContent = `Section ${getSection(state.q)} • Question ${state.q + 1}/50`;
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/50';
   document.getElementById('question').textContent = q.q;
 
-  const opts = document.getElementById('opts');
+  var opts = document.getElementById('opts');
   opts.innerHTML = '';
-  q.o.forEach((o, i) => {
-    const d = document.createElement('div');
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
     d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
-    d.innerHTML = `<div class="opt-mark">\( {String.fromCharCode(65 + i)}</div><p> \){o}</p>`;
-    d.onclick = () => select(i);
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
     opts.appendChild(d);
-  });
+  }
 
   document.getElementById('prevBtn').disabled = state.q === 0;
   document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
@@ -318,14 +315,17 @@ function render() {
 
 function select(i) {
   state.ans[state.q] = i;
-  document.querySelectorAll('.opt').forEach((el, idx) => el.classList.toggle('sel', idx === i));
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
   saveProgress();
 }
 
 function next() {
   if (state.q === state.data.length - 1) {
-    const unans = state.ans.filter(x => x === null).length;
-    if (unans > 0 && !confirm(`${unans} question(s) unanswered. Submit anyway?`)) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
       showPop();
       return;
     }
@@ -344,7 +344,11 @@ function prev() {
 function saveProgress() {
   try {
     sessionStorage.setItem('exposure_switches_quiz_progress', JSON.stringify({
-      q: state.q, ans: state.ans, time: state.time, submitted: state.submitted, ts: Date.now()
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
     }));
   } catch (e) {}
 }
@@ -354,16 +358,18 @@ function submit(timeout) {
   state.submitted = true;
   saveProgress();
 
-  let correct = 0;
-  state.data.forEach((q, i) => { if (state.ans[i] === q.a) correct++; });
-  const pct = Math.round((correct / state.data.length) * 100);
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
 
   document.getElementById('quiz').style.display = 'none';
   document.getElementById('res').style.display = 'flex';
   document.getElementById('res').classList.add('show');
   document.getElementById('rscore').textContent = pct + '%';
 
-  let title, msg;
+  var title, msg;
   if (timeout) title = '⏰ Time Up!';
   else if (pct >= 80) title = '🎉 Outstanding!';
   else if (pct >= 60) title = '🌟 Well Done!';
@@ -371,13 +377,13 @@ function submit(timeout) {
   else title = '💪 Keep Going!';
 
   if (pct >= 80) {
-    msg = `You scored <strong>\( {correct}/ \){state.data.length}</strong> (${pct}%)<br><br>Excellent mastery of Exposure Switches and Switching Devices! You are very well prepared. Keep practising to stay sharp.`;
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent mastery of Exposure Switches and Switching Devices! You are very well prepared. Keep practising to stay sharp.';
   } else if (pct >= 60) {
-    msg = `You scored <strong>\( {correct}/ \){state.data.length}</strong> (${pct}%)<br><br>✓ Pass mark achieved! Solid understanding. Review the questions you missed (especially semiconductors and contactors) and you’ll be even stronger.`;
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid understanding. Review the questions you missed (especially semiconductors and contactors) and you’ll be even stronger.';
   } else if (pct >= 40) {
-    msg = `You scored <strong>\( {correct}/ \){state.data.length}</strong> (${pct}%)<br><br>You’re making good progress. Focus on the explanations for mechanical vs electronic switching and p-n junctions. Consistent revision will raise your score quickly!`;
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making good progress. Focus on the explanations for mechanical vs electronic switching and p-n junctions. Consistent revision will raise your score quickly!';
   } else {
-    msg = `You scored <strong>\( {correct}/ \){state.data.length}</strong> (${pct}%)<br><br>Don’t worry — this topic has many technical details. Go through the detailed results carefully, revise the key concepts, and try again. Every attempt improves your understanding. You’ve got this!`;
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this topic has many technical details. Go through the detailed results carefully, revise the key concepts, and try again. Every attempt improves your understanding. You’ve got this!';
   }
 
   document.getElementById('rtitle').textContent = title;
@@ -391,38 +397,48 @@ function continueQuiz() {
 }
 
 function showPop() {
-  const g = document.getElementById('pgrid');
+  var g = document.getElementById('pgrid');
   g.innerHTML = '';
-  state.data.forEach((_, i) => {
-    const b = document.createElement('button');
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
     b.textContent = i + 1;
     if (state.ans[i] !== null) b.className = 'ans';
     if (i === state.q) b.style.border = '2px solid var(--a)';
-    b.onclick = () => { state.q = i; hidePop(); render(); };
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
     g.appendChild(b);
-  });
+  }
   document.getElementById('pop').classList.add('show');
 }
 
 function hidePop(e) {
-  if (!e || e.target.id === 'pop') document.getElementById('pop').classList.remove('show');
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
 }
 
 function showDet() {
-  const c = document.getElementById('dcont');
+  var c = document.getElementById('dcont');
   c.innerHTML = '';
 
-  let correct = 0;
-  state.data.forEach((q, i) => { if (state.ans[i] === q.a) correct++; });
-  const pct = Math.round((correct / state.data.length) * 100);
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
 
-  const sum = document.createElement('div');
+  var sum = document.createElement('div');
   sum.className = 'det-summary';
-  sum.innerHTML = `<div class="big">\( {pct}%</div><div> \){correct}/${state.data.length} correct</div>`;
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
   c.appendChild(sum);
 
-  const sections = [0, 10, 18, 26, 40, 46, 50];
-  const sectionNames = [
+  var sections = [0, 10, 18, 26, 40, 46, 50];
+  var sectionNames = [
     "A: Exposure Control & Switching Basics",
     "B: Mechanical Contactors",
     "C: Electronically Controlled Mechanical Contactors",
@@ -431,28 +447,27 @@ function showDet() {
     "F: Transistors & Thyristors"
   ];
 
-  for (let s = 0; s < 6; s++) {
-    const start = sections[s];
-    const end = sections[s + 1];
+  for (var s = 0; s < 6; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
 
-    const ph = document.createElement('div');
+    var ph = document.createElement('div');
     ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
-    ph.innerHTML = `<strong>Section ${sectionNames[s]}</strong>`;
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
     c.appendChild(ph);
 
-    for (let i = start; i < end; i++) {
-      const q = state.data[i];
-      const ans = state.ans[i];
-      const ok = ans === q.a;
-      const d = document.createElement('div');
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
       d.className = 'det-item' + (ok ? ' ok' : '');
-      d.innerHTML = `
-        <h4>Question ${i + 1}</h4>
-        <div class="q-text">${q.q}</div>
-        <div class="ans-row"><strong>Your answer:</strong> ${ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered'}</div>
-        <div class="ans-row"><strong>Correct:</strong> ${String.fromCharCode(65 + q.a) + ') ' + q.o[q.a]}</div>
-        <div class="exp">${q.e}</div>
-      `;
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
       c.appendChild(d);
     }
   }
@@ -486,7 +501,7 @@ function toggleTheme() {
   localStorage.setItem('exposure_switches_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   if (localStorage.getItem('exposure_switches_quiz_theme') === 'light') {
     document.body.classList.add('light');
   }
