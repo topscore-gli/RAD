@@ -61,7 +61,7 @@
       text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
       background:rgba(29,185,84,.1)
     }
-    .main-header h1{font-size:20px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header h1{font-size:18px;margin-bottom:8px;color:var(--accent);font-weight:900}
     .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
 
     .section-card{
@@ -70,7 +70,7 @@
       margin-bottom:24px;border-left:4px solid var(--accent)
     }
     .section-card h2{
-      font-size:18px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      font-size:17px;margin-bottom:14px;color:var(--accent);font-weight:900;
       display:flex;align-items:center;gap:8px
     }
     .section-card h3{
@@ -174,64 +174,52 @@
         </div>
       </div>
 
-      <!-- 1. What is Mains Voltage Compensation -->
+      <!-- PAGE 1 -->
       <div class="section-card">
-        <h2>1️⃣ What is Mains Voltage Compensation?</h2>
-        <p>It is the process of keeping the voltage supplied to an X-ray machine sufficiently stable despite changes in the incoming electrical supply.</p>
+        <h2>1️⃣ Introduction to Mains Voltage Compensation</h2>
+
+        <h3>What is mains voltage compensation?</h3>
+        <p>Mains voltage compensation is the process of keeping the voltage supplied to an X-ray machine sufficiently stable despite changes in the incoming electrical supply.</p>
 
         <div class="memory-tip">
           <strong>🧠 Analogy</strong>
-          <p>Think of water pressure in a pipe.<br>
-          If pressure becomes too low or too high, the equipment may not work properly.<br>
-          A pressure-regulating device keeps the pressure near the required level.<br>
-          A voltage compensator does the same job for electrical voltage.</p>
+          <p>Think of it like water pressure in a pipe. If the water pressure suddenly becomes too low, the equipment may not work properly. If the pressure becomes too high, the equipment can also be affected. A pressure-regulating device helps keep the pressure near the required level. Similarly, a voltage compensator helps the X-ray machine maintain a suitable and stable voltage.</p>
         </div>
-      </div>
 
-      <!-- 2. Why does voltage fluctuate -->
-      <div class="section-card">
-        <h2>2️⃣ Why Does Mains Voltage Fluctuate?</h2>
+        <h3>Why does mains voltage fluctuate?</h3>
+        <p>The material identifies two major situations:</p>
 
-        <h3>A. Fluctuations Outside Exposure</h3>
+        <h4>A. Fluctuations outside exposure</h4>
         <ul>
           <li>Other electrical equipment connected to the same mains supply</li>
           <li>Inconsistencies in the electricity supplied by the generating station</li>
         </ul>
 
-        <h3>B. Fluctuations During Exposure</h3>
-        <p>During exposure the X-ray tube demands a large amount of current. This increased demand can cause the supply voltage to drop.</p>
-
+        <h4>B. Fluctuations during exposure</h4>
+        <p>During X-ray exposure, the X-ray tube demands a large amount of current. This increased demand can cause the supply voltage to drop.</p>
         <div class="highlight-box">
           <p>More tube current → greater electrical demand → possible voltage drop</p>
         </div>
-      </div>
+        <p>These voltage changes can affect X-ray production and image quality.</p>
 
-      <!-- 3. Location -->
-      <div class="section-card">
-        <h2>3️⃣ Where is the Compensator Located?</h2>
-        <p>Positioned between the mains supply and the autotransformer:</p>
-
+        <h3>Where is the mains voltage compensator located?</h3>
         <div class="highlight-box">
-          <p>Mains supply → <strong>Mains voltage compensator</strong> → Autotransformer → X-ray circuit</p>
+          <p>Mains supply → Mains voltage compensator → Autotransformer → X-ray circuit</p>
         </div>
-
-        <p>It adjusts fluctuations <strong>before</strong> the voltage reaches the autotransformer.</p>
+        <p>Its purpose is to adjust fluctuations before the voltage reaches the autotransformer. The autotransformer can then provide the appropriate voltage to the rest of the X-ray circuit.</p>
 
         <div class="memory-tip">
           <strong>🧠 Important Point</strong>
-          <p>The compensator does <strong>not</strong> prevent the mains voltage from changing.<br>
-          It corrects the changes so that the voltage supplied to the X-ray circuit remains more stable.</p>
+          <p>The compensator does <strong>not</strong> prevent the mains voltage from changing. Instead, it corrects the changes so that the voltage supplied to the X-ray circuit remains more stable.</p>
         </div>
-      </div>
 
-      <!-- 4. Why stability is important -->
-      <div class="section-card">
-        <h2>4️⃣ Why is Voltage Stability Important?</h2>
-        <p>Voltage fluctuations can cause:</p>
+        <h3>Why is voltage stability important?</h3>
+        <p>The voltage supplied to the X-ray equipment affects the operation of the X-ray tube. Voltage fluctuations can cause:</p>
         <ul>
           <li>Unstable tube current</li>
           <li>Fluctuating X-ray intensity</li>
-          <li>Underexposed or overexposed images</li>
+          <li>Underexposed images</li>
+          <li>Overexposed images</li>
           <li>Reduced image consistency</li>
           <li>Increased wear on components</li>
           <li>Reduced equipment lifespan</li>
@@ -239,25 +227,33 @@
         </ul>
 
         <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Imagine taking photographs while the brightness of the flash keeps changing.<br>
-          One photo may be too dark, the next correct, the next too bright.<br>
-          The same problem occurs with X-ray production when the electrical supply is unstable.</p>
+          <strong>🧠 Simple Analogy</strong>
+          <p>Imagine taking photographs with a camera while the brightness of the flash keeps changing. One photograph might be too dark → correct → too bright → too dark. The same general problem can occur with X-ray production when the electrical supply is unstable.</p>
         </div>
       </div>
 
-      <!-- 5. Compensation Outside Exposure -->
+      <!-- PAGE 2 -->
       <div class="section-card">
-        <h2>5️⃣ Compensation Outside Exposure</h2>
+        <h2>2️⃣ Compensation Outside Exposure</h2>
+        <p>The material divides voltage compensation into two major situations: Compensation outside exposure and Compensation during exposure. On this page the focus is on manual voltage compensation.</p>
 
         <h3>Manual Voltage Compensator</h3>
-        <p>Common in older X-ray equipment. Consists of:</p>
+        <p>Older X-ray equipment commonly uses a manual mains voltage compensator. It generally consists of:</p>
         <ul>
           <li>A control knob</li>
-          <li>A voltage meter (moving-iron voltmeter) with a red mark showing the ideal voltage</li>
+          <li>A voltage readout/meter (moving-iron voltmeter)</li>
         </ul>
+        <p>There is a red mark on the meter indicating the ideal voltage level at which compensation is not required.</p>
 
-        <p>The control knob selects different tappings on the primary winding of the autotransformer.</p>
+        <h3>How does the operator adjust it?</h3>
+        <p>The control knob selects different tappings on the primary winding of the autotransformer. In simple terms, the operator changes the number of turns being used to compensate for a change in incoming voltage.</p>
+        <p>The material gives a useful example of a 1:1 volts-to-turns ratio. Therefore 240 V → 240 turns.</p>
+
+        <h4>Example 1: Mains voltage falls</h4>
+        <p>Suppose the normal supply is 240 V but it falls to 220 V. The meter needle moves to the left of the red mark. The radiographer then adjusts the compensator so that the autotransformer uses the appropriate number of turns corresponding to the lower voltage: 220 V → 220 turns. This helps maintain the required voltage relationship.</p>
+
+        <h4>Example 2: Mains voltage increases</h4>
+        <p>Suppose the supply increases above its normal value. The meter needle moves to the right of the red mark. The radiographer increases the selected number of turns to correspond with the increased voltage.</p>
 
         <div class="highlight-box">
           <p><strong>Key relationship:</strong><br>
@@ -265,38 +261,45 @@
           Voltage increases → increase selected turns</p>
         </div>
 
-        <h4>Example 1 – Voltage falls</h4>
-        <p>Normal supply = 240 V → falls to 220 V<br>
-        Meter needle moves left of the red mark.<br>
-        Operator selects 220 turns instead of 240 turns.</p>
-
-        <h4>Example 2 – Voltage rises</h4>
-        <p>Supply increases above normal.<br>
-        Meter needle moves right of the red mark.<br>
-        Operator increases the number of selected turns.</p>
+        <div class="memory-tip">
+          <strong>🧠 Easy way to remember</strong>
+          <p>Think of the compensator as a manual balancing system:<br>
+          Low voltage → adjust downward<br>
+          High voltage → adjust upward</p>
+        </div>
       </div>
 
-      <!-- 6. Automatic Compensation -->
+      <!-- PAGE 3 -->
       <div class="section-card">
-        <h2>6️⃣ Automatic Voltage Compensators</h2>
-        <p>Unlike the manual type, an automatic compensator does not require the radiographer to make continuous adjustments.</p>
+        <h2>3️⃣ Automatic Voltage Compensators</h2>
+        <p>The diagram on this page shows the relationship between major components of the X-ray circuit, including AC minor kV selector, major kV selector, autotransformer, step-up transformer, exposure switch and timing system. The diagram illustrates how the voltage-control components are incorporated into the X-ray circuit.</p>
 
-        <p>It:</p>
+        <div class="highlight-box">
+          <p>Simplified circuit concept:<br>
+          MAINS → Voltage Compensation → Autotransformer → kV Selection → Step-up Transformer → X-ray Tube</p>
+        </div>
+
+        <h3>Automatic Voltage Compensators</h3>
+        <p>Unlike the manual compensator, an automatic voltage compensator does not require the radiographer to continually make adjustments. It:</p>
         <ul>
           <li>Detects a change in mains voltage</li>
-          <li>Determines whether voltage has fallen or increased</li>
-          <li>Makes the correction automatically</li>
-          <li>Maintains a more stable voltage to the autotransformer</li>
+          <li>Determines whether the voltage has fallen or increased</li>
+          <li>Makes an adjustment automatically</li>
+          <li>Maintains a more stable voltage supplied to the autotransformer</li>
         </ul>
+        <p>Main components involved: Sensors and control circuits. These detect voltage changes and make the necessary correction.</p>
 
-        <p>Uses sensors and control circuits.</p>
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine an automatic water-pressure regulator. You don’t have to stand beside it and turn a knob whenever water pressure changes. The system detects the change and adjusts itself. An automatic voltage compensator works on a similar principle.</p>
+        </div>
 
         <div class="table-container">
           <table class="summary-table">
             <tr>
               <th>Feature</th>
-              <th>Manual</th>
-              <th>Automatic</th>
+              <th>Manual compensator</th>
+              <th>Automatic compensator</th>
             </tr>
             <tr>
               <td>Adjustment</td>
@@ -305,75 +308,92 @@
             </tr>
             <tr>
               <td>Detection</td>
-              <td>Operator watches meter</td>
+              <td>Operator observes meter</td>
               <td>Sensors detect change</td>
             </tr>
             <tr>
-              <td>Common in</td>
+              <td>Response</td>
+              <td>Manual</td>
+              <td>Automatic</td>
+            </tr>
+            <tr>
+              <td>Common association</td>
               <td>Older equipment</td>
               <td>Modern equipment</td>
             </tr>
+            <tr>
+              <td>Useful when</td>
+              <td>Operator can monitor supply</td>
+              <td>Frequent/unpredictable fluctuations</td>
+            </tr>
           </table>
         </div>
-
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>An automatic water-pressure regulator. You don’t stand beside it turning a knob every time pressure changes — the system detects the change and adjusts itself.</p>
-        </div>
+        <p>The material particularly associates automatic compensators with advanced X-ray systems and environments where power fluctuations are frequent or unpredictable.</p>
       </div>
 
-      <!-- 7. Compensation During Exposure -->
+      <!-- PAGE 4 -->
       <div class="section-card">
-        <h2>7️⃣ Compensation During Exposure</h2>
-        <p>During exposure the X-ray tube draws a large current (especially at high mA). This produces a voltage drop in the circuit.</p>
+        <h2>4️⃣ Compensation During Exposure</h2>
+        <p>This section introduces a different problem. The problem is no longer simply fluctuation in the incoming mains supply. During an exposure, the X-ray tube itself draws a substantial current, especially at high mA settings. This can produce a voltage drop in the circuit.</p>
+        <p>The material therefore introduces the <strong>Line Drop Compensation Transformer</strong>. Its purpose is to help maintain stable voltage during exposure.</p>
 
+        <h3>Why does voltage drop during exposure?</h3>
         <div class="highlight-box">
-          <p><strong>Line Drop Compensation Transformer</strong><br>
-          Purpose: helps maintain stable voltage during exposure.</p>
+          <p>Higher tube current → higher electrical load → greater voltage drop</p>
         </div>
-
-        <h3>Why does voltage drop?</h3>
-        <p>Higher tube current → higher electrical load → greater voltage drop</p>
-
         <ul>
-          <li>Low mA → smaller current demand → smaller voltage drop → less compensation needed</li>
-          <li>High mA → large current demand → larger voltage drop → more compensation needed</li>
+          <li>Low mA → Smaller current demand → Smaller voltage drop → Less compensation needed</li>
+          <li>High mA → Large current demand → Larger voltage drop → More compensation needed</li>
         </ul>
+        <p>The voltage drop can affect important X-ray components such as the filament transformer, rectifiers and high-voltage transformer. Consequently, unstable voltage can affect the consistency of X-ray production.</p>
 
-        <p>Position of the transformer:</p>
+        <h3>Position of the Line Drop Compensation Transformer</h3>
+        <p>The material describes it as a small current-type transformer placed in series with the load current. Its position is between:</p>
         <div class="highlight-box">
-          <p>Mains supply → <strong>Line-drop compensation transformer</strong> → Autotransformer → X-ray circuit</p>
+          <p>Mains supply → Line drop compensation transformer → Autotransformer</p>
         </div>
-        <p>It is a small current-type transformer placed in series with the load current.</p>
+        <p>Because it is in the primary circuit, it can respond to changes in current demand.</p>
+        <div class="highlight-box">
+          <p>Simplified idea:<br>
+          Mains → Line-drop compensating transformer → Autotransformer → X-ray circuit → X-ray tube</p>
+        </div>
       </div>
 
-      <!-- 8. How it works + Examples -->
+      <!-- PAGE 5 -->
       <div class="section-card">
-        <h2>8️⃣ How the Line-Drop Transformer Works</h2>
-        <p>It produces a compensating voltage related to the current flowing through its primary winding. This voltage offsets the voltage lost because of the load.</p>
+        <h2>5️⃣ How the Line Drop Compensation Transformer Works</h2>
+        <p>This is one of the most important pages because it provides a numerical example.</p>
 
+        <h3>Basic principle</h3>
+        <p>The compensating transformer produces a compensating voltage related to the current flowing through its primary winding. The compensating voltage helps offset the voltage lost because of the load.</p>
         <div class="highlight-box">
           <p>Greater current → greater voltage drop → greater compensating voltage<br>
           Lower current → smaller voltage drop → smaller compensating voltage</p>
         </div>
 
-        <h3>Worked Example 1</h3>
-        <p>Turns ratio = 20 : 1<br>
-        Primary current = 50 A<br>
-        Resistor = 2 Ω</p>
-        <p>Secondary current = 50 A ÷ 20 = 2.5 A<br>
-        Compensating voltage = 2.5 A × 2 Ω = <strong>5 V</strong></p>
+        <h3>Worked Example</h3>
+        <p>The material gives:</p>
+        <ul>
+          <li>Turns ratio = 20 : 1</li>
+          <li>Primary current = 50 A</li>
+          <li>Resistor = 2 Ω</li>
+        </ul>
+        <p><strong>Step 1 — Determine the secondary current</strong><br>
+        Using the turns ratio 20 : 1 → Secondary current = 50 A ÷ 20 = 2.5 A</p>
+        <p><strong>Step 2 — Calculate the voltage</strong><br>
+        Using Ohm’s law: Voltage = Current × Resistance = 2.5 A × 2 Ω = <strong>5 V</strong></p>
+        <p>This 5 V acts to compensate for the voltage drop associated with the 50 A load.</p>
 
-        <h3>Worked Example 2</h3>
-        <p>Current falls to 30 A</p>
+        <h3>Second Example — Current falls to 30 A</h3>
+        <p>Now suppose the load current falls from 50 A → 30 A. Using the same 20 : 1 ratio:</p>
         <p>Secondary current = 30 A ÷ 20 = 1.5 A<br>
         Compensating voltage = 1.5 A × 2 Ω = <strong>3 V</strong></p>
 
         <div class="table-container">
           <table class="summary-table">
             <tr>
-              <th>Load Current</th>
-              <th>Compensating Voltage</th>
+              <th>Load current</th>
+              <th>Compensating voltage</th>
             </tr>
             <tr>
               <td>50 A</td>
@@ -386,67 +406,59 @@
           </table>
         </div>
 
+        <div class="highlight-box">
+          <p><strong>The key relationship:</strong><br>
+          Higher load current → higher booster voltage<br>
+          Lower load current → lower booster voltage<br>
+          This allows the system to compensate according to the size of the voltage drop.</p>
+        </div>
+
         <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Pushing a shopping trolley.<br>
-          On a smooth floor → small force needed.<br>
-          On a rough floor → more force needed.<br>
-          The line-drop transformer detects increased “resistance” (higher current) and supplies extra assistance (more compensating voltage).</p>
+          <strong>🧠 A Simple Analogy</strong>
+          <p>Imagine you are pushing a shopping trolley. On a smooth floor: Small force → trolley moves easily. On a rough floor: More resistance → more force needed. The line-drop compensation transformer is somewhat like a system that detects the increased resistance and supplies additional assistance.<br>
+          In the X-ray circuit: More current → greater voltage drop. The compensating transformer responds by providing more compensating voltage.</p>
         </div>
       </div>
 
-      <!-- 9. Clinical Importance -->
+      <!-- PAGE 6 -->
       <div class="section-card">
-        <h2>9️⃣ Why Line-Drop Compensation Matters Clinically</h2>
+        <h2>6️⃣ Importance of Line Drop Compensation</h2>
+        <p>The final page emphasizes why all of this matters clinically. Voltage stability during an X-ray exposure is important because changes in tube voltage can affect tube current (mA) and consequently the intensity and quality of the X-ray beam.</p>
 
         <h3>Without adequate compensation</h3>
-        <p>Voltage fluctuation → change in tube operation → variation in X-ray beam → inconsistent image → possible repeat exposure → increased patient dose</p>
+        <p>Voltage fluctuation → Change in tube operation → Variation in X-ray beam → Inconsistent image → Possible repeat exposure → Increased patient radiation dose</p>
 
         <h3>With compensation</h3>
-        <p>Voltage fluctuation → compensator responds → voltage kept more consistent → more consistent X-ray production → more consistent image quality</p>
+        <p>Voltage fluctuation → Compensator responds → Voltage maintained more consistently → More consistent X-ray production → More consistent image quality</p>
+        <p>The material specifically notes that unstable X-ray production can result in underexposed or overexposed images, potentially requiring repeat exposures and increasing patient radiation dose.</p>
       </div>
 
-      <!-- HIGH-YIELD -->
+      <!-- WHOLE TOPIC -->
       <div class="section-card">
-        <h2>⭐ High-Yield Points</h2>
-        <div class="quick-facts">
-          <ul>
-            <li>Mains voltage compensation keeps voltage stable despite supply changes</li>
-            <li>Two situations: Outside exposure & During exposure</li>
-            <li>Outside exposure → Manual or Automatic mains compensator</li>
-            <li>During exposure → Line-drop compensation transformer</li>
-            <li>Manual: operator adjusts turns using meter and knob</li>
-            <li>Automatic: sensors + control circuits adjust automatically</li>
-            <li>Higher mA → greater current → greater voltage drop → greater compensation</li>
-            <li>Example: 50 A → 5 V compensation; 30 A → 3 V compensation (20:1 ratio, 2 Ω)</li>
-            <li>Unstable voltage can cause underexposed/overexposed images and higher patient dose</li>
-          </ul>
+        <h2>⭐ The Whole Topic in One Picture</h2>
+        <div class="highlight-box">
+          <p>MAINS VOLTAGE<br>
+          ├─ OUTSIDE EXPOSURE → Mains voltage changes from supply/other electrical loads → Manual/Automatic compensator<br>
+          └─ DURING EXPOSURE → X-ray tube draws high current → Voltage drop → Line-drop compensation<br><br>
+          Both lead to → Stable voltage supply → X-ray circuit → Consistent X-ray output → Consistent images</p>
         </div>
       </div>
 
-      <!-- CHECKLIST -->
+      <!-- EXAM-FOCUSED -->
       <div class="section-card">
-        <h2>✅ Quick Revision Checklist</h2>
+        <h2>🧠 Exam-Focused Summary</h2>
         <div class="quick-facts">
           <ul>
-            <li>Definition of mains voltage compensation</li>
-            <li>Causes of voltage fluctuation (outside vs during exposure)</li>
-            <li>Location of the compensator</li>
-            <li>Why voltage stability is important</li>
-            <li>How a manual compensator works</li>
-            <li>Difference between manual and automatic compensators</li>
-            <li>Purpose of the line-drop compensation transformer</li>
-            <li>Relationship between load current and compensating voltage</li>
-            <li>Numerical examples (50 A → 5 V, 30 A → 3 V)</li>
-            <li>Clinical consequences of poor compensation</li>
+            <li><strong>What is mains voltage compensation?</strong> It is the process of correcting variations in the mains voltage supplied to an X-ray machine so that the equipment receives a more stable voltage.</li>
+            <li><strong>Why is it necessary?</strong> Voltage fluctuations can affect tube current, X-ray intensity, image quality, equipment operation and component lifespan.</li>
+            <li><strong>When is compensation required?</strong> Outside exposure (handled by a mains voltage compensator) and During exposure (handled by a line drop compensation transformer).</li>
+            <li><strong>What is a manual voltage compensator?</strong> A manually operated system in which the radiographer observes the voltage meter and adjusts a control knob to select appropriate autotransformer tappings.</li>
+            <li><strong>What is an automatic voltage compensator?</strong> A system that uses sensors and control circuits to detect mains voltage variations and automatically make corrections.</li>
+            <li><strong>What causes voltage drop during exposure?</strong> The high current demand of the X-ray tube, particularly at high mA settings.</li>
+            <li><strong>What does the line drop compensation transformer do?</strong> It generates a compensating/boosting voltage related to the load current to offset voltage drops during exposure.</li>
+            <li><strong>What is the relationship between current and compensation?</strong> Higher current → greater voltage drop → greater compensation. Lower current → smaller voltage drop → smaller compensation.</li>
+            <li><strong>Numerical example to remember:</strong> Turns ratio = 20:1, Primary current = 50 A, Resistance = 2 Ω → Compensating voltage = 5 V. If current falls to 30 A → Compensating voltage = 3 V.</li>
           </ul>
-        </div>
-
-        <div class="memory-tip">
-          <strong>🧠 Final Memory Line</strong>
-          <p>OUTSIDE exposure = Mains compensator<br>
-          DURING exposure = Line-drop compensator<br>
-          More mA = More drop = More boost</p>
         </div>
       </div>
 
