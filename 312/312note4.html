@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 312 - High-Tension Cables, Plugs & Sockets</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:19px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:17px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{
+      background:var(--accent-tertiary);
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">RAD 312</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>⚡ High-Tension Cables, Plugs & Sockets</h1>
+        <p>Safe High-Voltage Transmission • Cable Construction • Earth Continuity</p>
+      </div>
+
+      <!-- ONE-SENTENCE SUMMARY -->
+      <div class="section-card">
+        <h2>📋 One-Sentence Summary</h2>
+        <p>High-tension cables safely carry the extremely high voltage from the generator to the X-ray tube while preventing leakage, minimising voltage loss, and protecting people through multiple layers of insulation and an earthed metal screen.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Layer Memory Trick</strong>
+          <p><strong>C-I-E-O</strong><br>
+          Central conductor → Inner insulation → Earth braid → Outer cover</p>
+        </div>
+      </div>
+
+      <!-- 1. Why special cables are needed -->
+      <div class="section-card">
+        <h2>1️⃣ Why Are Special Cables Needed?</h2>
+        <p>X-ray equipment uses very high electrical voltages. Ordinary wires cannot safely connect the high-voltage generator to the X-ray tube.</p>
+
+        <div class="highlight-box">
+          <p><strong>Important safety point:</strong><br>
+          Exposure to the high voltage in an X-ray system can be fatal and can cause severe tissue burns.</p>
+        </div>
+
+        <p>Therefore the high-tension cable has two major jobs:</p>
+        <ul>
+          <li>Carry the high voltage safely</li>
+          <li>Prevent the high voltage from escaping and injuring people</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>High-tension electricity is like very hot water under high pressure inside a pipe.<br>
+          You would never use a thin drinking straw — it would fail.<br>
+          You need a specially designed pipe that can withstand the pressure, does not leak, and does not allow the contents to escape.</p>
+        </div>
+      </div>
+
+      <!-- 2. Main requirements -->
+      <div class="section-card">
+        <h2>2️⃣ Main Requirements of High-Tension Cables</h2>
+        <p>Manufacturers design the cables to satisfy four major requirements:</p>
+        <ol>
+          <li><strong>Withstand high voltage</strong> – insulation must not break down</li>
+          <li><strong>Prevent external leakage</strong> – protect radiographer, patient and staff</li>
+          <li><strong>Minimise voltage loss</strong> – so the correct voltage reaches the tube</li>
+          <li><strong>Be reasonably affordable</strong> – balance safety, performance, durability and cost</li>
+        </ol>
+      </div>
+
+      <!-- 3. Types according to equipment size -->
+      <div class="section-card">
+        <h2>3️⃣ Types According to Equipment Size</h2>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Type</th>
+              <th>Used With</th>
+            </tr>
+            <tr>
+              <td><strong>Heavy-duty cables</strong></td>
+              <td>Three-phase generators and large systems</td>
+            </tr>
+            <tr>
+              <td><strong>Low-duty cables</strong></td>
+              <td>Mobile, portable and low-powered units</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Large truck → heavy-duty road equipment<br>
+          Small car → lighter-duty equipment<br>
+          Same principle applies to X-ray systems and their cables.</p>
+        </div>
+      </div>
+
+      <!-- 4. Function of the cable -->
+      <div class="section-card">
+        <h2>4️⃣ Function of the High-Tension Cable</h2>
+        <p>The high-tension cable connects:</p>
+
+        <div class="highlight-box">
+          <p>High-tension generator → <strong>High-tension cable</strong> → X-ray tube</p>
+        </div>
+
+        <p>It must transmit the very high voltage safely and withstand heat, mechanical stress and high electrical stress.</p>
+        <p>High-tension plugs and sockets at each end allow connection to the generator and the X-ray tube.</p>
+      </div>
+
+      <!-- 5. Construction of the cable -->
+      <div class="section-card">
+        <h2>5️⃣ Construction of the High-Tension Cable</h2>
+        <p>A high-tension cable is not a simple wire. It has several carefully designed layers.</p>
+
+        <h3>1. Central Conductor</h3>
+        <p>Carries the electrical supply. Made of several copper wires surrounded by high-grade plastic insulator.</p>
+        <ul>
+          <li>Copper is used because it conducts electricity well</li>
+          <li>Several thinner wires are used instead of one thick wire to reduce heat and improve flexibility</li>
+        </ul>
+
+        <h3>2. Anode vs Cathode Cables (Traditional)</h3>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Section</th>
+              <th>Number of Cores</th>
+            </tr>
+            <tr>
+              <td><strong>Anode</strong></td>
+              <td>One central core</td>
+            </tr>
+            <tr>
+              <td><strong>Cathode</strong></td>
+              <td>Three central cores<br>(broad focus, fine focus, common connection)</td>
+            </tr>
+          </table>
+        </div>
+        <p>Modern cables are commonly made with three cores for cost reduction and easier replacement.</p>
+
+        <h3>3. Inner Insulating Covering</h3>
+        <p>A thick layer of insulation around the central cores. Provides additional electrical protection.</p>
+        <div class="highlight-box">
+          <p>Thicker insulation → bulkier, more expensive and less flexible cable</p>
+        </div>
+
+        <h3>4. Earth Cable Braid</h3>
+        <p>A metallic sheath made of woven wire strands. Connected to earth. Forms an earthed metal screen around the insulated conductors.</p>
+
+        <h3>5. Outer Cable Cover</h3>
+        <p>The outermost layer (usually plastic). Protects the flexible earth braid underneath.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Layer Order (Inside → Outside)</strong>
+          <p>Central cores → Inner insulation → Earth cable braid → Outer cover<br>
+          Remember: <strong>C-I-E-O</strong></p>
+        </div>
+      </div>
+
+      <!-- 6. Connection details -->
+      <div class="section-card">
+        <h2>6️⃣ Cable Connection, Plugs & Sockets</h2>
+
+        <h3>Three Pins</h3>
+        <p>The socket has three pins that correspond to the three central conductors.</p>
+
+        <h3>Orientation Groove</h3>
+        <p>An outer acceptor groove ensures the cable can only be inserted in the correct orientation (similar to a keyed USB connector).</p>
+
+        <h3>Snap Ring</h3>
+        <p>Covers the bore into which the cable socket fits.</p>
+
+        <h3>Gland Nut</h3>
+        <p>An overhanging metal screw cap that secures the cable and socket firmly in position at the X-ray tube.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>The gland nut acts like a locking collar that mechanically secures the connection.</p>
+        </div>
+
+        <h3>Continuous Earth Screen</h3>
+        <p>The body of the high-tension plug is connected to the earth cable braid. This maintains a continuous earthed metal screen that is continuous with:</p>
+        <ul>
+          <li>the body of the X-ray tube</li>
+          <li>the high-tension generator</li>
+        </ul>
+      </div>
+
+      <!-- HIGH-YIELD -->
+      <div class="section-card">
+        <h2>⭐ High-Yield Points</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Special cables are needed because of extremely high voltages (can be fatal)</li>
+            <li>Main jobs: carry high voltage safely + prevent leakage</li>
+            <li>Four requirements: withstand voltage, prevent leakage, minimise loss, be affordable</li>
+            <li>Heavy-duty cables → large systems; Low-duty → mobile/portable</li>
+            <li>Central conductor = copper wires</li>
+            <li>Traditional: Anode = 1 core, Cathode = 3 cores</li>
+            <li>Modern cables usually have 3 cores</li>
+            <li>Earth cable braid = earthed metallic screen</li>
+            <li>Outer cover protects the earth braid</li>
+            <li>Gland nut secures the cable/socket connection</li>
+            <li>Continuous earth screen links tube and generator</li>
+            <li>Thicker insulation = bulkier, costlier, less flexible cable</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="section-card">
+        <h2>✅ Quick Revision Checklist</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Why special high-tension cables are required</li>
+            <li>Four main design requirements</li>
+            <li>Heavy-duty vs low-duty cables</li>
+            <li>Function of the high-tension cable</li>
+            <li>Layers of the cable (C-I-E-O)</li>
+            <li>Anode vs cathode core numbers</li>
+            <li>Purpose of the earth cable braid</li>
+            <li>Purpose of the outer cover</li>
+            <li>Role of the gland nut</li>
+            <li>How continuous earth screen is maintained</li>
+          </ul>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Final Mental Model</strong>
+          <p>Think of the high-tension cable as a high-pressure water hose with safety layers:<br>
+          Copper core = water-carrying pipe<br>
+          Insulation = thick wall preventing leakage<br>
+          Earth braid = protective metal shield<br>
+          Outer cover = tough outer jacket<br>
+          Plug/socket = secure connector at each end</p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='note4q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note5.html'">Next Page →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
