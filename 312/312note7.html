@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 312 - Interlocking Circuits</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:18px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:17px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{
+      background:var(--accent-tertiary);
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">RAD 312</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>⚡ Interlocking Circuits</h1>
+        <p>Fail-safe Mechanisms • Tube Stator Interlocks • Overload Interlocks</p>
+      </div>
+
+      <!-- ONE-SENTENCE SUMMARY -->
+      <div class="section-card">
+        <h2>📋 One-Sentence Summary</h2>
+        <p>Interlocking circuits are fail-safe mechanisms that prevent an X-ray exposure from occurring under unsafe conditions, such as when the anode is not rotating at sufficient speed or when the selected exposure factors exceed the tube’s permissible loading.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Overall Idea</strong>
+          <p>Think of interlocking circuits as several security locks on a car:<br>
+          Lock 1 – Engine (anode) must be ready<br>
+          Lock 2 – Driver must not overload the car (kV + mA + time)<br>
+          Lock 3 – Engine must not already be overheated<br>
+          Only when all conditions are safe does the system allow exposure.</p>
+        </div>
+      </div>
+
+      <!-- 1. What are interlocking circuits -->
+      <div class="section-card">
+        <h2>1️⃣ What are Interlocking Circuits?</h2>
+        <p>Interlocking circuits are safety mechanisms designed to prevent an X-ray machine from operating when certain conditions are unsafe.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>An interlock is like a security guard at a door who says: “You cannot enter until all the required safety conditions have been satisfied.”</p>
+        </div>
+
+        <p>In an X-ray machine an interlock can prevent exposure when, for example:</p>
+        <ul>
+          <li>The voltage becomes unsafe</li>
+          <li>Exposure factors selected by the radiographer are too high for the tube</li>
+          <li>The anode is not rotating properly</li>
+          <li>Other electrical or mechanical conditions could damage the equipment</li>
+        </ul>
+
+        <h3>Why fuses and circuit breakers are not enough</h3>
+        <p>Although X-ray equipment also contains fuses and circuit breakers, these cannot adequately perform all the functions required in the high-tension circuit. They would be bulky, cumbersome and expensive, and they cannot prevent damage caused by the operator selecting excessive exposure factors.</p>
+
+        <p>A normal fuse may not protect the tube if the selected exposure factors are too high, because the electrical current might not immediately be high enough to blow the fuse. An interlock instead asks:</p>
+        <div class="highlight-box">
+          <p>“Are the selected operating conditions safe before I allow the exposure?”</p>
+        </div>
+
+        <p>The material divides interlocks into two major categories:</p>
+        <ul>
+          <li><strong>Tube stator interlocks</strong></li>
+          <li><strong>Overload interlocks</strong></li>
+        </ul>
+      </div>
+
+      <!-- 2. Tube Stator Interlocks -->
+      <div class="section-card">
+        <h2>2️⃣ Tube Stator Interlocks</h2>
+        <p>The tube stator is responsible for rotating the anode in a rotating-anode X-ray tube. The anode can reach approximately <strong>3500 revolutions per minute (RPM)</strong> in about <strong>1.8 seconds</strong>.</p>
+
+        <h3>Why must the anode rotate?</h3>
+        <p>During an X-ray exposure a very large amount of heat is produced at the focal spot. If the anode remains stationary, the heat would be concentrated on essentially the same area.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine using a magnifying glass to focus sunlight onto one small point. That point gets extremely hot. Similarly, an X-ray tube needs the anode to rotate so that the heat is distributed over a larger area.</p>
+        </div>
+
+        <div class="highlight-box">
+          <p>Rotating anode → heat distributed → less concentrated heating → reduced risk of anode damage.<br>
+          If exposure occurs while the anode is stationary or rotating too slowly, the anode may overheat and split.</p>
+        </div>
+
+        <h3>The two stator windings</h3>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Winding</th>
+              <th>Main function</th>
+            </tr>
+            <tr>
+              <td><strong>Accelerating winding</strong></td>
+              <td>Rapidly accelerates the anode from rest to its required speed (requires considerable power)</td>
+            </tr>
+            <tr>
+              <td><strong>Maintaining winding</strong></td>
+              <td>Maintains the anode at the required speed once it is reached (requires much less power)</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think about pushing a heavy bicycle: initially you need a strong push to get it moving. Once it is moving quickly, you need only a small amount of effort to keep it moving. The two stator windings perform similar roles.</p>
+        </div>
+
+        <p>The purpose of the tube stator interlock is to make sure that <strong>both</strong> stator windings are energized before X-ray exposure is permitted.</p>
+      </div>
+
+      <!-- 3. How the tube stator interlock works -->
+      <div class="section-card">
+        <h2>3️⃣ How the Tube Stator Interlock Works</h2>
+        <p>Important components include:</p>
+        <ul>
+          <li>Autotransformer</li>
+          <li>Stators S1 and S2</li>
+          <li>Relay coils A and B</li>
+          <li>Contactors C1 and C2</li>
+          <li>Prepare switch</li>
+          <li>Exposure contactor coil</li>
+        </ul>
+
+        <p>The stators are connected to relay coils, which operate spring-loaded contactors connected in series.</p>
+
+        <h3>Sequence when Prepare is pressed</h3>
+        <ol>
+          <li>Stator 1 is energized</li>
+          <li>Relay B becomes energized and produces a magnetic field</li>
+          <li>This attracts contactor C2 → C2 closes</li>
+          <li>A similar process occurs with stator 2 and contactor C1</li>
+          <li>When both contactors C1 and C2 are closed, the exposure circuit is completed</li>
+        </ol>
+
+        <div class="highlight-box">
+          <p><strong>Important safety principle:</strong><br>
+          If the exposure button is pressed but either stator has not been energized, the exposure circuit remains incomplete and exposure cannot occur.</p>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Easy way to remember</strong>
+          <p>Think of two security guards standing at two doors:<br>
+          Guard 1 + Guard 2 must both say YES → exposure allowed.<br>
+          If either one says NO → exposure blocked.<br>
+          This is essentially an AND logic condition:<br>
+          Stator 1 OK AND Stator 2 OK → Exposure permitted.<br>
+          The relay-contactor arrangement can be replaced by an AND logic gate.</p>
+        </div>
+      </div>
+
+      <!-- 4. Slug Relay Circuit -->
+      <div class="section-card">
+        <h2>4️⃣ The Slug Relay Circuit (Why there is a delay)</h2>
+        <p>Even if the stators are energized immediately, exposure cannot happen at once because the anode needs time to accelerate (about 1.8–2 seconds to reach approximately 3500 RPM). This delay is produced by a <strong>slug relay circuit</strong>.</p>
+
+        <p>The slug relay circuit is positioned between the autotransformer and the stator windings. It consists of:</p>
+        <ul>
+          <li>A rectifier</li>
+          <li>A rheostat (optional)</li>
+          <li>A capacitor</li>
+          <li>A relay coil</li>
+          <li>A normally open contactor</li>
+        </ul>
+
+        <h3>The capacitor is the key</h3>
+        <p>The capacitor is connected in parallel with the relay coil. When the Prepare button is pressed:</p>
+        <ol>
+          <li>Capacitor starts charging</li>
+          <li>Capacitor draws heavy current</li>
+          <li>Very little current reaches the relay coil</li>
+          <li>Relay remains too weak to close the contactor</li>
+          <li>Time passes while the capacitor charges</li>
+          <li>Capacitor becomes fully charged</li>
+          <li>More current becomes available to the relay coil</li>
+          <li>Relay becomes strong enough</li>
+          <li>Contactor closes</li>
+          <li>Stator circuit is completed</li>
+        </ol>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy – Filling a water tank</strong>
+          <p>Imagine the capacitor is a water tank and the relay is a device that needs sufficient water pressure to operate.<br>
+          Initially the tank is empty → pressure is insufficient → relay cannot operate.<br>
+          As the tank fills, pressure increases → eventually enough pressure exists → relay operates.<br>
+          The capacitor’s charging time therefore creates the required delay.</p>
+        </div>
+
+        <p>The rheostat is optional. Some older equipment allows the operator to select the amount of time required for the anode to reach maximum speed. The rheostat provides this adjustment.</p>
+
+        <div class="highlight-box">
+          <p><strong>Complete tube-stator safety sequence:</strong><br>
+          Press PREPARE → Stators energized → Capacitor charges → Waiting period → Anode reaches sufficient speed → Relay operates → Contactors close → Exposure becomes possible.<br>
+          If something goes wrong → Exposure is prevented.</p>
+        </div>
+      </div>
+
+      <!-- 5. Overload Interlocks -->
+      <div class="section-card">
+        <h2>5️⃣ Overload Interlocks</h2>
+        <p>While tube stator interlocks protect against problems associated with anode rotation, overload interlocks ensure that the selected exposure factors do not exceed the X-ray tube rating.</p>
+
+        <p>The three major exposure factors considered are:</p>
+        <ul>
+          <li>kV</li>
+          <li>mA</li>
+          <li>Time</li>
+        </ul>
+        <p>These factors must be coordinated. A combination that is safe individually may become unsafe when all three are increased together. The interlock therefore considers the combination rather than simply looking at one selector.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy – A car</strong>
+          <p>Think of kV as one aspect of the power being applied, mA as another aspect of the electrical load, and time as how long the load is applied. The interlock looks at the total effect of the combination.</p>
+        </div>
+
+        <p>Two overload interlocking systems are identified:</p>
+        <ul>
+          <li>Analog overload interlocks</li>
+          <li>Mechanical overload interlocks</li>
+        </ul>
+      </div>
+
+      <!-- 6. Analog Interlocks -->
+      <div class="section-card">
+        <h2>6️⃣ Analog Overload Interlocks</h2>
+        <p>Analog interlocks provide overall overload protection by performing an electronic additional sum using a special transformer. Components include:</p>
+        <ul>
+          <li>Autotransformer</li>
+          <li>Special interlock transformer</li>
+          <li>Rectifier</li>
+          <li>Rheostat</li>
+          <li>Transistor</li>
+          <li>Percentage-load relay</li>
+          <li>Exposure circuitry</li>
+          <li>kV connector and mA connector</li>
+        </ul>
+
+        <h3>How kV affects the circuit</h3>
+        <p>The primary winding of the special interlock transformer is connected to the autotransformer. Its tapping mechanism is connected to the kV selector.</p>
+        <div class="highlight-box">
+          <p>kV increases → more primary windings are selected → input voltage to primary increases → transformer output increases → transistor grid bias increases</p>
+        </div>
+
+        <h3>How mA affects the circuit</h3>
+        <p>The secondary winding also has taps. The movable connection is linked to the mA selector.</p>
+        <div class="highlight-box">
+          <p>mA increases → more secondary windings are selected → transformer becomes more step-up in effect → output increases → transistor grid bias increases</p>
+        </div>
+
+        <h3>How time affects the circuit</h3>
+        <p>After the transformer output is rectified, it passes through a rheostat connected to the timer selector.</p>
+        <div class="highlight-box">
+          <p>Time increases → resistance decreases → voltage increases → transistor grid bias increases</p>
+        </div>
+
+        <h3>The transistor and percentage-load relay</h3>
+        <p>The output from the rheostat goes to the grid terminal of a transistor. The transistor acts like an electronic switch controlling the percentage-load relay. The percentage-load relay then operates a contactor associated with the exposure circuit.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy – Electronic gatekeeper</strong>
+          <p>Imagine the transistor as a gatekeeper. It receives information about kV, mA and time. The combined information determines whether the exposure circuit is allowed to operate. When the conditions reach the critical level, the transistor switches the percentage-load relay circuit off, preventing the exposure.</p>
+        </div>
+
+        <p>The analog interlock essentially combines the effects of <strong>kV + mA + time</strong> to determine whether the selected exposure is within the tube’s permissible loading. The important point is not merely that each factor has a limit independently, but that the combination of exposure factors must remain within the tube’s allowable loading.</p>
+      </div>
+
+      <!-- 7. Mechanical Interlocks -->
+      <div class="section-card">
+        <h2>7️⃣ Mechanical Overload Interlocks</h2>
+        <p>Mechanical interlocks are an older method, sometimes used in portable equipment. Unlike analog interlocks, they do not primarily depend on electronic circuits. They use physical obstruction to stop a selector from being moved beyond a safe combination.</p>
+
+        <p>The system includes:</p>
+        <ul>
+          <li>Chain</li>
+          <li>Spring-loaded lever</li>
+          <li>Cam</li>
+          <li>Pulley system</li>
+          <li>kV selector, mA selector and Timer</li>
+        </ul>
+
+        <h3>What is a cam?</h3>
+        <p>A cam is an irregular/oblong wheel that is not perforated exactly at its centre. As it rotates it produces a wobbling motion. This can convert rotational motion into linear motion (similar to cams used in automobile and engine camshafts).</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine a rotating object pushing a lever up and down. The shape of the rotating object determines exactly when and how far the lever moves. That is essentially what the cam does in this interlocking mechanism.</p>
+        </div>
+
+        <h3>How the mechanical interlock prevents overload</h3>
+        <p>Suppose the operator increases kV:</p>
+        <ol>
+          <li>kV selector moves</li>
+          <li>Pulls chain</li>
+          <li>Chain pulls lever</li>
+          <li>Lever encounters cam</li>
+          <li>Cam prevents further movement</li>
+        </ol>
+        <p>The maximum movement corresponds to the maximum exposure factors that the tube can accommodate. The mechanism can also cause the timer to move down if the kV selector is forced. Similarly, changing the mA selector affects the timer. The selectors are therefore mechanically linked.</p>
+      </div>
+
+      <!-- 8. Limitation and modern systems -->
+      <div class="section-card">
+        <h2>8️⃣ Limitation of Older Interlocks & Modern Protection</h2>
+        <p>The major limitation of the interlocks described earlier is that they can protect against an individual exposure exceeding the permitted tube loading, but they do not necessarily account for heat already stored in the anode.</p>
+
+        <div class="highlight-box">
+          <p>A safe exposure factor does not necessarily mean the tube is currently safe to expose. The tube may still need time to cool.</p>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy – Cooking pan</strong>
+          <p>Imagine a frying pan that can safely handle a certain amount of heat. You use it for several minutes and it becomes extremely hot. Now you add another small amount of heat. The new heat may be within the normal limit, but because the pan is already very hot, its total temperature may become excessive. The same principle applies to the X-ray tube anode.</p>
+        </div>
+
+        <h3>Modern electronic interlocks</h3>
+        <p>Current electronic interlocks can combine with logic-gate systems to prevent exposure when the anode is overheated. This can happen even when the selected exposure factors themselves are within normal limits.</p>
+
+        <div class="highlight-box">
+          <p><strong>Older approach:</strong> “Are the selected exposure factors safe?”<br>
+          <strong>More advanced approach:</strong> “Are the selected exposure factors safe AND is the tube currently cool enough for exposure?”</p>
+        </div>
+        <p>The second approach gives more comprehensive protection.</p>
+      </div>
+
+      <!-- HIGH-YIELD -->
+      <div class="section-card">
+        <h2>⭐ Important Points to Memorise</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Interlocking circuits are fail-safe mechanisms that prevent damage to X-ray equipment</li>
+            <li>Two major categories: Tube stator interlocks and Overload interlocks</li>
+            <li>Anode reaches ≈ 3500 RPM in about 1.8 seconds</li>
+            <li>Rotating anode distributes heat and prevents damage</li>
+            <li>Accelerating winding gets the anode moving; Maintaining winding keeps it at speed</li>
+            <li>Both stator circuits must be energized (AND logic) before exposure is allowed</li>
+            <li>Slug relay (with capacitor) provides the necessary delay while the anode accelerates</li>
+            <li>Overload interlocks coordinate kV + mA + time</li>
+            <li>Analog interlocks use a special transformer, rectifier, rheostat, transistor and percentage-load relay</li>
+            <li>Mechanical interlocks use chains, levers, pulleys and cams to physically obstruct unsafe combinations</li>
+            <li>Older systems do not account for heat already stored in the anode</li>
+            <li>Modern electronic interlocks also check whether the tube is currently cool enough</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="section-card">
+        <h2>✅ Quick Revision Checklist</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Definition and purpose of interlocking circuits</li>
+            <li>Why fuses and circuit breakers alone are not sufficient</li>
+            <li>Why the anode must rotate and the risk of a stationary anode</li>
+            <li>Functions of the accelerating and maintaining stator windings</li>
+            <li>How the tube stator interlock works (relays and contactors)</li>
+            <li>AND logic principle of the stator interlock</li>
+            <li>Full operation of the slug relay circuit and the role of the capacitor</li>
+            <li>Purpose of overload interlocks</li>
+            <li>How kV, mA and time each affect the analog interlock circuit</li>
+            <li>Role of the transistor and percentage-load relay</li>
+            <li>How mechanical interlocks work (cam, chain, lever)</li>
+            <li>Major limitation of older interlocks regarding stored anode heat</li>
+            <li>Advantage of modern electronic interlocks</li>
+          </ul>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Final Easy Overall Analogy</strong>
+          <p>Think of an X-ray machine as a car with several safety locks:<br>
+          Lock 1 – Engine must be ready (tube stator interlock checks anode rotation)<br>
+          Lock 2 – Driver must not overload the car (overload interlock checks kV + mA + time)<br>
+          Lock 3 – Engine must not already be overheated (modern electronic interlocks)<br>
+          Only when all required conditions are satisfactory does the system say “Exposure permitted.” Otherwise “Exposure blocked.”</p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='note7q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note8.html'">Next Page →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
