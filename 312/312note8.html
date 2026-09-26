@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 312 - Exposure Factor Selection</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:18px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:17px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{
+      background:var(--accent-tertiary);
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">RAD 312</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>⚡ Exposure Factor Selection</h1>
+        <p>kV Selection • Autotransformer • Variac • Voltage Drop & Compensation</p>
+      </div>
+
+      <!-- ONE-SENTENCE SUMMARY -->
+      <div class="section-card">
+        <h2>📋 One-Sentence Summary</h2>
+        <p>Exposure-factor selection involves choosing kV, mA and time. Kilovoltage is controlled through the autotransformer (and sometimes a Variac), then stepped up, while anticipated transformer, rectification and tube-current voltage losses are compensated for so that the desired voltage is ultimately available across the X-ray tube.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Big Picture Sequence</strong>
+          <p>kV → AUTOTRANSFORMER → STEP-UP → LOSSES → COMPENSATION → kV INDICATION</p>
+        </div>
+      </div>
+
+      <!-- 1. What are exposure factors -->
+      <div class="section-card">
+        <h2>1️⃣ What are Exposure Factors?</h2>
+        <p>When an X-ray exposure is made, the operator selects certain factors to control the production of X-rays. The three main exposure factors are:</p>
+        <ul>
+          <li><strong>Kilovoltage (kV)</strong> – controls the potential difference across the X-ray tube and strongly affects X-ray photon energy and penetrating power</li>
+          <li><strong>Milliamperage (mA)</strong> – controls the tube current and therefore the quantity of electrons flowing through the tube</li>
+          <li><strong>Exposure time</strong> – determines how long the tube current flows</li>
+        </ul>
+        <p>This material concentrates mainly on kV selection. (mA selection was dealt with separately in the filament-circuit material.)</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of an X-ray tube like a system in which electrons are being pushed from one side to another.<br>
+          kV = how strongly the electrons are pushed<br>
+          mA = how many electrons are flowing<br>
+          Time = how long the flow continues<br>
+          So kV controls the energy/penetrating ability, while mA and time are associated with the amount of radiation produced.</p>
+        </div>
+      </div>
+
+      <!-- 2. Soft and Hard X-rays -->
+      <div class="section-card">
+        <h2>2️⃣ X-rays in the Electromagnetic Spectrum</h2>
+        <p>X-rays occupy a region of the electromagnetic spectrum with wavelengths of approximately 0.01–10 μm and photon energies of approximately 100 eV–100 keV.</p>
+        <p>The material divides X-rays broadly into:</p>
+        <ul>
+          <li><strong>Soft X-rays</strong> – lower-energy end. Used in X-ray crystallography and mammography</li>
+          <li><strong>Hard X-rays</strong> – higher-energy end. Used in routine radiography, radiotherapy and airport baggage inspection</li>
+        </ul>
+      </div>
+
+      <!-- 3. Meaning of kilovoltage -->
+      <div class="section-card">
+        <h2>3️⃣ What Does Kilovoltage Mean?</h2>
+        <p>When we select a particular kV we are determining the potential difference between the cathode and anode of the X-ray tube. This potential difference accelerates electrons from the cathode toward the anode.</p>
+
+        <div class="highlight-box">
+          <p><strong>Important relationship:</strong><br>
+          Higher kV → greater electron acceleration → greater electron kinetic energy → potentially higher-energy X-ray photons.<br>
+          The maximum energy of an X-ray photon is limited by the kinetic energy of the electron striking the anode.</p>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine throwing a ball at a wall.<br>
+          If you throw it gently, it reaches the wall with relatively little energy.<br>
+          If you throw it very fast, it hits the wall with much more energy.<br>
+          Similarly: Low kV → electrons have less energy; High kV → electrons have more energy.</p>
+        </div>
+
+        <h3>Effect of kV on radiographic penetration</h3>
+        <ul>
+          <li><strong>Low kV</strong> – X-rays have relatively lower energy and penetration. If too low the radiograph may be underpenetrated.</li>
+          <li><strong>High kV</strong> – X-rays have greater penetrating ability. If excessively high the radiograph may be overpenetrated.</li>
+        </ul>
+        <div class="memory-tip">
+          <strong>🧠 Easy memory aid</strong>
+          <p>kV = penetrating power<br>
+          Higher kV → stronger X-ray beam → greater penetration.</p>
+        </div>
+      </div>
+
+      <!-- 4. kV selector and autotransformer -->
+      <div class="section-card">
+        <h2>4️⃣ kV Selector and Autotransformer</h2>
+        <p>The kV selector is located at the autotransformer. The selector consists of different tapings from the transformer winding.</p>
+
+        <div class="highlight-box">
+          <p><strong>Basic arrangement:</strong><br>
+          AC supply → Autotransformer (Major + Minor kV selectors) → Step-up transformer → High voltage → X-ray tube</p>
+        </div>
+
+        <h3>What is an autotransformer?</h3>
+        <p>An autotransformer is a transformer with one continuous winding that serves as both the primary and secondary winding. This differs from an ordinary two-winding transformer.</p>
+        <p>Because X-ray equipment works with very high voltages, it is safer to control the voltage <strong>before</strong> it is stepped up to the very high voltage required by the X-ray tube.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine carrying a large amount of water. It is much easier and safer to control the flow while the water is still at low pressure than after it has been converted to extremely high pressure. Similarly, voltage is adjusted before it is stepped up to tens of kilovolts.</p>
+        </div>
+
+        <h3>Transformer turns ratio</h3>
+        <p>The relationship between voltage and number of turns is:</p>
+        <div class="highlight-box">
+          <p>W<sub>p</sub> / W<sub>s</sub> = V<sub>p</sub> / V<sub>s</sub></p>
+        </div>
+        <p>Where W<sub>p</sub> = number of primary turns, W<sub>s</sub> = number of secondary turns, V<sub>p</sub> = primary voltage, V<sub>s</sub> = secondary voltage.</p>
+
+        <h4>Worked example</h4>
+        <p>Input voltage = 415 V<br>
+        Total winding = 1000 turns<br>
+        Desired selected voltage = 200 V</p>
+        <p>W<sub>s</sub> = (W<sub>p</sub> × V<sub>s</sub>) / V<sub>p</sub> = (1000 × 200) / 415 ≈ 482 turns</p>
+        <p>Therefore approximately the 482nd turn is selected to obtain 200 V.</p>
+
+        <h3>Stepping up the voltage</h3>
+        <p>The selected 200 V is then supplied to a step-up transformer to produce 40 kV.</p>
+        <p>Ratio = 200 : 40 000 = 1 : 200</p>
+        <p>Therefore for every 1 turn on the primary there are 200 turns on the secondary.</p>
+
+        <div class="highlight-box">
+          <p>415 V mains → Autotransformer (1000 turns) → select 482nd turn → 200 V → Step-up transformer (1 : 200) → 40 kV</p>
+        </div>
+
+        <h3>Major and minor kV selectors</h3>
+        <ul>
+          <li><strong>Major kV selector</strong> – typically changes the kV in larger steps (example given: 10 kV)</li>
+          <li><strong>Minor kV selector</strong> – typically changes the kV in smaller steps (example given: 1 kV)</li>
+        </ul>
+        <p>The difference is essentially the spacing between the transformer tap points.</p>
+        <p>Example of simplified operation:</p>
+        <ul>
+          <li>Major: 40 → 50 → 60 → 70 kV</li>
+          <li>Minor: 40 → 41 → 42 → 43 kV</li>
+        </ul>
+      </div>
+
+      <!-- 5. Variac transformer -->
+      <div class="section-card">
+        <h2>5️⃣ Variac Transformer</h2>
+        <p>Ordinary tapped autotransformers select voltage at fixed points. Some procedures (particularly fluoroscopy) require the voltage to be changed smoothly during an exposure. A fixed-tap system cannot provide continuous voltage adjustment. Therefore a special type of autotransformer called a <strong>Variac transformer</strong> (variable voltage autotransformer) is used.</p>
+
+        <h3>How does a Variac work?</h3>
+        <p>Instead of having fixed taps, the Variac uses a carbon brush slider that moves across the transformer winding. As the slider moves, the effective number of turns changes and the output voltage changes continuously.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy – Staircase vs Ramp</strong>
+          <p>Ordinary tapped autotransformer is like a staircase: you can stand only on specific steps (40, 50, 60, 70 kV).<br>
+          Variac is like a ramp: the slider can move continuously so you can adjust the voltage smoothly between values.</p>
+        </div>
+
+        <h3>Construction of the Variac</h3>
+        <ul>
+          <li>A round magnetic core</li>
+          <li>Windings around the core</li>
+          <li>A carbon brush slider</li>
+        </ul>
+        <p>The primary connection is made from both ends of the winding. The secondary connection uses one end of the winding and the carbon brush position. Moving the brush changes the effective turns ratio.</p>
+      </div>
+
+      <!-- 6. Why actual kV falls -->
+      <div class="section-card">
+        <h2>6️⃣ Does Selected kV Remain Constant?</h2>
+        <p>No. Suppose we select 40 kV. We might expect exactly 40 kV to appear across the X-ray tube throughout the exposure. However, the actual voltage can fall for three reasons:</p>
+
+        <h3>1. Transformer losses</h3>
+        <p>An ideal transformer assumes no energy losses. Real transformers are not ideal. Energy can be lost through eddy currents, hysteresis, etc. Some electrical energy is converted into heat. Therefore the actual voltage obtained will not necessarily equal the theoretical voltage calculated from the transformer equation. The actual result depends partly on the transformer’s rating.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Suppose you put ₦100 into a process but only ₦95 comes out because ₦5 is lost through friction. Similarly: Input electrical energy → some losses → slightly lower useful output.</p>
+        </div>
+
+        <h3>2. Effect of tube current</h3>
+        <p>From the power relationship P = I × V, therefore V = P / I. If power is considered constant, an increase in current is associated with a reduction in voltage.</p>
+        <p>In an X-ray tube the selected mA determines the tube current. Increasing mA means more electrons are released by the filament, more electrons travel from cathode to anode, and greater tube current flows. A voltage drop occurs. The material gives an example where a selected 40 kV could fall to approximately 36 kV once the tube is energized.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of a road carrying vehicles. Voltage is like the driving force. Current is like the number of vehicles moving. Increasing the number of vehicles creates more demand on the system and can result in a greater voltage drop.</p>
+        </div>
+
+        <h3>3. Rectification loss</h3>
+        <p>The X-ray generator contains rectifiers. The material treats the rectification process as introducing additional resistance. When current passes through this part of the circuit a further voltage reduction occurs. Therefore rectification contributes to the total voltage loss.</p>
+      </div>
+
+      <!-- 7. Total voltage drop and compensation -->
+      <div class="section-card">
+        <h2>7️⃣ Total Voltage Drop and Compensation</h2>
+        <p>The material summarizes the total voltage drop as:</p>
+        <div class="highlight-box">
+          <p><strong>Voltage drop = Transformer loss + Rectification loss + Tube-current loss</strong></p>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Memory aid</strong>
+          <p>Think: <strong>T + R + T</strong><br>
+          T = Transformer<br>
+          R = Rectification<br>
+          T = Tube current<br>
+          Together they cause the voltage drop.</p>
+        </div>
+
+        <h3>How do we compensate for voltage drop?</h3>
+        <p>The solution is to initially select a voltage higher than the desired final voltage.</p>
+        <p>Example:</p>
+        <ul>
+          <li>Desired tube voltage = 40 kV</li>
+          <li>Expected voltage loss = 10 kV</li>
+          <li>Therefore the system should initially provide 40 + 10 = 50 kV</li>
+          <li>After the expected losses: 50 – 10 = 40 kV</li>
+        </ul>
+        <p>So the tube receives approximately the required 40 kV. This is achieved by selecting more turns on the autotransformer to compensate for expected losses.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Suppose you need to receive ₦40,000 but know that ₦10,000 will be lost during a process. You would have to start with ₦50,000 so that after losing ₦10,000, ₦40,000 remains. The same principle is applied to voltage compensation.</p>
+        </div>
+
+        <h3>Why must mA be considered?</h3>
+        <p>Transformer losses and rectification losses are usually relatively constant for a given system. However, tube-current loss changes with the selected mA. Different examinations require different mA values. Therefore the compensation system needs to account for the mA selected.</p>
+
+        <h3>kV compensator ganged to the mA selector</h3>
+        <p>One solution is to connect another kV selector mechanically or electrically with the mA selector (described as being “ganged” to the mA selector).</p>
+        <ul>
+          <li>When mA is increased → tube current increases → expected voltage drop increases → compensating kV selector increases the number of autotransformer turns → more voltage is supplied initially → expected loss is compensated</li>
+          <li>Lower mA → lower expected voltage drop → less compensation required</li>
+        </ul>
+        <div class="highlight-box">
+          <p>Key idea: As mA increases, compensation increases.</p>
+        </div>
+      </div>
+
+      <!-- 8. Kilovoltage indicator -->
+      <div class="section-card">
+        <h2>8️⃣ Kilovoltage Indicator</h2>
+        <p>The radiographer needs to know the kV being selected. However, at the time of selection the selected voltage has not yet been applied across the X-ray tube. The system therefore takes expected voltage losses into account (tube current, rectification, and energy losses in the autotransformer and high-tension transformer).</p>
+
+        <p>Two methods of displaying kV are described:</p>
+
+        <h3>1. Calibrated autotransformer</h3>
+        <p>The kV selector knob is marked with kV values. The number indicated on the knob does not simply represent the raw voltage selected from the transformer. Instead it is calibrated to account for expected voltage drops.</p>
+        <p>Example: Required tube voltage = 40 kV. The system may need an additional primary voltage of 40 V. Therefore instead of selecting exactly 200 V the system selects 200 + 40 = 240 V. The point corresponding to 240 V on the autotransformer is then labelled as 40 kV. After the expected losses occur, this corresponds to the required tube voltage.</p>
+
+        <h3>2. Pre-reading kilovolt meter</h3>
+        <p>A voltmeter is connected to the kV selector but is specially calibrated. Its reading represents the expected actual kV across the X-ray tube after taking the expected voltage drop into account. The operator does not have to calculate the losses manually each time.</p>
+      </div>
+
+      <!-- HIGH-YIELD -->
+      <div class="section-card">
+        <h2>⭐ Key Concepts to Remember</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>kV controls the penetrating power / energy of the X-ray beam</li>
+            <li>Higher kV → higher electron energy → higher-energy X-rays → greater penetration</li>
+            <li>Autotransformer allows voltage to be controlled before it is stepped up</li>
+            <li>Major selector = larger increments; Minor selector = smaller increments</li>
+            <li>Variac = variable voltage autotransformer with carbon brush slider for continuous adjustment</li>
+            <li>Actual tube kV falls because of: Transformer losses + Rectification losses + Tube-current losses</li>
+            <li>Total voltage drop equation: VD = TL + RL + TCL</li>
+            <li>Compensation = initially select a higher voltage than the desired final tube voltage</li>
+            <li>mA affects tube-current loss, so compensation can be ganged to the mA selector</li>
+            <li>Two methods of kV indication: Calibrated autotransformer and Pre-reading kilovolt meter</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="section-card">
+        <h2>✅ Quick Revision Checklist</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Definition of the three exposure factors and what each controls</li>
+            <li>Soft vs hard X-rays and their applications</li>
+            <li>Meaning of kV and its effect on electron energy and penetration</li>
+            <li>Location and purpose of the autotransformer</li>
+            <li>Turns-ratio calculation (example: 415 V → 200 V → 40 kV)</li>
+            <li>Major vs minor kV selectors</li>
+            <li>Why a Variac is needed and how it works</li>
+            <li>Three causes of voltage drop (transformer, rectification, tube current)</li>
+            <li>Total voltage-drop equation and the compensation method</li>
+            <li>Why compensation is linked to mA</li>
+            <li>Two methods of indicating selected kV</li>
+          </ul>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 One-sentence takeaway</strong>
+          <p>Exposure-factor selection involves choosing kV, mA and time, with kV being controlled through the autotransformer and subsequently stepped up, while anticipated transformer, rectification and tube-current voltage losses are compensated for so that the desired voltage is ultimately available across the X-ray tube.</p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='note8q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note9.html'">Next Page →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
