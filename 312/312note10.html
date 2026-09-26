@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 312 - Exposure Switches and Switching Devices</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:17px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:16px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{
+      background:var(--accent-tertiary);
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">RAD 312</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>⚡ Exposure Switches & Switching Devices</h1>
+        <p>Timers • Mechanical Contactors • Electronic Switches • Thyristors</p>
+      </div>
+
+      <!-- ONE-SENTENCE SUMMARY -->
+      <div class="section-card">
+        <h2>📋 One-Sentence Summary</h2>
+        <p>The exposure system uses a timer to decide the duration and a switching system (mechanical, electronically controlled mechanical, or electronic) to start and stop the X-ray exposure precisely, with modern systems relying on semiconductors such as diodes, transistors and thyristors.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Central Idea</strong>
+          <p>Timer decides the duration → Switch starts/stops the circuit → X-rays are produced for the required period → Switch stops the exposure.</p>
+        </div>
+      </div>
+
+      <!-- PAGE 1 -->
+      <div class="section-card">
+        <h2>1️⃣ Introduction to Exposure Timers and Switching Devices</h2>
+
+        <h3>What is exposure?</h3>
+        <p>In X-ray imaging, exposure refers to the length of time that the image receptor remains within the X-ray beam while X-rays are being produced.</p>
+        <ul>
+          <li>Overexposure → the film/image becomes excessively dark or “burnt out”</li>
+          <li>Underexposure → the film/image becomes very light or “whitened”</li>
+        </ul>
+        <p>There is therefore an appropriate exposure duration needed to obtain an optimal image. This exposure time is usually very short, making it impractical for the radiographer to control it manually.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of using a flashlight to take a photograph:<br>
+          Shine it for too long → too much light<br>
+          Shine it for too briefly → insufficient light<br>
+          Shine it for exactly the right time → a useful image<br>
+          The X-ray exposure system performs a similar task, but much more rapidly and precisely.</p>
+        </div>
+
+        <h3>Three things the exposure system must accomplish</h3>
+        <ol>
+          <li>Start the exposure</li>
+          <li>Monitor/control the duration</li>
+          <li>End the exposure at the desired time</li>
+        </ol>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Component</th>
+              <th>Main function</th>
+            </tr>
+            <tr>
+              <td><strong>Timing system</strong></td>
+              <td>Determines/monitors how long exposure lasts</td>
+            </tr>
+            <tr>
+              <td><strong>Switching system</strong></td>
+              <td>Starts and stops the exposure</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="highlight-box">
+          <p>Timer = decides WHEN<br>
+          Switch = allows or stops the electrical flow</p>
+        </div>
+
+        <h3>What is a switching system?</h3>
+        <p>A switching system works much like an ordinary wall light switch. It can close a circuit (current flows) or open a circuit (current stops). An X-ray switching system receives a signal from the timing system and either opens or closes the electrical circuit.</p>
+
+        <h3>Location of the switch</h3>
+        <p>The switching system may be located in either:</p>
+        <ul>
+          <li>the low-voltage / primary section, or</li>
+          <li>the high-voltage / secondary section</li>
+        </ul>
+        <p>Therefore the material identifies primary (low-voltage) exposure switches and secondary (high-voltage) exposure switching devices.</p>
+
+        <h3>Types of switches</h3>
+        <ul>
+          <li>Mechanical contactors — obsolete</li>
+          <li>Electronically controlled mechanical contactors — obsolete</li>
+          <li>Electronic switches</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🧠 Page 1 key idea</strong>
+          <p>Timer decides → Switch starts → Exposure occurs → Timer reaches set value → Switch stops</p>
+        </div>
+      </div>
+
+      <!-- PAGE 2 -->
+      <div class="section-card">
+        <h2>2️⃣ Mechanical and Electronically Controlled Mechanical Contactors</h2>
+
+        <h3>Mechanical contactors</h3>
+        <p>Found mainly in very old X-ray equipment. They are simple devices containing a spring-loaded mechanical contact that closes before exposure begins and opens when the selected exposure time has elapsed.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine an old-fashioned doorbell switch that physically moves. When you press it the contact closes and the circuit is completed; when you release it the contact opens and the circuit is interrupted. A mechanical contactor works using the same basic idea.</p>
+        </div>
+
+        <h4>Advantages</h4>
+        <ul>
+          <li>Cheap</li>
+          <li>Simple construction</li>
+          <li>Uncomplicated operation</li>
+        </ul>
+
+        <h4>Disadvantages</h4>
+        <ul>
+          <li>Poor response time (physical parts must move)</li>
+          <li>Sparking / electrical arcing at the contacts</li>
+          <li>Wear and tear from repeated physical movement</li>
+          <li>Unsuitable for very short exposure times</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🧠 Easy memory aid</strong>
+          <p>Mechanical = Moving parts → wear → slower response → possible sparking</p>
+        </div>
+
+        <h3>Electronically Controlled Mechanical Contactors</h3>
+        <p>These devices combine mechanical contactors with electronic control (using a thyratron valve). The important improvement is that switching can occur when the AC current is at zero value.</p>
+
+        <h3>What is phased switching?</h3>
+        <p>The AC waveform repeatedly rises and falls. At certain points its value reaches zero. The electronically controlled mechanical contactor is designed to perform switching at this zero point. Switching when the AC current is zero helps eliminate the incidence of sparking / contact welding. This technique is called <strong>phased switching</strong>.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine trying to stop a moving bicycle. Stopping it when it is already stationary is easy. Trying to suddenly stop it while moving rapidly creates greater stress. Similarly, switching at the zero point of the AC waveform reduces the electrical stress associated with switching.</p>
+        </div>
+      </div>
+
+      <!-- PAGE 3 -->
+      <div class="section-card">
+        <h2>3️⃣ How the Electronically Controlled Mechanical Contactor Works</h2>
+        <p>The system contains thyratron valves, timer and control circuit, contactor coils, make contactor and break contactor.</p>
+        <div class="highlight-box">
+          <p>Simplified sequence: Timer/control → Thyratron → Contactor coil → Mechanical contact → X-ray circuit</p>
+        </div>
+
+        <h3>Before exposure</h3>
+        <ul>
+          <li>Make contactor is open</li>
+          <li>Break contactor is closed</li>
+          <li>Timer/control circuit provides the appropriate voltage bias to the thyratron</li>
+        </ul>
+
+        <h3>When the radiographer selects exposure time and initiates exposure</h3>
+        <ol>
+          <li>Timer/control circuit changes the bias supplied to the thyratron associated with the make contactor</li>
+          <li>Contactor coil becomes energized and produces a magnetic field</li>
+          <li>Magnetic field pulls the make contactor closed</li>
+          <li>Make contactor closes → circuit completed → X-ray exposure begins</li>
+        </ol>
+
+        <h3>When the exposure time expires</h3>
+        <ol>
+          <li>Timer/control circuit changes the bias of the second thyratron</li>
+          <li>Second contactor coil becomes energized</li>
+          <li>Magnetic field causes the break contactor to move away</li>
+          <li>Circuit is interrupted → X-ray exposure stops</li>
+        </ol>
+        <p>The system is designed so that this switching occurs at the appropriate zero point of the AC voltage.</p>
+
+        <h3>Why the thyratron is important</h3>
+        <p>The thyratron is an electronic device that controls the operation of the mechanical contactor. It acts as an intermediary: Timer → Thyratron → Contactor → X-ray circuit.</p>
+
+        <h3>Electronic Switches</h3>
+        <p>Electronic switches do not require moving components. They use the electrical properties of semiconductors. Originally thyratron valves were used; later these were replaced by solid-state semiconductor devices.</p>
+        <div class="highlight-box">
+          <p>Mechanical switch: Physical movement controls current<br>
+          Electronic switch: Semiconductor properties control current</p>
+        </div>
+      </div>
+
+      <!-- PAGE 4 -->
+      <div class="section-card">
+        <h2>4️⃣ Thyratron Operation, Primary Electronic Switching and Semiconductors</h2>
+
+        <h3>How a thyratron works</h3>
+        <p>A thyratron has three important terminals: Cathode, Anode and Grid. Electrons normally move from the cathode toward the anode. The grid controls whether this movement can occur.</p>
+        <ul>
+          <li>Positive or neutral bias → electrons can flow</li>
+          <li>Negative bias → electrons are repelled and current flow can be stopped</li>
+        </ul>
+        <p>Changing the grid bias allows the thyratron to act like a switch.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine a doorway with a security guard. Guard allows people through → current flows. Guard blocks people → current stops. The grid is like the guard controlling electron movement.</p>
+        </div>
+
+        <h3>Primary electronic switching</h3>
+        <p>Primary electronic switching involves controlling low voltage and sometimes very large currents. This is achieved using thyristors, particularly Silicon Controlled Rectifiers (SCRs).</p>
+
+        <h3>What is a rectifier?</h3>
+        <p>A rectifier is a circuit element that allows current to flow mainly in one direction. With alternating current, one half-cycle can pass while the other half-cycle is blocked.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>A rectifier is like a one-way road. Cars can travel in Direction A (allowed) but Direction B is blocked. Similarly, electrical current is allowed in one direction.</p>
+        </div>
+
+        <h3>Semiconductors</h3>
+        <p>Semiconductors are materials whose electrical properties can vary depending on temperature, electric fields, light and impurities. Examples include silicon, germanium, gallium arsenide and silicon carbide.</p>
+
+        <h3>Doping</h3>
+        <p>A semiconductor can have its electrical properties deliberately changed by adding impurities. This process is called doping. The purpose is to increase the number of charge carriers.</p>
+        <ul>
+          <li><strong>N-type semiconductor</strong> – a donor impurity adds additional electrons (example: silicon or germanium + phosphorus)</li>
+          <li><strong>P-type semiconductor</strong> – an acceptor impurity creates additional holes (examples: doping with boron or indium)</li>
+        </ul>
+
+        <h3>What is a “hole”?</h3>
+        <p>A hole is essentially an absence of an electron where an electron would normally be. The material treats it as a positive space.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Easy analogy</strong>
+          <p>Imagine a row of seats: ● ● ● □ ● ●. The empty seat □ represents a hole. When an electron moves into that empty position, another position becomes empty. Therefore the “hole” appears to move in the opposite direction.</p>
+        </div>
+      </div>
+
+      <!-- PAGE 5 -->
+      <div class="section-card">
+        <h2>5️⃣ The P-N Junction and Diode</h2>
+
+        <h3>P-N diode</h3>
+        <p>A simple p-n diode is made by combining a P-type semiconductor and an N-type semiconductor. This creates a P-N junction. The diode can exist in three important conditions: Zero bias, Forward bias and Reverse bias.</p>
+
+        <h3>Zero bias</h3>
+        <p>When the diode is not connected to an external circuit, electrons near the junction move from the n-region toward the p-region. This movement eventually produces a space charge zone / depletion layer. This layer establishes an electrical field that opposes further electron diffusion. Eventually equilibrium is reached.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of people moving from a crowded room into an emptier room. Initially movement occurs easily. As the conditions around the doorway change, a barrier develops that eventually prevents further movement. That barrier is similar to the depletion layer.</p>
+        </div>
+
+        <h3>Forward bias</h3>
+        <p>Forward bias occurs when the positive terminal is connected to the P-region and the negative terminal to the N-region. The applied voltage pushes the holes and electrons toward the depletion region. If the applied voltage is sufficient, the depletion layer collapses enough to allow charge carriers to cross. Therefore: Forward bias → diode conducts.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Easy memory trick</strong>
+          <p>Forward = Flow. When forward biased, current can flow.</p>
+        </div>
+      </div>
+
+      <!-- PAGE 6 -->
+      <div class="section-card">
+        <h2>6️⃣ Reverse Bias and Transistors</h2>
+
+        <h3>Reverse bias</h3>
+        <p>Reverse bias is produced by reversing the external connection (negative terminal → P-region, positive terminal → N-region). This causes holes to move away from the junction, electrons to move away from the junction, the depletion layer to become wider, resistance to increase and current flow to be blocked.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Easy memory trick</strong>
+          <p>Reverse = Resist. Reverse bias increases resistance and normally prevents conduction.</p>
+        </div>
+
+        <h3>Breakdown</h3>
+        <p>If the applied voltage becomes sufficiently high, the depletion layer can break down and the diode can then conduct. The material identifies two mechanisms: Zener process and Avalanche process.</p>
+
+        <h3>Transistors</h3>
+        <p>A transistor is produced by adding another semiconductor layer to a p-n junction. Two basic types are PNP and NPN. The three regions are Emitter, Base and Collector. A transistor can function as a switch or a signal amplifier.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of the transistor as a small control valve controlling a much larger flow. A small electrical signal at the base can control a much larger current through the transistor.</p>
+        </div>
+
+        <h3>Conventional current versus electron flow</h3>
+        <p>Electron flow and conventional current are in opposite directions. Electrons are negatively charged, so their movement is opposite to the direction conventionally assigned to current.</p>
+      </div>
+
+      <!-- PAGE 7 -->
+      <div class="section-card">
+        <h2>7️⃣ NPN Transistor</h2>
+
+        <h3>NPN transistor structure</h3>
+        <p>An NPN transistor consists of N — P — N. Its regions are: N = emitter, P = base, N = collector. The emitter is heavily doped compared with the base and collector.</p>
+
+        <h3>Why is the emitter heavily doped?</h3>
+        <p>The base contains holes that can recombine with electrons. If only a small number of electrons were injected from the emitter, many would recombine in the base and very few would reach the collector, making the transistor inefficient. Therefore the emitter is heavily doped so that it can inject a large number of electrons.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine trying to supply water to a large tank through a pipe. If the source provides only a small amount of water, very little reaches the tank. A heavily doped emitter is like a high-capacity water source.</p>
+        </div>
+
+        <h3>Forward bias of NPN transistor</h3>
+        <p>In forward bias the base is positive relative to the emitter, the emitter is negative relative to the base, and the collector is also positive relative to the emitter (base-collector junction is reverse biased). When the circuit is closed, electrons move from emitter → base; some recombine with holes in the base; most electrons move toward the collector. The transistor therefore enters a conducting state.</p>
+
+        <h3>Reverse bias</h3>
+        <p>When the connections are reversed, the collector and emitter effectively exchange roles and current from collector to emitter is weaker than in forward operation.</p>
+
+        <h3>Amplification</h3>
+        <p>One of the important properties of a transistor is its ability to amplify a small current supplied to the base. Applications include transistor radios, fire alarm systems, amplifiers, temperature sensors and logarithmic converters.</p>
+
+        <div class="highlight-box">
+          <p><strong>Important exam point:</strong> A transistor can function as both Switch + Amplifier.</p>
+        </div>
+      </div>
+
+      <!-- PAGE 8-9 -->
+      <div class="section-card">
+        <h2>8️⃣ Thyristors</h2>
+        <p>A thyristor can be considered as a semiconductor device with an additional layer compared with a transistor. Its structure is described as P-N-P-N or N-P-N-P. Thyristors are particularly useful as switches for high voltages because of their resilience. A typical thyristor has three junctions: J1, J2 and J3.</p>
+
+        <h3>Three major operating states</h3>
+
+        <h4>1. Forward blocking state — OFF</h4>
+        <p>Positive terminal → anode, negative terminal → cathode. J1 and J3 are forward biased, but J2 is reverse biased. Because J2 is reverse biased, current does not flow. If the threshold voltage becomes sufficiently high, avalanche breakdown can occur.</p>
+        <div class="memory-tip">
+          <strong>🧠 Easy way to remember</strong>
+          <p>Even though the external polarity is forward, the middle junction blocks the current.</p>
+        </div>
+
+        <h4>2. Forward conduction state — ON</h4>
+        <p>A short positive pulse is applied to the gate. This causes the space-charge region around J2 to break down and allows conduction. An important feature is that the gate does not need to continue receiving the pulse. Once the thyristor has been triggered, it continues conducting (latching behaviour).</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy – locked door</strong>
+          <p>Imagine a door with a special trigger. Door initially locked → no one passes. Press the trigger → door unlocks. Once unlocked, it stays open even after you stop pressing the button. This is similar to the thyristor’s latching behaviour.</p>
+        </div>
+
+        <h4>How does a thyristor stop conducting?</h4>
+        <ul>
+          <li>Current falls below the holding current</li>
+          <li>Current direction is reversed (as in AC)</li>
+          <li>Anode or cathode current is momentarily shut off</li>
+        </ul>
+
+        <h4>3. Reverse blocking state — OFF</h4>
+        <p>When the thyristor is connected in reverse bias, current flow is blocked. Therefore it can also function as a rectifier when supplied with alternating current.</p>
+      </div>
+
+      <!-- PAGE 10 -->
+      <div class="section-card">
+        <h2>9️⃣ Thyristors in the X-ray Circuit and Advantages of Electronic Timers</h2>
+
+        <h3>Thyristors in the mains X-ray circuit</h3>
+        <p>Thyristors are applied to the mains X-ray circuit. Because a thyristor can block current during one polarity of AC, two thyristors are connected in parallel to ensure continuous electrical flow.</p>
+
+        <h3>Timing control</h3>
+        <p>The timing device supplies current to the gate for switching. When the selected exposure time has elapsed, the timing device stops supplying the appropriate gate current. This controls the switching process and therefore controls the exposure duration.</p>
+
+        <h3>Phased switching with a pulsing/peaking transformer</h3>
+        <p>The system can also achieve phased switching by feeding current into the gate using a special transformer called a pulsing or peaking transformer. This allows switching to be synchronized appropriately with the AC waveform.</p>
+
+        <h3>Advantages of Electronic Timers / Switching</h3>
+        <ol>
+          <li><strong>Accurate timing</strong> – Electronic systems can control the switching time very precisely</li>
+          <li><strong>No moving components</strong> – No mechanical wear and tear</li>
+          <li><strong>Easy phased switching</strong> – Can easily perform switching at the desired point in the AC cycle</li>
+          <li><strong>Primary and secondary applications</strong> – Can be used for both primary/low-voltage and secondary/high-voltage switching</li>
+          <li><strong>Small control current can control large current</strong> – A relatively small gate current can control a much larger anode current</li>
+        </ol>
+      </div>
+
+      <!-- COMPARISON TABLE -->
+      <div class="section-card">
+        <h2>🔑 Very Important Comparison</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Feature</th>
+              <th>Mechanical Contactor</th>
+              <th>Electronic Mechanical</th>
+              <th>Electronic Switch</th>
+            </tr>
+            <tr>
+              <td>Moving parts</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Speed</td>
+              <td>Relatively slow</td>
+              <td>Better</td>
+              <td>Very fast</td>
+            </tr>
+            <tr>
+              <td>Wear</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Minimal / none</td>
+            </tr>
+            <tr>
+              <td>Sparking</td>
+              <td>Possible</td>
+              <td>Reduced by phased switching</td>
+              <td>Avoided / reduced</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>Obsolete</td>
+              <td>Obsolete</td>
+              <td>Modern approach</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- HIGH-YIELD -->
+      <div class="section-card">
+        <h2>⭐ Exam-Focused Points</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Three functions required: Start exposure, Monitor/control duration, End exposure</li>
+            <li>Two major components: Timer and Switching system</li>
+            <li>Three types of exposure switches: Mechanical contactor, Electronically controlled mechanical contactor, Electronic switch</li>
+            <li>Major disadvantages of mechanical contactors: Moving parts cause wear, poor response time, sparking, unsuitable for very short exposures</li>
+            <li>Purpose of phased switching: Switching at the zero point of the AC waveform reduces sparking/contact welding</li>
+            <li>Three terminals of a thyratron: Cathode, Anode, Grid</li>
+            <li>Two semiconductor types: N-type (electrons), P-type (holes)</li>
+            <li>Three diode conditions: Zero bias, Forward bias, Reverse bias</li>
+            <li>Three transistor regions: Emitter, Base, Collector</li>
+            <li>Two transistor types: NPN and PNP</li>
+            <li>Three thyristor operating states: Forward blocking, Forward conduction, Reverse blocking</li>
+            <li>Why two thyristors are used in the mains X-ray circuit: To ensure continuous flow of electricity with AC</li>
+            <li>Five advantages of electronic timers listed above</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- FINAL ANALOGY -->
+      <div class="section-card">
+        <h2>🧩 One Analogy to Remember the Entire Topic</h2>
+        <div class="memory-tip">
+          <strong>Automatic water tap</strong>
+          <p>Timer = the person/program deciding how long water should flow<br>
+          Switch = the valve that opens and closes the pipe<br>
+          Mechanical switch = a person physically opening the valve<br>
+          Electronic switch = an electronic sensor controlling the valve without physical movement<br>
+          Diode = a one-way valve<br>
+          Transistor = a small control mechanism that can control a much larger flow<br>
+          Thyristor = a special electronically triggered valve that can remain ON after being triggered until the appropriate condition turns it OFF<br><br>
+          So the X-ray exposure system is essentially: Timer decides the duration → electronic/mechanical switch controls the circuit → X-rays are produced for the required period → switch stops the exposure.</p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='note9q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note10.html'">Next Page →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
