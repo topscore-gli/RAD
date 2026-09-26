@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 312 - Mains Voltage Compensation</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:18px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:20px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:18px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:13px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:12px 10px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:10px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{
+      background:var(--accent-tertiary);
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">RAD 312</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>⚡ Mains Voltage Compensation</h1>
+        <p>Stable Voltage • Manual & Automatic Compensators • Line-Drop Compensation</p>
+      </div>
+
+      <!-- ONE-SENTENCE SUMMARY -->
+      <div class="section-card">
+        <h2>📋 One-Sentence Summary</h2>
+        <p>Mains voltage compensation keeps the voltage supplied to the X-ray machine stable despite fluctuations in the incoming supply (outside exposure) and voltage drops caused by high tube current (during exposure).</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Key Memory Trick</strong>
+          <p><strong>OUTSIDE</strong> exposure → Mains voltage compensator<br>
+          <strong>DURING</strong> exposure → Line-drop compensation transformer<br>
+          More mA → More current → More voltage drop → More compensation</p>
+        </div>
+      </div>
+
+      <!-- 1. What is Mains Voltage Compensation -->
+      <div class="section-card">
+        <h2>1️⃣ What is Mains Voltage Compensation?</h2>
+        <p>It is the process of keeping the voltage supplied to an X-ray machine sufficiently stable despite changes in the incoming electrical supply.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Think of water pressure in a pipe.<br>
+          If pressure becomes too low or too high, the equipment may not work properly.<br>
+          A pressure-regulating device keeps the pressure near the required level.<br>
+          A voltage compensator does the same job for electrical voltage.</p>
+        </div>
+      </div>
+
+      <!-- 2. Why does voltage fluctuate -->
+      <div class="section-card">
+        <h2>2️⃣ Why Does Mains Voltage Fluctuate?</h2>
+
+        <h3>A. Fluctuations Outside Exposure</h3>
+        <ul>
+          <li>Other electrical equipment connected to the same mains supply</li>
+          <li>Inconsistencies in the electricity supplied by the generating station</li>
+        </ul>
+
+        <h3>B. Fluctuations During Exposure</h3>
+        <p>During exposure the X-ray tube demands a large amount of current. This increased demand can cause the supply voltage to drop.</p>
+
+        <div class="highlight-box">
+          <p>More tube current → greater electrical demand → possible voltage drop</p>
+        </div>
+      </div>
+
+      <!-- 3. Location -->
+      <div class="section-card">
+        <h2>3️⃣ Where is the Compensator Located?</h2>
+        <p>Positioned between the mains supply and the autotransformer:</p>
+
+        <div class="highlight-box">
+          <p>Mains supply → <strong>Mains voltage compensator</strong> → Autotransformer → X-ray circuit</p>
+        </div>
+
+        <p>It adjusts fluctuations <strong>before</strong> the voltage reaches the autotransformer.</p>
+
+        <div class="memory-tip">
+          <strong>🧠 Important Point</strong>
+          <p>The compensator does <strong>not</strong> prevent the mains voltage from changing.<br>
+          It corrects the changes so that the voltage supplied to the X-ray circuit remains more stable.</p>
+        </div>
+      </div>
+
+      <!-- 4. Why stability is important -->
+      <div class="section-card">
+        <h2>4️⃣ Why is Voltage Stability Important?</h2>
+        <p>Voltage fluctuations can cause:</p>
+        <ul>
+          <li>Unstable tube current</li>
+          <li>Fluctuating X-ray intensity</li>
+          <li>Underexposed or overexposed images</li>
+          <li>Reduced image consistency</li>
+          <li>Increased wear on components</li>
+          <li>Reduced equipment lifespan</li>
+          <li>Increased maintenance requirements</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Imagine taking photographs while the brightness of the flash keeps changing.<br>
+          One photo may be too dark, the next correct, the next too bright.<br>
+          The same problem occurs with X-ray production when the electrical supply is unstable.</p>
+        </div>
+      </div>
+
+      <!-- 5. Compensation Outside Exposure -->
+      <div class="section-card">
+        <h2>5️⃣ Compensation Outside Exposure</h2>
+
+        <h3>Manual Voltage Compensator</h3>
+        <p>Common in older X-ray equipment. Consists of:</p>
+        <ul>
+          <li>A control knob</li>
+          <li>A voltage meter (moving-iron voltmeter) with a red mark showing the ideal voltage</li>
+        </ul>
+
+        <p>The control knob selects different tappings on the primary winding of the autotransformer.</p>
+
+        <div class="highlight-box">
+          <p><strong>Key relationship:</strong><br>
+          Voltage decreases → reduce selected turns<br>
+          Voltage increases → increase selected turns</p>
+        </div>
+
+        <h4>Example 1 – Voltage falls</h4>
+        <p>Normal supply = 240 V → falls to 220 V<br>
+        Meter needle moves left of the red mark.<br>
+        Operator selects 220 turns instead of 240 turns.</p>
+
+        <h4>Example 2 – Voltage rises</h4>
+        <p>Supply increases above normal.<br>
+        Meter needle moves right of the red mark.<br>
+        Operator increases the number of selected turns.</p>
+      </div>
+
+      <!-- 6. Automatic Compensation -->
+      <div class="section-card">
+        <h2>6️⃣ Automatic Voltage Compensators</h2>
+        <p>Unlike the manual type, an automatic compensator does not require the radiographer to make continuous adjustments.</p>
+
+        <p>It:</p>
+        <ul>
+          <li>Detects a change in mains voltage</li>
+          <li>Determines whether voltage has fallen or increased</li>
+          <li>Makes the correction automatically</li>
+          <li>Maintains a more stable voltage to the autotransformer</li>
+        </ul>
+
+        <p>Uses sensors and control circuits.</p>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Feature</th>
+              <th>Manual</th>
+              <th>Automatic</th>
+            </tr>
+            <tr>
+              <td>Adjustment</td>
+              <td>Human operator</td>
+              <td>Automatic system</td>
+            </tr>
+            <tr>
+              <td>Detection</td>
+              <td>Operator watches meter</td>
+              <td>Sensors detect change</td>
+            </tr>
+            <tr>
+              <td>Common in</td>
+              <td>Older equipment</td>
+              <td>Modern equipment</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>An automatic water-pressure regulator. You don’t stand beside it turning a knob every time pressure changes — the system detects the change and adjusts itself.</p>
+        </div>
+      </div>
+
+      <!-- 7. Compensation During Exposure -->
+      <div class="section-card">
+        <h2>7️⃣ Compensation During Exposure</h2>
+        <p>During exposure the X-ray tube draws a large current (especially at high mA). This produces a voltage drop in the circuit.</p>
+
+        <div class="highlight-box">
+          <p><strong>Line Drop Compensation Transformer</strong><br>
+          Purpose: helps maintain stable voltage during exposure.</p>
+        </div>
+
+        <h3>Why does voltage drop?</h3>
+        <p>Higher tube current → higher electrical load → greater voltage drop</p>
+
+        <ul>
+          <li>Low mA → smaller current demand → smaller voltage drop → less compensation needed</li>
+          <li>High mA → large current demand → larger voltage drop → more compensation needed</li>
+        </ul>
+
+        <p>Position of the transformer:</p>
+        <div class="highlight-box">
+          <p>Mains supply → <strong>Line-drop compensation transformer</strong> → Autotransformer → X-ray circuit</p>
+        </div>
+        <p>It is a small current-type transformer placed in series with the load current.</p>
+      </div>
+
+      <!-- 8. How it works + Examples -->
+      <div class="section-card">
+        <h2>8️⃣ How the Line-Drop Transformer Works</h2>
+        <p>It produces a compensating voltage related to the current flowing through its primary winding. This voltage offsets the voltage lost because of the load.</p>
+
+        <div class="highlight-box">
+          <p>Greater current → greater voltage drop → greater compensating voltage<br>
+          Lower current → smaller voltage drop → smaller compensating voltage</p>
+        </div>
+
+        <h3>Worked Example 1</h3>
+        <p>Turns ratio = 20 : 1<br>
+        Primary current = 50 A<br>
+        Resistor = 2 Ω</p>
+        <p>Secondary current = 50 A ÷ 20 = 2.5 A<br>
+        Compensating voltage = 2.5 A × 2 Ω = <strong>5 V</strong></p>
+
+        <h3>Worked Example 2</h3>
+        <p>Current falls to 30 A</p>
+        <p>Secondary current = 30 A ÷ 20 = 1.5 A<br>
+        Compensating voltage = 1.5 A × 2 Ω = <strong>3 V</strong></p>
+
+        <div class="table-container">
+          <table class="summary-table">
+            <tr>
+              <th>Load Current</th>
+              <th>Compensating Voltage</th>
+            </tr>
+            <tr>
+              <td>50 A</td>
+              <td>5 V</td>
+            </tr>
+            <tr>
+              <td>30 A</td>
+              <td>3 V</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Analogy</strong>
+          <p>Pushing a shopping trolley.<br>
+          On a smooth floor → small force needed.<br>
+          On a rough floor → more force needed.<br>
+          The line-drop transformer detects increased “resistance” (higher current) and supplies extra assistance (more compensating voltage).</p>
+        </div>
+      </div>
+
+      <!-- 9. Clinical Importance -->
+      <div class="section-card">
+        <h2>9️⃣ Why Line-Drop Compensation Matters Clinically</h2>
+
+        <h3>Without adequate compensation</h3>
+        <p>Voltage fluctuation → change in tube operation → variation in X-ray beam → inconsistent image → possible repeat exposure → increased patient dose</p>
+
+        <h3>With compensation</h3>
+        <p>Voltage fluctuation → compensator responds → voltage kept more consistent → more consistent X-ray production → more consistent image quality</p>
+      </div>
+
+      <!-- HIGH-YIELD -->
+      <div class="section-card">
+        <h2>⭐ High-Yield Points</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Mains voltage compensation keeps voltage stable despite supply changes</li>
+            <li>Two situations: Outside exposure & During exposure</li>
+            <li>Outside exposure → Manual or Automatic mains compensator</li>
+            <li>During exposure → Line-drop compensation transformer</li>
+            <li>Manual: operator adjusts turns using meter and knob</li>
+            <li>Automatic: sensors + control circuits adjust automatically</li>
+            <li>Higher mA → greater current → greater voltage drop → greater compensation</li>
+            <li>Example: 50 A → 5 V compensation; 30 A → 3 V compensation (20:1 ratio, 2 Ω)</li>
+            <li>Unstable voltage can cause underexposed/overexposed images and higher patient dose</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="section-card">
+        <h2>✅ Quick Revision Checklist</h2>
+        <div class="quick-facts">
+          <ul>
+            <li>Definition of mains voltage compensation</li>
+            <li>Causes of voltage fluctuation (outside vs during exposure)</li>
+            <li>Location of the compensator</li>
+            <li>Why voltage stability is important</li>
+            <li>How a manual compensator works</li>
+            <li>Difference between manual and automatic compensators</li>
+            <li>Purpose of the line-drop compensation transformer</li>
+            <li>Relationship between load current and compensating voltage</li>
+            <li>Numerical examples (50 A → 5 V, 30 A → 3 V)</li>
+            <li>Clinical consequences of poor compensation</li>
+          </ul>
+        </div>
+
+        <div class="memory-tip">
+          <strong>🧠 Final Memory Line</strong>
+          <p>OUTSIDE exposure = Mains compensator<br>
+          DURING exposure = Line-drop compensator<br>
+          More mA = More drop = More boost</p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='note3q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note4.html'">Next Page →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
