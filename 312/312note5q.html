@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fuses, Switches & Circuit Breakers</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:14px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="exit()">←</button>
+      <h1>Fuses, Switches & Circuit Breakers</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 20:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 1200, PASS: 60 };
+
+const SECTIONS = {
+  0: "A: Fuses – Basics & HRC",
+  10: "B: Slow-blow & Fast-acting Fuses",
+  20: "C: Fuse Construction & Ratings",
+  30: "D: Circuit Breakers",
+  40: "E: Switches & Magnetic Relays"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  {q:"What is the primary purpose of a fuse in an electrical circuit?",o:["To increase voltage","To protect the circuit from excessive current","To store electrical energy","To increase resistance permanently"],a:1,e:"A fuse protects the circuit by interrupting excessive current before damage occurs."},
+  {q:"What happens to a conventional fuse when excessive current flows through it?",o:["It becomes magnetized","It increases its voltage","Its element melts and breaks the circuit","It stores the excess current"],a:2,e:"Excessive current melts the fuse element, opening the circuit."},
+  {q:"The heat generated in a fuse element is associated with:",o:["Current and resistance","Voltage only","Frequency only","Capacitance only"],a:0,e:"Heat is produced by the I²R effect (current flowing through the resistance of the element)."},
+  {q:"When a fuse element melts because of excessive current, the fuse is said to have:",o:["Tripped","Blown","Reset","Energized"],a:1,e:"A melted fuse is commonly described as having “blown”."},
+  {q:"How must a fuse be connected to the circuit it protects?",o:["In parallel","In series","In a star connection only","Across the load"],a:1,e:"A fuse must be connected in series so that all circuit current flows through it."},
+  {q:"Why should a fuse be connected in series?",o:["So all circuit current passes through the fuse","To increase circuit voltage","To decrease the supply frequency","To make the fuse reusable"],a:0,e:"Series connection ensures the entire current of the circuit passes through the protective element."},
+  {q:"Which type of fuse can resume operation after cooling down?",o:["Ceramic fuse","Polymer-based PTC fuse","Glass cartridge fuse","Knife fuse"],a:1,e:"Polymer-based PTC (Positive Temperature Coefficient) fuses can reset after cooling."},
+  {q:"Traditional glass or ceramic cartridge fuses are commonly associated with:",o:["Older X-ray machines","Only CT scanners","Hydraulic systems","Magnetic relays"],a:0,e:"Glass and ceramic cartridge fuses were widely used in older X-ray equipment."},
+  {q:"What does HRC stand for?",o:["High Resistance Circuit","High Relay Control","High-Rupturing Capacity","High Rated Current"],a:2,e:"HRC = High-Rupturing Capacity."},
+  {q:"HRC fuses are particularly useful in systems:",o:["Handling higher currents","Handling no current","With only mechanical components","That require no protection"],a:0,e:"HRC fuses are designed for circuits that carry higher currents and need reliable arc interruption."},
+
+  {q:"What is the main characteristic of a slow-blow fuse?",o:["It blows immediately with any current","It tolerates brief current surges","It cannot conduct current","It operates only at zero voltage"],a:1,e:"Slow-blow (time-delay) fuses can withstand short-duration current surges without blowing."},
+  {q:"Slow-blow fuses are particularly suitable for circuits containing:",o:["Motors and transformers","Only light bulbs","Open switches","Fuse caps only"],a:0,e:"Motors and transformers draw high inrush currents at start-up, so slow-blow fuses are ideal."},
+  {q:"Why are slow-blow fuses useful in X-ray equipment?",o:["They increase X-ray intensity","They tolerate temporary startup current surges","They eliminate all electrical resistance","They increase the mains voltage"],a:1,e:"They allow the brief high currents that occur when transformers and motors start without unnecessary interruption."},
+  {q:"A slow-blow fuse helps prevent:",o:["Unnecessary interruptions caused by transient surges","All electrical current","Normal circuit operation","Equipment from receiving any voltage"],a:0,e:"By tolerating short surges it avoids nuisance blowing during normal start-up transients."},
+  {q:"Fast-acting fuses are designed to:",o:["Respond slowly to overcurrent","Respond quickly to dangerous overcurrent","Increase current flow","Store electrical energy"],a:1,e:"Fast-acting fuses open very quickly when a dangerous overcurrent occurs."},
+  {q:"Which components particularly benefit from fast-acting fuse protection?",o:["Diodes and transistors","Mechanical handles","Fuse caps only","Grease contacts"],a:0,e:"Semiconductor devices (diodes, transistors) are sensitive to even short overcurrents and need fast protection."},
+  {q:"Why do fast-acting fuses respond rapidly?",o:["They have low thermal inertia","They contain water","They have very thick insulation","They have no fuse element"],a:0,e:"Low thermal inertia means the element heats and melts very quickly."},
+  {q:"What material may be used in HRC fuses to help quench an electrical arc?",o:["Copper wire","Silica sand","Rubber","Oil paint"],a:1,e:"Silica sand (or similar powder) is used to quench the arc when the fuse blows."},
+  {q:"The main purpose of fuse powder in an HRC fuse is to:",o:["Increase voltage","Prevent arcing when the fuse blows","Increase current","Cool the X-ray tube"],a:1,e:"The powder extinguishes the arc that forms when the element melts under high current."},
+  {q:"Which of the following is NOT listed as a part of a fuse?",o:["Fuse cap","Fuse element","Fuse link","Bimetallic strip"],a:3,e:"A bimetallic strip is used in thermal circuit breakers, not in ordinary fuses."},
+
+  {q:"What is the actual part of a fuse that melts during an overload?",o:["Fuse cap","Fuse element","Fuse link","Fuse receptacle"],a:1,e:"The fuse element is the thin wire or strip that melts under overload."},
+  {q:"The fuse element may be made from:",o:["Thin wire or flat foil","Wood","Glass only","Rubber only"],a:0,e:"Fuse elements are typically thin wire or flat metal foil."},
+  {q:"What determines the current rating of a fuse?",o:["The colour of the fuse","The current-carrying capacity of the fuse element","The size of the control panel","The length of the mains cable only"],a:1,e:"The current rating is determined by the current-carrying capacity of the element itself."},
+  {q:"The fuse link primarily:",o:["Houses the fuse element","Produces X-rays","Generates magnetism","Measures voltage"],a:0,e:"The fuse link is the cartridge or body that contains and supports the fuse element."},
+  {q:"Which material can be used to make a fuse link?",o:["Glass","Paper","Cotton","Wood"],a:0,e:"Glass (and ceramic) are common materials for the fuse link body."},
+  {q:"Why is a transparent fuse link desirable?",o:["It increases current","It makes a blown fuse easier to detect","It prevents all heating","It increases voltage"],a:1,e:"A transparent body allows visual inspection to see whether the element has melted."},
+  {q:"The current rating of a fuse is measured in:",o:["Amperes","Ohms only","Hertz","Watts only"],a:0,e:"Current rating is expressed in amperes (A)."},
+  {q:"What can happen if a fuse with too low a current rating is used?",o:["Unnecessary interruptions may occur","The equipment becomes immune to faults","The fuse cannot carry any current","The voltage automatically doubles"],a:0,e:"An under-rated fuse will blow during normal operation, causing nuisance interruptions."},
+  {q:"What is a possible problem with using a fuse with too high a current rating?",o:["It may fail to protect the circuit effectively","It will always blow immediately","It cannot conduct current","It becomes a circuit breaker"],a:0,e:"An over-rated fuse may not melt soon enough to protect the circuit from damage."},
+  {q:"The voltage rating of a fuse specifies the maximum voltage it can safely:",o:["Generate","Interrupt without creating an electrical arc","Store","Increase"],a:1,e:"The voltage rating is the highest voltage the fuse can interrupt without sustaining an arc."},
+
+  {q:"What is the major difference between a fuse and a circuit breaker?",o:["A circuit breaker is generally reusable after tripping","A circuit breaker cannot interrupt current","A fuse is always reusable","A fuse requires electromagnetism"],a:0,e:"After a circuit breaker trips it can usually be reset; a blown fuse must be replaced."},
+  {q:"A circuit breaker is designed to interrupt current during:",o:["Normal operation only","An overload or fault","X-ray exposure only","Cooling only"],a:1,e:"Circuit breakers open the circuit when an overload or short-circuit fault occurs."},
+  {q:"Where are circuit breakers installed in X-ray systems according to the material?",o:["In the mains isolator box","Inside the X-ray tube only","Inside the patient table only","Inside the collimator only"],a:0,e:"They are typically located in the mains isolator box."},
+  {q:"Circuit breakers help protect components such as:",o:["High-tension generators and low-voltage circuits","Patient clothing","Room walls","Mechanical chairs only"],a:0,e:"They protect both the high-tension generator and the low-voltage control circuits."},
+  {q:"Thermal circuit breakers are mainly used for:",o:["Low-voltage sections","Only mechanical systems","Patient positioning","High-frequency sound systems"],a:0,e:"Thermal breakers are commonly employed in low-voltage sections of the equipment."},
+  {q:"What component is central to the operation of a thermal circuit breaker?",o:["Bimetallic strip","Silica sand","Fuse powder","Fuse cap"],a:0,e:"A bimetallic strip bends when heated by excessive current and trips the breaker."},
+  {q:"What happens to the bimetallic strip when it is heated by excessive current?",o:["It bends","It disappears","It becomes transparent","It produces X-rays"],a:0,e:"Differential expansion of the two metals causes the strip to bend."},
+  {q:"The bending of the bimetallic strip causes:",o:["A spring-loaded switch to trip","The X-ray tube to rotate","The fuse to reset","The mains voltage to increase"],a:0,e:"The bent strip releases a spring-loaded mechanism that opens the contacts."},
+  {q:"Why might some thermal circuit breakers require time before they can be reset?",o:["The bimetallic strip needs to cool","The fuse powder needs replacing","The transformer must be removed","The voltage must increase"],a:0,e:"The strip must cool and return to its original shape before the breaker can be reset."},
+  {q:"Electromagnetic circuit breakers operate mainly through:",o:["Magnetization of an armature","Melting of glass","Heating of silica sand","Evaporation of water"],a:0,e:"A strong magnetic field attracts an armature that trips the contacts."},
+
+  {q:"One advantage of an electromagnetic circuit breaker over a thermal circuit breaker is that it:",o:["Can be reset without waiting for the bimetallic strip to cool","Has no moving parts","Cannot trip","Requires a fuse replacement"],a:0,e:"Electromagnetic breakers can usually be reset immediately after tripping."},
+  {q:"What is the basic function of a switch?",o:["Making and breaking circuits","Increasing current permanently","Producing X-rays","Cooling electrical components"],a:0,e:"A switch is used to make (close) or break (open) an electrical circuit."},
+  {q:"The mains supply switch is normally located:",o:["Close to the generator or control panel","Inside the patient's body","Inside the X-ray tube","Inside the fuse element"],a:0,e:"The mains isolator is placed near the generator or control panel for easy access."},
+  {q:"The mains supply switch is used primarily to:",o:["Isolate the X-ray unit from the main power source","Increase exposure time","Increase X-ray wavelength","Measure patient thickness"],a:0,e:"It provides a means of completely isolating the unit from the mains supply."},
+  {q:"What type of switch is the mains switch usually described as?",o:["Knife switch","Thermal switch","Semiconductor switch","Hydraulic switch"],a:0,e:"The mains isolator is commonly a knife-type switch."},
+  {q:"A knife switch may be classified according to the number of circuits it operates as:",o:["One-, two-, three-, or four-pole","Five-, six-, or seven-pole only","Positive or negative only","Thermal or hydraulic only"],a:0,e:"Knife switches are described as single-pole, double-pole, three-pole or four-pole."},
+  {q:"Why is a knife switch unsuitable for high-voltage switching according to the material?",o:["Its switching speed depends on the operator and may promote arcing","It contains no metal","It cannot carry any current","It automatically increases voltage"],a:0,e:"Manual operation speed varies and can allow arcing at high voltages."},
+  {q:"Which of the following is a component of a magnetic relay?",o:["Electromagnet","Fuse powder only","Bimetallic strip only","Silica sand only"],a:0,e:"A magnetic relay contains an electromagnet that operates the contacts."},
+  {q:"In a normally open (NO) magnetic relay, the contacts are:",o:["Closed in the default state","Open in the default state","Permanently welded","Always electrically isolated"],a:1,e:"Normally-open contacts are open when the relay coil is de-energized."},
+  {q:"In a normally open magnetic relay, what happens when the control coil is energized?",o:["The armature is attracted and the switch circuit closes","The armature moves away and the circuit remains open","The fuse melts immediately","The bimetallic strip cools"],a:0,e:"Energizing the coil attracts the armature, closing the normally-open contacts."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('fuses_switches_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/50';
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('fuses_switches_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of Fuses, Switches and Circuit Breakers! You have a strong command of protection devices and switching principles. Great work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review thermal vs electromagnetic breakers and fuse ratings to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on the differences between fuses and breakers, slow-blow vs fast-acting fuses, and magnetic relays. Practice will improve your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this topic has many practical details. Go through the explanations carefully, revise the key points, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 10, 20, 30, 40, 50];
+  var sectionNames = [
+    "A: Fuses – Basics & HRC",
+    "B: Slow-blow & Fast-acting Fuses",
+    "C: Fuse Construction & Ratings",
+    "D: Circuit Breakers",
+    "E: Switches & Magnetic Relays"
+  ];
+
+  for (var s = 0; s < 5; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('fuses_switches_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('fuses_switches_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('fuses_switches_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
