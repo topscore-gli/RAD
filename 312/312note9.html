@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAD 312 - Exposure Factor Selection</title>
+  <title>RAD 312 - High Tension Generators</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
     :root{
@@ -61,7 +61,7 @@
       text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
       background:rgba(29,185,84,.1)
     }
-    .main-header h1{font-size:18px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header h1{font-size:17px;margin-bottom:8px;color:var(--accent);font-weight:900}
     .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
 
     .section-card{
@@ -70,7 +70,7 @@
       margin-bottom:24px;border-left:4px solid var(--accent)
     }
     .section-card h2{
-      font-size:17px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      font-size:16px;margin-bottom:14px;color:var(--accent);font-weight:900;
       display:flex;align-items:center;gap:8px
     }
     .section-card h3{
@@ -157,298 +157,262 @@
 
     <div class="content">
       <div class="main-header">
-        <h1>⚡ Exposure Factor Selection</h1>
-        <p>kV Selection • Autotransformer • Variac • Voltage Drop & Compensation</p>
+        <h1>⚡ High Tension Generators</h1>
+        <p>Rectification • High-Frequency Generators • Feedback • Advantages</p>
       </div>
 
       <!-- ONE-SENTENCE SUMMARY -->
       <div class="section-card">
         <h2>📋 One-Sentence Summary</h2>
-        <p>This material explains how the X-ray generator selects, produces, indicates and compensates for kilovoltage so that the X-ray tube receives the required voltage during exposure, despite transformer, rectification and tube-current losses.</p>
+        <p>The high-tension generator supplies the high voltage required by the X-ray tube, converts AC to suitable form through rectification and (in modern systems) high-frequency conversion, and uses feedback control to maintain precise kV and mA during exposure.</p>
 
         <div class="memory-tip">
-          <strong>🧠 Complete Concept Map</strong>
-          <p>Mains supply → Autotransformer (select voltage) → kV compensation (accounts for expected losses) → Step-up transformer → High voltage → Rectification → X-ray tube → Electron movement cathode → anode → X-ray production</p>
+          <strong>🧠 One-line Memory Trick</strong>
+          <p>“Convert → Invert → Transform → Control → Produce.”<br>
+          Convert: AC → DC<br>
+          Invert: DC → high-frequency AC<br>
+          Transform: step up the voltage<br>
+          Control: feedback maintains kV/mA<br>
+          Produce: X-ray tube produces X-rays</p>
         </div>
       </div>
 
       <!-- PAGE 1 -->
       <div class="section-card">
-        <h2>1️⃣ Introduction and Kilovoltage</h2>
+        <h2>1️⃣ High-Tension Generators and Rectification</h2>
 
-        <h3>What are exposure factors?</h3>
-        <p>The three major exposure factors are:</p>
+        <h3>What is a high-tension generator?</h3>
+        <p>The high-tension generator is an important part of modern X-ray equipment. Its main responsibility is to provide the high voltage required between the cathode and anode of the X-ray tube so that X-rays can be produced.</p>
+        <p>The voltage initially comes from the mains electrical supply. A high-tension transformer then increases (steps up) this voltage to the very high level required by the X-ray tube.</p>
+
+        <h3>Why isn’t stepping up the voltage enough?</h3>
+        <p>Simply increasing the voltage is not sufficient. The electrical supply from the mains is alternating current (AC). AC continually changes its direction: Positive → Negative → Positive → Negative.</p>
+        <p>However, the X-ray tube requires the electrical current to flow in a controlled direction during exposure. Therefore the voltage must undergo <strong>rectification</strong>.</p>
+
+        <h3>Rectification</h3>
+        <p>Rectification is the process of converting AC into direct current (DC) suitable for consistent X-ray production. Its major purpose is to ensure that the polarity of the X-ray tube remains appropriate during exposure.</p>
+        <p>Modern systems use solid-state rectifiers, which are semiconductor devices that allow current to flow primarily in one direction.</p>
+        <p>There are two basic ways the negative portion of an AC waveform can be handled:</p>
         <ul>
-          <li>Kilovoltage (kV)</li>
-          <li>Milliamperage (mA)</li>
-          <li>Exposure time</li>
+          <li><strong>Blocking</strong> – the negative portion is prevented from passing</li>
+          <li><strong>Redirection</strong> – the negative portion is redirected so that it becomes positive</li>
         </ul>
-        <p>This material focuses mainly on kilovoltage selection. mA selection is covered in the filament-circuit material.</p>
-
-        <h3>Where do X-rays fit in the electromagnetic spectrum?</h3>
-        <p>X-rays are electromagnetic radiation with very short wavelength and high energy.</p>
-        <ul>
-          <li>Wavelength: approximately 0.01–10 μm</li>
-          <li>Photon energy: approximately 100 eV–100 keV</li>
-        </ul>
-        <p>They are broadly divided into:</p>
-        <ul>
-          <li><strong>Soft X-rays</strong> – lower energy; used in mammography and X-ray crystallography</li>
-          <li><strong>Hard X-rays</strong> – higher energy and greater penetrating ability; used in routine radiography, radiotherapy and airport baggage inspection</li>
-        </ul>
-
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Think of X-rays like different types of bullets:<br>
-          A low-energy/soft X-ray is like a small, less powerful bullet that may not travel very far through a thick object.<br>
-          A high-energy/hard X-ray is like a more powerful bullet capable of penetrating deeper.</p>
-        </div>
-
-        <h3>Kilovoltage (kV)</h3>
-        <p>When we select the kV we are selecting the potential difference between the cathode and anode of the X-ray tube.</p>
         <div class="highlight-box">
-          <p>Higher kV → electrons accelerate faster → electrons gain more kinetic energy → higher-energy X-ray photons can be produced.<br>
-          The maximum energy of an X-ray photon is limited by the kinetic energy of the electron striking the anode.</p>
+          <p>AC without rectification → blocked negative phase → redirected negative phase</p>
         </div>
 
-        <div class="memory-tip">
-          <strong>🧠 Simple chain to remember</strong>
-          <p>Increase kV → increase electron velocity → increase electron energy → increase X-ray photon energy → increase penetration.<br>
-          Therefore kV primarily controls the penetrating power of the X-ray beam.</p>
-        </div>
-
-        <h3>Effect of incorrect kV</h3>
+        <h3>PN junctions</h3>
+        <p>Modern rectifiers use semiconductor materials. The important semiconductor materials are P-type material and N-type material. When these are combined they form a PN junction.</p>
+        <p>The PN junction:</p>
         <ul>
-          <li><strong>Too low kV</strong> – X-rays do not penetrate the body sufficiently → radiograph is underpenetrated</li>
-          <li><strong>Too high kV</strong> – X-rays penetrate excessively → radiograph is overpenetrated</li>
+          <li>allows current to flow during forward bias</li>
+          <li>blocks current during reverse bias</li>
+        </ul>
+        <p>This one-way conduction makes semiconductor rectifiers useful for X-ray generators.</p>
+
+        <h3>Rectifier bridges</h3>
+        <p>Modern systems commonly use rectifier bridges. Instead of simply throwing away the negative portion of the AC waveform, the bridge can redirect it, improving the efficiency and continuity of power supplied to the X-ray tube.</p>
+
+        <h3>Older high-tension generators</h3>
+        <p>The material also mentions older generator designs:</p>
+        <ul>
+          <li><strong>Self-rectified high-tension circuits</strong> – Very simple circuits used in older portable X-ray equipment and dental X-ray equipment. The X-ray tube itself acted as the rectifier because the tube behaves like a diode valve.</li>
+          <li><strong>Half-wave two-valve rectified circuit</strong> – Used rectifiers to control the current.</li>
+          <li><strong>Single-phase full-wave rectified circuit</strong></li>
+          <li><strong>Three-phase full-wave rectified circuit</strong> – Used in polyphase systems.</li>
         </ul>
 
         <div class="memory-tip">
-          <strong>🧠 Easy analogy</strong>
-          <p>Imagine shining a torch through a curtain.<br>
-          Weak torch → not enough light gets through → similar to low kV / underpenetration.<br>
-          Very powerful torch → too much light passes through → similar to high kV / overpenetration.</p>
+          <strong>🧠 Easy Analogy</strong>
+          <p>Think of AC electricity as a person walking: Forward → backward → forward → backward. The X-ray tube needs the person to move only in the useful direction. A rectifier acts like a one-way gate: it prevents the unwanted direction or redirects it so that useful electrical flow can continue.</p>
+        </div>
+
+        <div class="quick-facts">
+          <h4>⭐ Key points to remember</h4>
+          <ul>
+            <li>High-tension generator = supplies high voltage to the X-ray tube</li>
+            <li>Transformer = increases voltage</li>
+            <li>Rectifier = controls/converts AC into suitable DC</li>
+            <li>PN junction = permits one-way current flow</li>
+            <li>Rectifier bridge = redirects the negative phase for more continuous power</li>
+          </ul>
         </div>
       </div>
 
       <!-- PAGE 2 -->
       <div class="section-card">
-        <h2>2️⃣ kV Selector and Autotransformer</h2>
+        <h2>2️⃣ High-Frequency Generators</h2>
 
-        <h3>Where is the kV selected?</h3>
-        <p>The kV selector is located at the autotransformer. The system includes major and minor kV selectors, autotransformer, step-up transformer, exposure switch and timing system.</p>
+        <h3>What is a high-frequency generator?</h3>
+        <p>The high-frequency (HF) generator represents the latest generator technology described in the material. It is found in almost all modern X-ray equipment because it provides:</p>
+        <ul>
+          <li>compact equipment design</li>
+          <li>precise control of exposure factors</li>
+          <li>improved efficiency</li>
+          <li>better control of X-ray production</li>
+        </ul>
+
+        <h3>Increasing the frequency</h3>
+        <p>Conventional mains electricity normally operates at approximately 50/60 Hz. A high-frequency generator increases this frequency to approximately <strong>400 Hz – 1 MHz</strong>.</p>
+        <p>This very large increase in frequency produces a much smoother waveform. The material states that the resulting waveform can have a ripple of less than 1%.</p>
+
+        <h4>What is ripple?</h4>
+        <p>Ripple refers to fluctuations in the voltage. A large ripple means the voltage changes significantly during exposure. A very small ripple means the voltage remains much more constant.</p>
         <div class="highlight-box">
-          <p>Simplified pathway: Mains supply → Autotransformer → Step-up transformer → X-ray tube</p>
-        </div>
-        <p>The autotransformer allows the operator to select an appropriate voltage before the voltage is greatly increased by the high-tension transformer.</p>
-
-        <h3>What is an autotransformer?</h3>
-        <p>An autotransformer is a transformer with one continuous winding that acts as both the primary and secondary winding. Unlike an ordinary transformer with separate primary and secondary coils, the autotransformer uses different portions of the same winding.</p>
-
-        <h3>Why is it used?</h3>
-        <p>Because X-ray equipment deals with very high voltages, it is safer and more convenient to control the voltage before it is stepped up to tens of kilovolts.</p>
-
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Imagine filling a huge water tank. Instead of trying to control the water flow when the tank is already full of high-pressure water, you control the flow before it enters the tank.<br>
-          Similarly: Control the voltage at a lower level → then step it up to the very high X-ray voltage.</p>
+          <p>Higher frequency → less ripple → more stable voltage</p>
         </div>
 
-        <h3>Autotransformer tapping</h3>
-        <p>The autotransformer contains different tap points that allow different voltages to be selected. These can be controlled using a knob, push buttons or a touchscreen. The selected tap determines how much voltage is obtained from the transformer.</p>
+        <h3>Processor-controlled operation</h3>
+        <p>The operation of an HF generator is controlled electronically. The hardware is processor-controlled and operates in real time. During an exposure the system continuously monitors the actual tube voltage and tube current. These are compared with the values selected by the operator. For example, if the operator selects particular kV and mA values, the generator checks whether the X-ray tube is actually receiving those values.</p>
 
-        <h3>Example calculation</h3>
-        <p>Input voltage = 415 V<br>
-        Total autotransformer turns = 1000 turns<br>
-        Desired voltage = 200 V</p>
-        <p>Using the transformer relationship:</p>
+        <h3>Feedback mechanism</h3>
+        <p>If the actual tube voltage or current differs significantly from the preset value, the generator responds. The feedback system increases the rate of pulses sent to the X-ray tube. More pulses → increased tube voltage/current → actual values move toward the selected values. This provides automatic correction during exposure.</p>
+
+        <h3>Basic Operation of the HF Generator</h3>
         <div class="highlight-box">
-          <p>W<sub>s</sub> = (W<sub>p</sub> × V<sub>s</sub>) / V<sub>p</sub> = (1000 × 200) / 415 ≈ 482 turns</p>
+          <p>Mains AC → AC/DC converter → DC → Inverter → High-frequency AC → High-voltage transformer → High voltage for X-ray tube</p>
         </div>
-        <p>Therefore approximately the 482nd turn is selected to obtain 200 V.</p>
-        <div class="memory-tip">
-          <strong>🧠 Important exam point</strong>
-          <p>415 V + 1000 turns + desired 200 V → approximately 482 turns.</p>
-        </div>
+        <p>The inverter is especially important because it changes the DC back into AC at a much higher frequency.</p>
+
+        <h3>Advantages of high-frequency generators</h3>
+        <ul>
+          <li><strong>Average kV is close to peak kV</strong> – The average voltage is approximately equal to the peak voltage. This means smaller exposure factors can be used while still achieving the required exposure.</li>
+          <li><strong>Precise control</strong> – The voltage and current can be controlled precisely. This makes it easier to select appropriate clinical exposure factors.</li>
+          <li><strong>Compact design</strong> – Because the generator uses mainly electronic components, it can be made relatively small.</li>
+          <li><strong>Lower cost</strong> – The material states that the smaller design makes HF generators less expensive than conventional generators.</li>
+          <li><strong>Stable exposure factors</strong> – Compensatory mechanisms help maintain the selected kV and mA despite variations in voltage.</li>
+        </ul>
       </div>
 
       <!-- PAGE 3 -->
       <div class="section-card">
-        <h2>3️⃣ Step-Up Transformer, Major/Minor kV and Variac</h2>
+        <h2>3️⃣ Modern HF Generators and Principle of Operation</h2>
+        <p>High-frequency generators have become standard in modern X-ray equipment. The material identifies their important benefits as efficiency, compactness, precise exposure control, improved image quality and reduced radiation dose.</p>
 
-        <h3>Stepping 200 V up to 40 kV</h3>
-        <p>After obtaining 200 V from the autotransformer, this voltage is supplied to a step-up transformer. The desired output is 40 kV. The turns relationship is approximately 1 : 200 (for every 1 turn on the primary there are approximately 200 turns on the secondary). Thus the selected 200 V can theoretically be stepped up to approximately 40 kV.</p>
+        <h3>Microprocessor control</h3>
+        <p>Modern HF generators contain microprocessors. These processors control the generator in real time. They can manage exposure factor selection, X-ray tube performance, generator operation and communication with other parts of the X-ray system. The material specifically mentions communication with digital image receptors and PACS (Picture Archiving and Communication System). This allows different parts of the imaging system to work together efficiently.</p>
 
-        <div class="highlight-box">
-          <p>Overall picture:<br>
-          415 V mains → Autotransformer → 200 V selected → Step-up transformer (1 : 200) → 40 kV → X-ray tube</p>
-        </div>
+        <h3>Solid-state components</h3>
+        <p>Older generators depended more heavily on mechanical components. Modern HF generators increasingly use solid-state electronic components. This provides advantages such as reduced mechanical wear, reduced tear, longer equipment lifespan and improved reliability. Advances in semiconductor technology have also improved the efficiency of rectifiers and inverters.</p>
 
-        <h3>Major and minor kV selectors</h3>
-        <ul>
-          <li><strong>Major kV selector</strong> – typically changes the kV in larger steps (example: 10 kV)</li>
-          <li><strong>Minor kV selector</strong> – changes the kV in smaller steps (example: 1 kV)</li>
-        </ul>
+        <h3>Principle of Operation</h3>
+        <p>The operation occurs through several important stages:</p>
 
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Think of adjusting the volume on a speaker:<br>
-          Major selector = large volume changes<br>
-          Minor selector = fine adjustments<br>
-          So if you wanted 75 kV: Major selector might take you to 70 kV; Minor selector could add 5 kV.</p>
-        </div>
+        <h4>Stage 1 — Rectification</h4>
+        <p>The incoming low-frequency AC from the mains is converted into DC. The material gives typical mains voltages as 240 V or 415 V. An AC/DC converter containing solid-state rectifiers performs this conversion. Why convert AC to DC? Because the subsequent stages require a stable DC input.</p>
 
-        <h3>Why do we need a Variac transformer?</h3>
-        <p>During some examinations, particularly fluoroscopy, it may be necessary to change the kilovoltage continuously during exposure. An ordinary tapped autotransformer cannot provide smooth continuous adjustment because it has specific tap points. Therefore a special type called a <strong>Variac transformer</strong> is used.</p>
+        <h4>Stage 2 — Inversion</h4>
+        <p>The DC is then converted back into AC. However, this time the AC has a much higher frequency. The inverter can increase the frequency to approximately 400 Hz – 1 MHz. This high-frequency AC is important for efficient voltage transformation.</p>
 
-        <h3>Variac transformer</h3>
-        <p>Variac is a generic name for a variable-voltage autotransformer. It allows the voltage to be varied rapidly and continuously. Instead of fixed tap points, the Variac uses a carbon brush slider that moves across the transformer winding. Moving the brush changes the effective number of turns being used and therefore changes the output voltage.</p>
+        <h4>Stage 3 — Voltage transformation</h4>
+        <p>The high-frequency AC is then sent to a high-voltage transformer. The transformer increases the voltage to the level required to produce X-rays. The material gives a typical range of 40 kV – 150 kV. The exact voltage depends on the imaging requirements.</p>
+        <p>Why use a high-frequency transformer? High-frequency transformers can be smaller, more efficient and more suitable for compact X-ray systems.</p>
 
         <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Imagine a long staircase.<br>
-          A normal tapped transformer lets you stand only on certain steps: Step 1 → Step 2 → Step 3 → Step 4.<br>
-          A Variac is more like a sliding ramp where you can select almost any position.<br>
-          Tapped autotransformer = discrete voltage selection<br>
-          Variac = continuously variable voltage selection</p>
+          <strong>🧠 Easy Analogy</strong>
+          <p>Imagine a water system:<br>
+          Rectifier = changes the direction/control of the water<br>
+          Inverter = changes the rate at which the water moves<br>
+          Transformer = increases the pressure<br>
+          X-ray tube = uses that high pressure to perform the required work<br>
+          This is not a literal electrical equivalence, but it is useful for remembering the sequence.</p>
         </div>
       </div>
 
       <!-- PAGE 4 -->
       <div class="section-card">
-        <h2>4️⃣ Why kV Falls During Exposure</h2>
-        <p>The selected kV does not necessarily remain at exactly that value during an exposure. For example you may select 40 kV but the voltage across the X-ray tube may fall during exposure. There are three major reasons:</p>
+        <h2>4️⃣ Feedback, Frequency and Components</h2>
 
-        <h3>1. Transformer losses</h3>
-        <p>An ideal transformer would have no energy loss. Real transformers experience losses, specifically eddy-current losses and hysteresis losses. Some electrical energy is converted to heat or otherwise lost within the transformer. Therefore the theoretical calculation does not necessarily give exactly the actual voltage obtained.</p>
+        <h3>1. Real-time feedback and control</h3>
+        <p>During an X-ray exposure, accurate control of kVp and mA is essential. The HF generator therefore uses sensors to continuously monitor tube voltage and current. The system compares the actual value with the preset value. If the values differ, the feedback system adjusts the rate of pulses sent to the X-ray tube. This allows the generator to keep the actual exposure conditions close to the selected values.</p>
+        <p>Why is this important? It helps maintain consistent image quality, prevent inappropriate exposure, protect the patient and protect the X-ray equipment.</p>
 
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Suppose you have ₦10,000 and want to send all of it to someone. During the transfer some amount is lost as fees. The receiver therefore gets less than ₦10,000.<br>
-          Similarly: Input energy → transformer losses → less useful output voltage.</p>
-        </div>
+        <h3>2. Role of frequency in X-ray generation</h3>
+        <p>One of the most important developments in HF generators is the increase in electrical frequency. Traditional generators operate at approximately 50/60 Hz. This can produce considerable voltage ripple.</p>
+        <p><strong>Problem with large ripple:</strong> Large fluctuations in voltage can affect the uniformity of the X-ray beam. This may contribute to inconsistent exposure and poorer radiographic images.</p>
+        <p><strong>HF solution:</strong> HF generators increase the frequency to 400 Hz → up to 1 MHz. This reduces ripple to less than 1% according to the material. The resulting waveform is therefore much smoother.</p>
+        <p><strong>Benefits of low ripple:</strong> A nearly ripple-free waveform provides more stable voltage, better control of the X-ray beam, improved image consistency, fewer artifacts, more precise exposure and potential reduction in patient radiation dose because exposure factors can be finely controlled.</p>
 
-        <h3>2. Tube current</h3>
-        <p>There is an inverse relationship between current and voltage when power is constant (V = P / I). If current increases while power is fixed, voltage decreases.</p>
-        <p>In an X-ray tube the tube current is related to the selected mA. Increasing mA means the filament produces more electrons through thermionic emission. More electrons flow from cathode to anode. This increased tube current causes a voltage drop. The material gives an example: a selected 40 kV may fall to approximately 36 kV once the tube is energized.</p>
-
-        <div class="highlight-box">
-          <p>Simple idea: Increase mA → more electrons flow → greater tube current → greater voltage drop.</p>
-        </div>
+        <h3>3. Components of a high-frequency generator</h3>
+        <p>The material identifies five major components:</p>
+        <ol>
+          <li><strong>AC/DC Converter</strong> – Converts incoming AC into DC (AC → DC)</li>
+          <li><strong>Inverter</strong> – Converts DC back into high-frequency AC (DC → high-frequency AC)</li>
+          <li><strong>High-Voltage Transformer</strong> – Increases the high-frequency AC voltage to the high voltage required for X-ray production (High-frequency AC → very high voltage)</li>
+          <li><strong>Filament Circuit</strong> – Provides power to heat the cathode filament of the X-ray tube. Heating the filament releases electrons. These electrons are subsequently accelerated toward the anode to produce X-rays. Simplified: Filament heating → electron release → electron acceleration → X-rays</li>
+          <li><strong>Control System and Feedback Loop</strong> – Sensors continuously monitor tube voltage and tube current. The system compares these values with the desired values and adjusts the output when necessary.</li>
+        </ol>
       </div>
 
       <!-- PAGE 5 -->
       <div class="section-card">
-        <h2>5️⃣ Rectification and kV Compensation</h2>
+        <h2>5️⃣ Basic Components and Advantages</h2>
+        <p>The diagram on this page presents the basic components involved in a high-frequency generator. The components shown include: DC power supply, 3-phase supply, inverter, step-up transformer, bridge rectifier, capacitor and X-ray tube.</p>
 
-        <h3>1. Rectification loss</h3>
-        <p>The rectification process involves current passing through rectifiers. The rectifier presents resistance to current flow. This contributes to another voltage reduction. Therefore rectification further reduces the voltage available across the X-ray tube.</p>
-
-        <h3>2. Total voltage drop</h3>
         <div class="highlight-box">
-          <p><strong>Voltage drop = Transformer loss + Rectification loss + Tube-current loss</strong></p>
-        </div>
-        <p>This is one of the key equations/concepts to remember.</p>
-
-        <h3>3. How do we compensate for voltage drop?</h3>
-        <p>The solution is simple in principle: Select a higher voltage initially so that after the expected losses, the desired voltage remains.</p>
-        <p>Example: Suppose you want 40 kV but expect 10 kV of total voltage loss. You would initially select 50 kV. During operation 50 kV – 10 kV = 40 kV. Therefore the tube receives the desired 40 kV.</p>
-
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Imagine travelling 100 km, but your car’s fuel consumption and detours mean you need to start with enough fuel for 120 km. You don’t plan for exactly 100 km of fuel; you allow for the expected loss.<br>
-          Similarly: Desired kV + expected voltage loss = initial selected voltage.</p>
+          <p>A useful simplified sequence for remembering the system is:<br>
+          Electrical supply → Rectification / DC power → Inverter → High-frequency AC → Step-up transformer → High voltage → Rectification → X-ray tube</p>
         </div>
 
-        <h3>4. Which loss changes with mA?</h3>
-        <p>Transformer losses and rectification losses are usually relatively constant. Tube-current loss changes with the selected mA. Different examinations require different mA settings. Therefore increasing mA requires compensation for the additional voltage drop.</p>
-
-        <h3>5. kV compensator ganged to mA selector</h3>
-        <p>One solution is to connect a kV compensator to the mA selector. This is called ganging the controls.</p>
-        <div class="highlight-box">
-          <p>When mA is increased:<br>
-          mA increases → Tube current increases → Voltage drop increases → Compensator automatically increases the selected voltage → Adequate kV remains available across the tube</p>
-        </div>
-        <p>The number of autotransformer turns is increased in proportion to the expected voltage drop.</p>
-
-        <div class="memory-tip">
-          <strong>🧠 Analogy</strong>
-          <p>Imagine a car climbing a hill. When the load becomes heavier, the driver automatically presses the accelerator more.<br>
-          Similarly: Higher mA = heavier electrical load → compensator automatically increases voltage selection.</p>
-        </div>
+        <h3>⭐ Advantages of High-Frequency Generators</h3>
+        <ol>
+          <li><strong>Improved efficiency</strong> – Operating at higher frequencies reduces energy losses during voltage transformation. Remember: Higher frequency → more efficient voltage transformation.</li>
+          <li><strong>Compact design</strong> – High-frequency operation allows the use of smaller transformers and other components. Therefore the generator can be smaller, lighter and more portable. This is particularly useful for mobile X-ray units, portable X-ray machines, emergency departments and remote locations.</li>
+          <li><strong>Improved image quality</strong> – HF generators produce a smoother, nearly ripple-free waveform. This contributes to better-quality diagnostic images.</li>
+          <li><strong>Lower radiation dose</strong> – Because the generator provides precise control of exposure factors, smaller exposure settings can be used while still obtaining appropriate image quality. This can help reduce patient radiation dose.</li>
+          <li><strong>Real-time control</strong> – The generator continuously monitors tube voltage and tube current. If conditions change, the feedback system can rapidly adjust the generator’s output. This helps maintain stable operation even when there are changes in electrical load or exposure settings.</li>
+          <li><strong>Cost-effectiveness</strong> – The material states that electronic components used in HF generators can be less expensive to produce than the mechanical components used in traditional generators. This can make HF generators more cost-effective for manufacturers and healthcare facilities.</li>
+        </ol>
       </div>
 
-      <!-- PAGE 6 -->
+      <!-- COMPLETE FLOW -->
       <div class="section-card">
-        <h2>6️⃣ Kilovoltage Indicator</h2>
-
-        <h3>Why do we need a kV indicator?</h3>
-        <p>The radiographer needs to know what kV is being selected. But there is a problem: the selected voltage has not yet been applied across the X-ray tube at the time of selection. Also, during actual exposure, voltage can fall because of tube current, rectification and transformer energy losses. Therefore the kV indication must take these expected losses into account.</p>
-
-        <p>Two methods are described:</p>
-
-        <h3>1. Calibrated autotransformer</h3>
-        <p>In this system the kV selector is calibrated so that its indicated value represents the expected actual kV across the X-ray tube, taking voltage losses into consideration.</p>
-        <p>Example: Desired tube voltage = 40 kV. The voltage drop expected from the system might require an additional 40 V at the autotransformer input. Instead of selecting exactly 200 V we might select 240 V. The autotransformer position corresponding to 240 V can then be marked as 40 kV. Why? Because after the expected losses occur, approximately 40 kV remains across the X-ray tube.</p>
-
-        <div class="highlight-box">
-          <p><strong>Important distinction:</strong> The number displayed on the selector does not necessarily represent the raw voltage currently coming out of the autotransformer. It is calibrated to represent the expected useful kV at the tube.</p>
-        </div>
-
-        <h3>2. Pre-reading kilovolt meter</h3>
-        <p>Instead of calibrating the autotransformer selector itself, another approach is to connect a voltmeter to the kV selector. The meter is calibrated in kilovolts. Its calibration accounts for the expected voltage drop in the high-tension circuit. Therefore the displayed value represents the expected kV that will actually be available across the X-ray tube after losses.</p>
+        <h2>🧠 Complete Topic in One Simple Flow</h2>
+        <ol>
+          <li><strong>Mains supply</strong> – Provides ordinary AC electricity</li>
+          <li><strong>Rectification</strong> – AC is converted to DC</li>
+          <li><strong>Inversion</strong> – DC is converted back to high-frequency AC</li>
+          <li><strong>Step-up transformation</strong> – The high-frequency AC enters the high-voltage transformer</li>
+          <li><strong>Voltage increases</strong> – Voltage is raised to approximately 40–150 kV, depending on imaging requirements</li>
+          <li><strong>Rectification</strong> – The voltage is made suitable for the X-ray tube</li>
+          <li><strong>X-ray tube</strong> – The high voltage accelerates electrons from cathode to anode, producing X-rays</li>
+          <li><strong>Feedback</strong> – Sensors monitor kV and mA and continuously compare them with the selected values</li>
+          <li><strong>Automatic correction</strong> – The generator adjusts its output when necessary</li>
+        </ol>
       </div>
 
-      <!-- HIGH-YIELD -->
+      <!-- EXAM-FOCUSED -->
       <div class="section-card">
-        <h2>⭐ Most Important Exam Points</h2>
+        <h2>📌 Exam-Focused Revision</h2>
         <div class="quick-facts">
           <ul>
-            <li>Exposure factors: kV, mA and exposure time</li>
-            <li>kV primarily controls the penetrating power/energy of the X-ray beam</li>
-            <li>Increase kV → increase electron velocity → increase electron energy → increase X-ray photon energy → increase penetration</li>
-            <li>Too low kV → underpenetration; Too high kV → overpenetration</li>
-            <li>Autotransformer = one winding serving as both primary and secondary, with taps used to select different voltages</li>
-            <li>Voltage is controlled before stepping it up because it is safer and more practical</li>
-            <li>Variac = variable-voltage autotransformer that uses a carbon brush slider for smooth/continuous voltage variation (especially useful in fluoroscopy)</li>
-            <li>kV falls during exposure because of: Transformer losses + Tube-current loss + Rectification loss</li>
-            <li>Increase mA → more electrons emitted → greater tube current → greater voltage drop</li>
-            <li>Voltage drop is compensated by initially selecting a higher voltage so that after losses the desired voltage remains</li>
-            <li>“Ganged” means the kV compensator is mechanically/electronically linked to the mA selector</li>
-            <li>Two methods of kV indication: Calibrated autotransformer and Pre-reading kilovolt meter</li>
+            <li><strong>Main function of a high-tension generator:</strong> To provide the high voltage required between the anode and cathode of the X-ray tube</li>
+            <li><strong>What does the transformer do?</strong> It steps up the voltage</li>
+            <li><strong>What is rectification?</strong> Conversion/control of AC to provide suitable DC/current direction for X-ray production</li>
+            <li><strong>Purpose of a rectifier:</strong> To ensure current flows in the required direction</li>
+            <li><strong>Normal mains frequency:</strong> 50/60 Hz</li>
+            <li><strong>Frequency an HF generator can achieve:</strong> Approximately 400 Hz to 1 MHz</li>
+            <li><strong>What happens to ripple in an HF generator?</strong> It can be reduced to less than 1%</li>
+            <li><strong>Function of the inverter:</strong> It converts DC into high-frequency AC</li>
+            <li><strong>Function of the high-voltage transformer:</strong> It steps up high-frequency AC to the high voltage required for X-ray production</li>
+            <li><strong>Function of the filament circuit:</strong> To heat the cathode filament and release electrons</li>
+            <li><strong>What monitors kV and mA?</strong> The sensors/control and feedback system</li>
+            <li><strong>Five major components:</strong> AC/DC converter, Inverter, High-voltage transformer, Filament circuit, Control system and feedback loop</li>
           </ul>
         </div>
       </div>
 
-      <!-- FINAL ANALOGY -->
-      <div class="section-card">
-        <h2>🧠 One Big Analogy to Remember Everything</h2>
-        <div class="memory-tip">
-          <strong>Water-delivery system</strong>
-          <p>kV = water pressure<br>
-          mA = amount of water flowing<br>
-          Transformer = pressure-changing pump<br>
-          Rectifier = valve that resists flow<br>
-          Transformer losses = leakage/friction<br>
-          X-ray tube = destination where the water must arrive<br>
-          kV compensation = increasing the starting pressure to overcome losses<br><br>
-          If you need a certain pressure at the destination, you cannot always set exactly that pressure at the beginning because some pressure will be lost along the way.<br>
-          Therefore: Starting pressure = required final pressure + expected losses<br>
-          That is essentially the central idea behind kV compensation.</p>
-        </div>
-      </div>
-
       <!-- BUTTONS -->
-      <button class="explore-btn" onclick="window.location.href='./312note8q.html'">📝 Questions</button>
-      <button class="explore-btn secondary" onclick="window.location.href='./312note10.html'">Next Page →</button>
+      <button class="explore-btn" onclick="window.location.href='note5q.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='note6.html'">Next Page →</button>
 
     </div>
   </div>
 
   <div class="nav-bar">
-    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='#'">💬</button><p>Chat</p></div>
-    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='../312.html'">⭐</button><p>Favourite</p></div>
-    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='#'">📚</button><p>Library</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
   </div>
 
   <script>
