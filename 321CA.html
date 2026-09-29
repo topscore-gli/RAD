@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAD 312 CA Questions</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:15px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="exit()">←</button>
+      <h1>RAD 312 CA Questions</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 20:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 1200, PASS: 60 };
+
+const SECTIONS = {
+  0: "A: Transformers & Regulation",
+  6: "B: Semiconductors & Rectifiers",
+  13: "C: AEC, Timers & Phototimers",
+  18: "D: Space Charge, Saturation & Tube",
+  24: "E: Generators, Circuits & Practical"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  // Section A: Transformers & Regulation
+  {q:"In transformer regulation:",o:["It is a statement that describes the relationship between the stator load and the kilovoltage selected for a given mA.","It describes the extent to which voltage output from the secondary winding rises when a load is added to it.","Percentage regulation of transformers used for radiographic procedures are lower than that used for fluoroscopy.","It is a statement that explains the extent to which the voltage falls in the secondary winding when the transformer is on load."],a:3,e:"Transformer regulation describes how much the secondary voltage falls when the transformer is placed under load."},
+  {q:"One of the following is true about the high-tension transformer component in an X-ray room:",o:["It feels warm after several exposures.","Its capacity determines the maximum exposure factors to be used for a given examination.","It is immersed in an airtight container filled with oil and gas.","It makes a faint humming sound when the equipment is on."],a:1,e:"The rating/capacity of the HT transformer determines the maximum exposure factors that can safely be used."},
+  {q:"A feature that makes silicon-iron and nickel-iron the favorite for transformer core design is:",o:["They are not so bulky.","They have easily magnetizable dipoles.","They are easily available.","They retain eddy currents."],a:1,e:"These alloys have favourable magnetic properties (easily magnetizable dipoles) that reduce core losses."},
+  {q:"One of the following best describes the shell-core type:",o:["It cannot be printed in circuit boards.","There is no need for insulation between the primary and secondary windings since the secondary winding is above the primary.","It is the least efficient of the core types of transformers.","The iron core is made of solid unlaminated wrought iron."],a:1,e:"In the shell-type design the secondary is wound over the primary; it is the most efficient core arrangement."},
+  {q:"Energy loss due to hysteresis is as a result of:",o:["Humming sound of the iron core.","Constant magnetization and demagnetization of the iron core.","Improper arrangement of the solenoids.","Excessive load on the transformer."],a:1,e:"Hysteresis loss is caused by the continuous magnetization and demagnetization of the core under AC."},
+  {q:"In an ideal transformer:",o:["There is a perfect relationship between the ratio of voltage induced and the number of turns in both windings.","Eddy currents are absent.","Hysteresis does not occur.","All of the above are correct."],a:3,e:"An ideal transformer assumes perfect turns-voltage ratio and no losses (no eddy currents or hysteresis)."},
+
+  // Section B: Semiconductors & Rectifiers
+  {q:"In the process of doping:",o:["Impurities are added to semiconductors to increase the number of holes/electrons within it.","Conductors are converted to semiconductors.","Impurities are removed from the semiconductors to make them more active than they were in their natural state.","The p- and n- ends are chemically joined together."],a:0,e:"Doping is the deliberate addition of impurities to increase the number of charge carriers."},
+  {q:"An example of an element that can be used in the construction of a solid-state rectifier is:",o:["Nickel","Strontium","Cadmium","None of the above"],a:2,e:"Cadmium (and selenium) are naturally occurring semiconductor materials used in solid-state devices."},
+  {q:"Some naturally occurring materials that can be used as semiconductors without a need for doping include:",o:["Selenium and Gadolinium","Cadmium and Selenium","Adamantium and Cadmium","Selenium and Gallium"],a:1,e:"Cadmium and selenium can act as semiconductors without doping."},
+  {q:"In a typical n-p-n junction:",o:["The p-wafer is made as thin as possible.","The n-wafer acting as the collector is lightly doped when compared to the other n-wafer.","The p-wafer is of the same size as the two n-wafers combined.","The n-wafer acting as the emitter is heavily doped when compared to the other n-wafer."],a:3,e:"In an NPN transistor the emitter is heavily doped relative to the collector."},
+  {q:"A rectifier bridge:",o:["Consists of two rectifier valves connected in parallel to the high-tension transformer.","Blocks the negative half of the AC voltage cycle.","Is an assemblage of four rectifiers connected in a square fashion.","None of the above description fits."],a:2,e:"A bridge rectifier uses four diodes arranged in a square (bridge) configuration for full-wave rectification."},
+  {q:"A sinusoidal waveform means that:",o:["The waveform is positive in one half of the cycle and remains so unless rectified.","The waveform is positive in one half of the cycle and remains so if not rectified.","The angle sustained by one cycle is expressed as the sine of the angle between two or three waveforms.","It has positive and negative cycles."],a:3,e:"A sinusoidal AC waveform has both positive and negative half-cycles."},
+  {q:"The thyristor was replaced by the:",o:["Thyratron valve","Diode valve","Ionization chamber","All of the above"],a:0,e:"Note: Historically the thyratron was replaced by the thyristor/SCR. The scanned options appear reversed; based on material the modern device is the thyristor."},
+
+  // Section C: AEC, Timers & Phototimers
+  {q:"All these factors affect the operation of an AEC except:",o:["mA","kVp","Backup timer setting","Compensators"],a:3,e:"kVp, mA and backup timer affect AEC operation; compensators are not listed among the primary factors."},
+  {q:"Which of the following timers does the radiographer only select the kV and mA?",o:["Mechanical timers","Ionization chambers","Synchronous timers","Electronic timers"],a:1,e:"With ionization-chamber AEC the radiographer selects kV and mA; the exposure terminates automatically."},
+  {q:"Phototimers are triggered by:",o:["Light produced by scattered radiation.","Light from the fluorescent material.","X-ray photons from scattered radiation.","X-ray photons directly from the X-ray tube."],a:1,e:"A phototimer detects light emitted by a fluorescent screen that is struck by the remnant X-ray beam."},
+  {q:"AECs described as entrance-type detectors are located:",o:["Between the X-ray tube and the patient.","Below the image receptor.","Between the patient and the X-ray tube.","Just below the image receptor."],a:2,e:"Entrance-type (ionization chamber) detectors are placed between the patient and the image receptor."},
+  {q:"Since a capacitor discharges at a constant rate:",o:["The voltage supplied to the X-ray tube before X-ray production is ripple-free.","The voltage drops all the way down to zero.","The exposure time selected must not be lower than 0.5 seconds.","The voltage supplied to the X-ray tube before X-ray production is not ripple-free."],a:0,e:"Capacitor-discharge circuits help produce a more constant (ripple-reduced) potential."},
+
+  // Section D: Space Charge, Saturation & Tube
+  {q:"Concerning space-charge effect, one of these does not apply:",o:["The space charge can impede electrons from moving from the cathode to the anode if the kV is not high enough.","Increase or decrease in kV will also lead to increase or decrease in mA.","It occurs when high mA values are combined with low kV values.","It requires high kV with low mA to overcome the space-charge effect."],a:3,e:"Space-charge limitation is overcome by raising kV; the statement that high kV with low mA is required is the one that does not correctly describe the effect."},
+  {q:"Which of these statements is wrong about saturation?",o:["All the electrons produced by the cathode are being collected by the anode.","Further increase in voltage does not lead to an increase in X-ray photons produced.","Increasing the filament heat is the only way to increase X-ray photons.","None of the three explains saturation."],a:2,e:"At saturation, further increase in kV does not increase tube current; filament heat (mA) is the main way to increase electron emission, but the absolute statement is the incorrect one."},
+  {q:"Why does high potential difference (tube kilovoltage) cause overpenetration?",o:["Because electrons produced have very high kinetic energy as they move from cathode to anode.","Because the anode is hot enough to produce more characteristic radiation.","Because the electrons move at very high speed from the anode to the cathode.","Because high potential difference produces hotter cathodes that in turn produce hard x-rays."],a:0,e:"Higher kV gives electrons greater kinetic energy, producing more penetrating X-rays."},
+  {q:"Why does the filament circuit require very little current?",o:["Little current is needed to heat up the filament to white hot.","Thermionic emission does not require much current irrespective of the thickness of the wire.","The filament is designed to be very thick, so there is no need for high current.","All of the above are correct."],a:0,e:"Only a small current is required to heat the thin filament to the temperature needed for thermionic emission."},
+  {q:"Why are exposure timers located in the low-voltage section of the mains circuit?",o:["Because it will be difficult to control the flow of high-energy electrons.","There is no space for connecting exposure timers.","It is safer to switch low voltage when compared to high voltage.","It is more expensive connecting exposure timers to the high-voltage section due to insulation costs."],a:2,e:"Switching is safer and simpler in the low-voltage primary circuit."},
+  {q:"Why is an autotransformer described as being self-inducting?",o:["It has only one winding that serves as both primary and secondary winding.","It is designed to automatically induce EMF in its secondary winding.","The secondary winding is wound over the primary winding, hence no need for an iron core.","It bridges the gap between the low- and high-voltage circuit."],a:0,e:"An autotransformer has a single winding that acts as both primary and secondary (self-induction)."},
+
+  // Section E: Generators, Circuits & Practical
+  {q:"In an electronic timer, the capacitor discharges into the gate of the thyristor because:",o:["It discharges faster than direct connection to the mains.","The current it carries is within the rating of the thyristor.","It is the best and efficient design for an electronic timer.","It produces a direct current needed for the operation of the thyristor."],a:1,e:"The capacitor supplies a controlled current suitable for triggering the thyristor gate."},
+  {q:"Why do the high-tension cables on a self-rectified generator undergo a lot of electrical stress?",o:["Because they are under the strain of alternating high voltage.","All of the above.","Because the insulation is very thick.","Because they are exposed to high voltage."],a:0,e:"In self-rectification the cables experience the full alternating high voltage, causing greater stress."},
+  {q:"Self-rectified x-ray tubes cannot be used on high exposure factors because:",o:["The tube cannot withstand the heat generated.","Reversal of polarity can damage the tube.","The tube can reverse-produce electrons when AC reverses its polarity.","All of the above."],a:1,e:"When polarity reverses, the anode can become the electron source and damage the tube."},
+  {q:"Why should a system of rectifiers be used for continuous x-ray generation?",o:["Because alternating currents produce a lot of heat greater than the tube rating.","Because alternating currents vary polarity every 1/30 seconds.","Because alternating current does not produce a constant potential difference.","Because alternating currents are not strong enough for x-ray generation."],a:2,e:"Rectification is needed to convert AC into a unidirectional (more constant) potential difference."},
+  {q:"Why does the tube of a falling-load generator not last?",o:["They always operate the tubes above their rating.","High mA are always used for exposure.","The tubes are self-rectified, therefore are always stressed.","All of the above."],a:0,e:"Falling-load generators start at high mA and can push the tube close to or beyond its thermal rating."},
+  {q:"Why should a radiographer be careful when selecting exposure factors for an imaging receptor with a narrow exposure latitude?",o:["Because the cost of repeat radiographs is quite high.","Because the amount of radiation exposure to the patient should be as low as reasonably achievable.","Because the imaging receptor can easily be overpenetrated or overexposed.","All of the options are correct."],a:3,e:"Narrow-latitude receptors are unforgiving; incorrect factors easily produce over- or under-exposure, increasing dose and cost."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('rad312_ca_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/' + state.data.length;
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('rad312_ca_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent performance on the RAD 312 CA material! You have a strong command of transformers, semiconductors, AEC and tube physics. Keep it up!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid understanding. Review space-charge, saturation and rectifier bridge details to push higher.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on transformer regulation, doping, AEC location and the reasons for rectification. Consistent revision will improve your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t be discouraged. Go through the detailed explanations carefully, especially the transformer and semiconductor sections, and try again. You can master this!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 6, 13, 18, 24, 30];
+  var sectionNames = [
+    "A: Transformers & Regulation",
+    "B: Semiconductors & Rectifiers",
+    "C: AEC, Timers & Phototimers",
+    "D: Space Charge, Saturation & Tube",
+    "E: Generators, Circuits & Practical"
+  ];
+
+  for (var s = 0; s < 5; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('rad312_ca_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('rad312_ca_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('rad312_ca_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
