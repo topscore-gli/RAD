@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cervical Spine Radiography - Viva Master Guide</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:16px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:17px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:16px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:12px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:10px 8px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:9px 8px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{background:var(--accent-tertiary)}
+    
+    .youtube-box{
+      background:rgba(255,0,0,.08);border:2px dashed #ff4444;border-radius:15px;padding:20px;margin:20px 0;text-align:center
+    }
+    .youtube-box iframe{width:100%;height:220px;border-radius:12px;border:none}
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">Cervical Spine Viva</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>🦴 Cervical Spine Radiography</h1>
+        <p>Viva Master Guide • Complete Technique • Image Criteria • Model Answers</p>
+      </div>
+
+      <!-- HOW TO USE -->
+      <div class="section-card">
+        <h2>📖 How to Use This Guide</h2>
+        <p>This guide separates three kinds of information:</p>
+        <ul>
+          <li><strong>FROM YOUR MATERIAL</strong>: values and projection names explicitly recorded in the supplied Viva material.</li>
+          <li><strong>STANDARD REFERENCE EXAMPLE</strong>: common teaching values from published radiographic positioning guidance (study examples, not universal prescriptions).</li>
+          <li><strong>LOCAL PROTOCOL REQUIRED</strong>: where the source does not define the projection or where technique varies substantially.</li>
+        </ul>
+        <div class="highlight-box">
+          <p>Do not memorise a researched example as if it were printed in your class notes. If your examiner asks “according to the material,” give the source value first, then explain that departments may use different protocols.</p>
+        </div>
+      </div>
+
+      <!-- 1. ANATOMY -->
+      <div class="section-card">
+        <h2>1️⃣ Cervical Anatomy & Basic Terms</h2>
+        <p>Seven cervical vertebrae: C1–C7. C1 is the atlas; C2 is the axis and bears the dens (odontoid process). C3–C7 have broadly similar vertebral-body and posterior-arch anatomy.</p>
+        <ul>
+          <li><strong>C1 (atlas)</strong>: ring-shaped vertebra with anterior/posterior arches and lateral masses; no typical vertebral body.</li>
+          <li><strong>C2 (axis)</strong>: contains the dens, which projects upward and articulates with C1.</li>
+          <li><strong>C3–C7</strong>: vertebral bodies, pedicles, laminae, spinous processes, transverse processes and articular processes.</li>
+          <li><strong>Cervicothoracic junction</strong>: the transition around C7–T1; it may be obscured by the shoulders on a lateral image.</li>
+        </ul>
+
+        <h3>Key Terms</h3>
+        <ul>
+          <li><strong>Whiplash</strong>: injury associated with rapid flexion/extension of the neck.</li>
+          <li><strong>Klippel–Feil syndrome</strong>: congenital fusion of cervical vertebrae, often with a short neck.</li>
+          <li><strong>Spondylosis</strong>: degenerative changes of the spine.</li>
+          <li><strong>Torticollis</strong>: abnormal twisting or tilting of the head/neck.</li>
+          <li><strong>Ankylosing spondylitis</strong>: inflammatory disease that can cause spinal stiffness and fusion.</li>
+          <li><strong>Kyphosis</strong>: excessive posterior convexity of the spine.</li>
+          <li><strong>Tetraplegia/quadriplegia</strong>: paralysis involving all four limbs.</li>
+        </ul>
+
+        <h3>Why are cervical examinations important?</h3>
+        <p>They may assess trauma, alignment, vertebral bodies and disc spaces, degenerative change, upper cervical articulation, neural foramina, or the cervicothoracic junction. For acute adult blunt trauma, CT is often preferred under modern trauma pathways; plain radiography should follow the clinician’s request and local protocol.</p>
+
+        <h3>Anatomical Landmarks</h3>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Landmark</th><th>Approximate level / use</th></tr>
+            <tr><td>Thyroid cartilage prominence</td><td>Common surface landmark for C4; AP/lateral cervical centring</td></tr>
+            <tr><td>Mastoid process / mastoid tips</td><td>Used for head alignment and lateral cervical positioning</td></tr>
+            <tr><td>Centre of open mouth</td><td>Centring for AP open-mouth odontoid view</td></tr>
+            <tr><td>C7–T1</td><td>Cervicothoracic junction; swimmer’s view if obscured on lateral</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2. PATIENT PREP -->
+      <div class="section-card">
+        <h2>2️⃣ Patient Preparation & Safety</h2>
+        <p>A strong Viva answer begins before the exposure.</p>
+
+        <h3>Before the examination</h3>
+        <ul>
+          <li>Verify the request, patient identity using approved identifiers, clinical question, relevant history and correct examination.</li>
+          <li>Explain the procedure in clear language, gain cooperation/consent according to policy, and check whether the patient can stand, sit, lie supine and follow instructions.</li>
+          <li>Ask about pregnancy possibility where relevant and follow local pregnancy-screening policy; do not delay emergency care when clinically necessary.</li>
+          <li>Remove necklaces, earrings, hair clips, removable dentures or other artefacts that may obscure the anatomy, if removal is safe and appropriate.</li>
+          <li>Check for pain, reduced mobility, neurological symptoms, trauma, cervical collar, recent surgery or other factors affecting positioning.</li>
+          <li>For suspected trauma, preserve spinal alignment, maintain immobilisation/collar as directed, and do not ask the patient to rotate, flex, extend or open the mouth forcibly.</li>
+        </ul>
+
+        <h3>During positioning</h3>
+        <ul>
+          <li>Use the smallest field that includes the required anatomy; use shielding only in accordance with current local policy and never let shielding obscure anatomy or interfere with automatic exposure control.</li>
+          <li>Use a detector/receptor size and orientation suitable for the projection; centre the anatomy to the receptor and align the central ray to the required point.</li>
+          <li>Place a correct anatomical side marker before exposure, outside the anatomy of interest.</li>
+          <li>Give clear breathing instructions. Routine views generally require the patient to remain still and suspend breathing briefly.</li>
+          <li>Avoid unnecessary repeat images. Review anatomy, rotation, motion, exposure and collimation before deciding whether a repeat is justified.</li>
+        </ul>
+
+        <h3>After the examination</h3>
+        <ul>
+          <li>Help the patient return to a safe position; do not leave a dizzy, painful or injured patient unsupported.</li>
+          <li>Check that the images are labelled correctly and include the required anatomy; communicate urgent concerns according to departmental policy.</li>
+        </ul>
+
+        <div class="memory-tip">
+          <strong>🚨 TRAUMA SAFETY — SAY THIS IF ASKED</strong>
+          <p>“In suspected cervical trauma, I prioritise spinal precautions. I do not remove the collar or manipulate the neck unless authorised under the trauma protocol. I obtain the views that can be safely performed and request help if the required anatomy cannot be demonstrated without unsafe movement.”</p>
+        </div>
+      </div>
+
+      <!-- 3. ROUTINE PROJECTIONS -->
+      <div class="section-card">
+        <h2>3️⃣ Routine Projections — Complete Technique</h2>
+
+        <h3>3.1 AP Cervical (C3–C7; commonly AP Axial)</h3>
+        <p><strong>Purpose:</strong> Frontal assessment of vertebral bodies, disc spaces, alignment and uncovertebral joints.</p>
+        <p><strong>Patient and part position:</strong> Supine or erect as clinically appropriate. Centre the midsagittal plane to the receptor; shoulders level; head straight without rotation. Raise/protrude chin only as appropriate to avoid mandibular overlap, and never manipulate a trauma patient.</p>
+        <p><strong>Centring point:</strong> Your material: just below the thyroid cartilage prominence. Standard references centre midline at C4, around the lower margin of the thyroid cartilage.</p>
+        <p><strong>Central ray:</strong> Your material does not specify angulation. A common AP axial technique uses 15–20° cephalad to C4. If the prescribed view is a straight AP, do not add this angle automatically.</p>
+        <p><strong>Collimation:</strong> Laterally include the cervical spine and relevant soft tissues; superiorly include the upper cervical region and inferiorly include the lower cervical/cervicothoracic region required by protocol. Common evaluation target is C3 through T1/T2.</p>
+        <p><strong>FFD / SID:</strong> About 100 cm (40 in) in a common AP axial reference protocol.</p>
+        <p><strong>Exposure factors:</strong></p>
+        <ul>
+          <li>From your material: 70–80 kVp, 12 mAs.</li>
+          <li>Standard reference example: 70–80 kVp, 12 mAs; SID 100 cm. Adjust for patient size, detector and departmental chart.</li>
+        </ul>
+        <p><strong>Breathing:</strong> Ask the patient to suspend breathing and avoid swallowing/movement for the exposure.</p>
+        <p><strong>Image evaluation:</strong> C3–C7 bodies and disc spaces visible; spinous processes near midline; no significant rotation; adequate penetration through shoulders and soft tissues; disc spaces reasonably open when correct axial angulation is used.</p>
+        <p><strong>Common errors:</strong> Too little/much chin elevation can obscure upper vertebrae; incorrect angle can close disc spaces; rotation shifts spinous processes off midline; inadequate penetration may hide lower cervical anatomy.</p>
+        <p><strong>Why this view:</strong> Provides a frontal survey of vertebral alignment and disc spaces; useful in selected trauma or degenerative assessments.</p>
+
+        <h3>3.2 Lateral Cervical — Erect</h3>
+        <p><strong>Purpose:</strong> Profile assessment of vertebral bodies, disc spaces, posterior elements, alignment and prevertebral soft tissues.</p>
+        <p><strong>Patient and part position:</strong> Erect sitting or standing for non-trauma cases, shoulder against vertical receptor. True lateral; shoulders level. Gently elevate chin to clear C1–C2 and relax/depress shoulders as tolerated. Do not force shoulder movement.</p>
+        <p><strong>Centring point:</strong> Your material: below the mastoid process at the level of the thyroid cartilage prominence. Common reference centring is C4, at the upper margin of the thyroid cartilage.</p>
+        <p><strong>Central ray:</strong> Horizontal central ray, perpendicular to receptor, centred at C4 for the standard lateral.</p>
+        <p><strong>Collimation:</strong> Include the upper cervical region through C7–T1 if possible; include prevertebral soft tissues. If C7–T1 is obscured, a swimmer’s view or another protocol-approved method may be needed.</p>
+        <p><strong>FFD / SID:</strong> Common reference example: 150–180 cm (60–72 in); longer SID reduces magnification and helps show the lower cervical spine.</p>
+        <p><strong>Exposure factors:</strong></p>
+        <ul>
+          <li>From your material: 70–80 kVp, 20 mAs.</li>
+          <li>Standard reference example: Reference values vary widely; one published source lists 70–80 kVp and 28 mAs at SID 150–180 cm. Other digital technique charts use lower mAs. Use local chart.</li>
+        </ul>
+        <p><strong>Breathing:</strong> Usually suspend breathing briefly and do not swallow during exposure.</p>
+        <p><strong>Image evaluation:</strong> C1–C7 shown; C7–T1 junction visible if possible; bodies, disc spaces, articular pillars, spinous processes and prevertebral soft tissues visible; no significant rotation; adequate exposure.</p>
+        <p><strong>Common errors:</strong> Shoulders obscure C7–T1; chin overlies upper cervical spine; rotation makes posterior vertebral borders and facets non-superimposed; motion blurs cortical margins.</p>
+        <p><strong>Why this view:</strong> Often the most informative plain-film projection in trauma because it demonstrates alignment and many fracture/displacement patterns; it also evaluates disc spaces and soft tissues.</p>
+
+        <h3>3.3 AP Open-Mouth Odontoid — C1–C2</h3>
+        <p><strong>Purpose:</strong> Demonstrates the dens, C2 body, C1 lateral masses and atlantoaxial articulations.</p>
+        <p><strong>Patient and part position:</strong> Supine or erect if safe. Head straight, no rotation; shoulders level. Ask the patient to open the mouth widely only if safe. Align the lower margins of the upper incisors and skull base/mastoid tips so they do not obscure the dens. A gentle “ah” may lower the tongue if appropriate.</p>
+        <p><strong>Centring point:</strong> Your material: centre of the open mouth.</p>
+        <p><strong>Central ray:</strong> Perpendicular to receptor, through the centre of the open mouth. If anatomy is obscured, only make small adjustments if clinically safe and allowed by protocol.</p>
+        <p><strong>Collimation:</strong> Tight collimation around upper cervical anatomy, including dens, C1 lateral masses and C1–C2 joints. Avoid clipping required anatomy.</p>
+        <p><strong>FFD / SID:</strong> Common reference example: 100 cm (40 in).</p>
+        <p><strong>Exposure factors:</strong></p>
+        <ul>
+          <li>From your material: 70–80 kVp regionally but no separate mAs for this view.</li>
+          <li>Standard reference example: 70–80 kVp, 15 mAs, SID 100 cm. Other sources use roughly 8–15 mAs.</li>
+        </ul>
+        <p><strong>Breathing:</strong> Keep mouth open and remain still; avoid jaw/tongue motion.</p>
+        <p><strong>Image evaluation:</strong> Dens and C2 body fully seen; C1 lateral masses and C1–C2 joints visible; no teeth or skull-base overlap of dens; lateral spaces symmetrical; no rotation; adequate bone and soft-tissue detail.</p>
+        <p><strong>Common errors:</strong> Mouth not open enough; upper teeth or skull base obscures dens; head rotation produces unequal lateral spaces; tongue or jaw movement blurs anatomy.</p>
+        <p><strong>Why this view:</strong> Specifically evaluates the upper cervical/atlantoaxial region, which is not adequately assessed by the routine AP view alone.</p>
+      </div>
+
+      <!-- 4. SUPPLEMENTARY -->
+      <div class="section-card">
+        <h2>4️⃣ Supplementary Cervical Projections</h2>
+        <p>Your source lists lateral supine shoot-through, right and left posterior obliques (erect and supine), lateral flexion and extension, lateral swimmer’s, and an axial projection. It does not provide full technique details for these views. The following are standard teaching examples; confirm the exact method and exposure chart used by your department.</p>
+
+        <h3>4.1 Lateral Supine / Horizontal-Beam Shoot-Through</h3>
+        <ul>
+          <li><strong>Indication:</strong> Patient cannot stand or safely be repositioned; selected trauma assessment.</li>
+          <li><strong>Position:</strong> Patient remains supine as found; maintain immobilisation and collar according to trauma protocol. Place receptor vertically against shoulder/neck or use the approved horizontal-beam setup.</li>
+          <li><strong>Centring:</strong> Around C4 / thyroid-cartilage level for a lateral cervical view; horizontal beam.</li>
+          <li><strong>Collimation:</strong> Upper cervical region through C7–T1 where possible, including relevant soft tissues.</li>
+          <li><strong>FFD/SID:</strong> Use the department’s trauma setup; long SID around 150–180 cm is used in some lateral protocols.</li>
+          <li><strong>Exposure:</strong> No single validated mAs from your material. Use the trauma/portable technique chart and detector exposure index.</li>
+          <li><strong>Image check:</strong> Alignment, vertebral bodies, disc spaces, prevertebral tissues and C7–T1 if visible; no motion or avoidable rotation.</li>
+        </ul>
+
+        <h3>4.2 Right and Left Posterior Oblique Cervical</h3>
+        <ul>
+          <li><strong>Purpose:</strong> Demonstrate intervertebral foramina and apophyseal joints; investigate suspected foraminal narrowing or selected bony abnormalities.</li>
+          <li><strong>Position:</strong> Erect or supine as allowed. Rotate the body about 45° from AP; maintain head alignment with the trunk. Obtain both sides if requested.</li>
+          <li><strong>Centring:</strong> Around C4 / thyroid-cartilage level.</li>
+          <li><strong>Central ray:</strong> For the common AP posterior-oblique method, angle approximately 15–20° cephalad. PA oblique methods use a different angle/direction. Do not mix the two methods.</li>
+          <li><strong>Collimation:</strong> Include cervical foramina and required upper/lower cervical anatomy; common target C1–T1.</li>
+          <li><strong>FFD/SID:</strong> Commonly 150–180 cm for erect obliques in some protocols.</li>
+          <li><strong>Exposure:</strong> Your source does not specify. Reference examples commonly use about 70–80 kVp and approximately 8–16 mAs.</li>
+          <li><strong>Image check:</strong> Foraminal spaces should be visible; correct obliquity; no excessive rotation/tilt; appropriate coverage and exposure.</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Viva point:</strong> AP obliques generally demonstrate the foramina farther from the receptor; PA obliques generally demonstrate the foramina nearer the receptor. State the exact convention taught by your department.</p>
+        </div>
+
+        <h3>4.3 Lateral Flexion and Extension</h3>
+        <ul>
+          <li><strong>Purpose:</strong> Selected assessment of cervical movement/instability when specifically requested and clinically cleared.</li>
+          <li><strong>Position:</strong> Start from a true lateral. Flexion: patient gently lowers chin as far as permitted. Extension: patient gently raises chin/extends as far as permitted. Never force the movement.</li>
+          <li><strong>Centring:</strong> As for lateral cervical, around C4, horizontal/perpendicular to receptor.</li>
+          <li><strong>Collimation:</strong> Include the required cervical vertebrae and junction; use the same field for both images to allow comparison.</li>
+          <li><strong>FFD/SID:</strong> Common lateral reference 150–180 cm.</li>
+          <li><strong>Exposure:</strong> No specific factor in your material. Use lateral cervical chart.</li>
+          <li><strong>Image check:</strong> Flexion shows increased separation of spinous processes; extension brings them closer. Evaluate alignment and motion only in the clinical context.</li>
+        </ul>
+        <div class="memory-tip">
+          <strong>🚨 Safety</strong>
+          <p>Flexion/extension is not a routine manoeuvre for an uncleared acute trauma patient. Do not perform against pain or neurological symptoms; follow clinician clearance and protocol.</p>
+        </div>
+
+        <h3>4.4 Lateral Swimmer’s View</h3>
+        <ul>
+          <li><strong>Purpose:</strong> Demonstrate C7–T1 (and often adjacent T2/T3) when the shoulders obscure the cervicothoracic junction on the lateral view.</li>
+          <li><strong>Position:</strong> True lateral, erect or recumbent as appropriate. Raise and flex the arm nearest the receptor, resting forearm on head; depress and move the opposite arm slightly anterior. Avoid unsafe movement in trauma.</li>
+          <li><strong>Centring:</strong> T1 / cervicothoracic junction. A common reference centres to T1; if shoulders remain superimposed, some protocols use a 5° caudal angle.</li>
+          <li><strong>Collimation:</strong> Cover approximately C5 through T4 as required, with the junction visible through the shoulder structures.</li>
+          <li><strong>FFD/SID:</strong> Common reference 150–180 cm.</li>
+          <li><strong>Exposure:</strong> Your material does not specify. One published reference example lists 80–85 kVp and 120 mAs at SID 150–180 cm; other systems use different values. This is a high-exposure projection — use only the local technique chart.</li>
+          <li><strong>Breathing:</strong> A common technique uses suspended breathing at full expiration.</li>
+          <li><strong>Image check:</strong> C7–T1 and adjacent vertebral outlines/disc spaces visible; shoulders separated enough to see the junction.</li>
+        </ul>
+
+        <h3>4.5 “Axial Projection” — Clarify Which Method</h3>
+        <p>Your uploaded material only names “axial projection” and does not identify the exact cervical axial method. It is unsafe to assign one centring point, angle or exposure to that vague label. Different axial methods may target different anatomy:</p>
+        <ul>
+          <li>AP axial cervical: Commonly C3–C7, centred at C4 with a 15–20° cephalad angle.</li>
+          <li>AP axial posterior elements/pillars: A different specialised method.</li>
+          <li>Open-mouth odontoid: A distinct upper-cervical view.</li>
+        </ul>
+        <div class="highlight-box">
+          <p>In the Viva, say: “The source lists an axial projection but does not specify the method. I would confirm the exact axial view from the request or departmental protocol before selecting centring, angulation and exposure factors.”</p>
+        </div>
+      </div>
+
+      <!-- 5. CLINICAL INDICATIONS -->
+      <div class="section-card">
+        <h2>5️⃣ Clinical Indications from Your Material</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Clinical presentation</th><th>Views listed</th><th>Reason / viva explanation</th></tr>
+            <tr><td>Fall from a height; possible cervical injury</td><td>AP and lateral cervical</td><td>Assess alignment and suspected traumatic injury; follow trauma pathway</td></tr>
+            <tr><td>Fall from scaffold; investigation of C3</td><td>AP (material notes 5–10°) and lateral</td><td>Assess suspected C3 injury. Check angle against local technique</td></tr>
+            <tr><td>Swallowed coin</td><td>Lateral neck/cervical; some add RPO/RAO, PA chest, AP abdomen</td><td>Locate radiopaque foreign body according to suspected location and local protocol</td></tr>
+            <tr><td>Swallowed fish bone</td><td>Lateral soft-tissue neck/cervical</td><td>Assess suspected foreign body in the neck; urgent clinical assessment may be needed</td></tr>
+            <tr><td>Atlanto-occipital articulation</td><td>Lateral cervical and AP open-mouth</td><td>Assess upper cervical anatomy; open-mouth demonstrates dens and C1–C2 relationship</td></tr>
+            <tr><td>Neck stiffness / suspected spondylosis</td><td>AP and lateral; another entry adds both obliques</td><td>Assess alignment/degenerative changes; obliques may demonstrate foraminal narrowing</td></tr>
+            <tr><td>Goitre</td><td>AP and lateral cervical/thoracic inlet; one entry mentions Valsalva</td><td>Assess neck/thoracic inlet if clinically requested</td></tr>
+            <tr><td>Enlarged adenoids / noisy breathing</td><td>Lateral soft-tissue neck/postnasal-space view</td><td>Assess postnasal space/airway region when indicated</td></tr>
+          </table>
+        </div>
+        <div class="memory-tip">
+          <strong>Clinical safety note</strong>
+          <p>Do not force neck motion in trauma. A suspected fish bone should not be dismissed as harmless; escalate according to clinical urgency. Foreign-body imaging pathways vary by site and presentation.</p>
+        </div>
+      </div>
+
+      <!-- 6. COLLIMATION -->
+      <div class="section-card">
+        <h2>6️⃣ Collimation — Examiner-Ready</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Projection</th><th>What to include / explain</th></tr>
+            <tr><td>AP C3–C7 / AP axial</td><td>Collimate laterally to the cervical soft-tissue edges; include upper cervical anatomy and lower cervical/cervicothoracic region required by protocol (often C3–T1/T2)</td></tr>
+            <tr><td>Lateral erect</td><td>Include upper cervical region through C7–T1 where possible; include prevertebral soft tissues. Swimmer’s if junction is not shown</td></tr>
+            <tr><td>Open-mouth C1–C2</td><td>Tight field around dens, C1 lateral masses and C1–C2 articulations without clipping required anatomy</td></tr>
+            <tr><td>Obliques</td><td>Include the foramina across the required cervical levels, commonly C1–T1</td></tr>
+            <tr><td>Flexion/extension</td><td>Use matching fields that include the required cervical spine on both views</td></tr>
+            <tr><td>Swimmer’s</td><td>Include cervicothoracic junction, commonly C5–T4 range</td></tr>
+            <tr><td>Shoot-through</td><td>Include the required cervical region and junction with trauma-safe setup</td></tr>
+          </table>
+        </div>
+        <div class="highlight-box">
+          <p><strong>Why collimate?</strong> To restrict the irradiated area, reduce scatter and unnecessary patient dose, and help image contrast. Collimation must not exclude anatomy required to answer the clinical question.</p>
+        </div>
+      </div>
+
+      <!-- 7. IMAGE QUALITY -->
+      <div class="section-card">
+        <h2>7️⃣ Image Quality / Image Indicators</h2>
+        <p>Use a consistent checklist: coverage, positioning, central-ray alignment, exposure, motion, markers and artefacts.</p>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>View</th><th>Essential image-evaluation criteria</th></tr>
+            <tr><td>AP / AP axial</td><td>Required cervical vertebrae and disc spaces included; spinous processes close to midline; no significant rotation; disc spaces open when correct axial angle used; adequate detail through lower neck</td></tr>
+            <tr><td>Lateral</td><td>C1–C7 and ideally C7–T1 visible; vertebral bodies and posterior elements in profile; disc spaces and prevertebral tissues visible; posterior vertebral borders aligned; minimal rotation; no motion</td></tr>
+            <tr><td>Open-mouth</td><td>Dens and C2 body fully visible; C1 lateral masses and C1–C2 joints included; no teeth/skull-base overlap of dens; lateral spaces symmetric; no rotation</td></tr>
+            <tr><td>Obliques</td><td>Foramina clearly demonstrated; correct obliquity; required cervical levels included; no significant motion or distortion</td></tr>
+            <tr><td>Flexion / extension</td><td>Adequate comparable coverage; position achieved only within permitted movement; assess change in alignment under clinician-directed protocol</td></tr>
+            <tr><td>Swimmer’s</td><td>C7–T1 and adjacent levels demonstrated through shoulder region; shoulders sufficiently separated; adequate penetration</td></tr>
+            <tr><td>All views</td><td>Correct ID and side marker; collimation appropriate; exposure sufficient for bone and relevant soft tissue; no avoidable artefacts; no clipping</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 8. RADIATION PROTECTION -->
+      <div class="section-card">
+        <h2>8️⃣ Radiation Protection & Technical Principles</h2>
+        <ul>
+          <li><strong>Justification:</strong> Perform only the examination/projections clinically requested and justified.</li>
+          <li><strong>Optimisation:</strong> Use appropriate collimation, exposure chart, detector and positioning to achieve diagnostic quality at an appropriately low dose.</li>
+          <li><strong>FFD/SID:</strong> Source-to-image distance is measured from X-ray focal spot to image receptor. Some teaching sources use “FFD” (focus-film distance); in digital radiography, SID is the common term.</li>
+          <li><strong>Why a longer SID for lateral/oblique?</strong> A longer distance can reduce magnification and improve geometric accuracy, but exposure must be adjusted to the equipment/protocol.</li>
+          <li><strong>Grid:</strong> Often used for cervical spine depending on patient thickness, detector and protocol. Follow the technique chart; a grid requires appropriate centring and alignment.</li>
+          <li><strong>Exposure factors:</strong> kVp affects beam energy/penetration and contrast; mAs affects photon quantity/exposure. The optimum combination depends on patient thickness, detector, grid and processing.</li>
+          <li><strong>Motion control:</strong> Give clear instructions, use an appropriate short exposure time and support the patient safely.</li>
+          <li><strong>Repeat analysis:</strong> Identify whether an error came from positioning, centring, collimation, exposure, motion, marker or anatomy coverage before repeating.</li>
+        </ul>
+      </div>
+
+      <!-- 9. FAST TECHNIQUE TABLE -->
+      <div class="section-card">
+        <h2>9️⃣ Fast Technique Table — Reference Examples</h2>
+        <p>The table below is a revision aid only. Values are representative examples and may differ from your department. Your uploaded source values are shown separately.</p>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Projection</th><th>Common SID/FFD</th><th>Common kVp/mAs</th><th>Centring / beam</th></tr>
+            <tr><td>AP axial</td><td>100 cm</td><td>70–80 kVp; 12 mAs</td><td>C4; 15–20° cephalad</td></tr>
+            <tr><td>Lateral erect</td><td>150–180 cm</td><td>70–80 kVp; 20–28 mAs examples</td><td>C4; horizontal, perpendicular</td></tr>
+            <tr><td>Open-mouth C1–C2</td><td>100 cm</td><td>70–80 kVp; \~10–15 mAs</td><td>Centre open mouth; perpendicular</td></tr>
+            <tr><td>AP oblique</td><td>150–180 cm</td><td>70–80 kVp; \~8–16 mAs</td><td>C4; \~15–20° cephalad</td></tr>
+            <tr><td>Lateral flexion/extension</td><td>150–180 cm</td><td>Use lateral chart</td><td>C4; horizontal/perpendicular</td></tr>
+            <tr><td>Swimmer’s lateral</td><td>150–180 cm</td><td>One ref: 80–85 kVp, 120 mAs</td><td>T1; sometimes 5° caudal</td></tr>
+            <tr><td>Lateral supine shoot-through</td><td>Trauma setup</td><td>No universal factor</td><td>C4 region; horizontal beam</td></tr>
+          </table>
+        </div>
+        <div class="memory-tip">
+          <strong>Caution</strong>
+          <p>The swimmer’s example is not a recommendation to use 120 mAs on every machine. Use the approved technique chart and check the exposure indicator.</p>
+        </div>
+      </div>
+
+      <!-- 10. MODEL VIVA ANSWERS -->
+      <div class="section-card">
+        <h2>🔟 Model Viva Answers</h2>
+        <div class="quick-facts">
+          <p><strong>Q1.</strong> What are the basic cervical views in your material?<br>“The three basic views listed are lateral erect, AP C3–C7, and AP open-mouth C1–C2.”</p>
+          <p><strong>Q2.</strong> State the source centring points.<br>“Lateral erect: below the mastoid process at the level of the thyroid cartilage prominence. AP C3–C7: just below the thyroid cartilage prominence. AP open-mouth C1–C2: centre of the open mouth.”</p>
+          <p><strong>Q3.</strong> State the exposure factors from your material.<br>“The cervical section records 70–80 kVp, 12 mAs for AP and 20 mAs for lateral, with a 17 × 14-inch cassette. It does not state a separate mAs for the open-mouth view. The material notes that factors vary with equipment and patient size.”</p>
+          <p><strong>Q4.</strong> What are the supplementary cervical views listed?<br>“Lateral supine shoot-through; right and left posterior obliques, erect or supine; lateral flexion and extension; lateral swimmer’s; and an axial projection.”</p>
+          <p><strong>Q5.</strong> Why is the open-mouth view performed?<br>“It demonstrates the dens, C2 body, C1 lateral masses and atlantoaxial articulations, which may not be adequately shown on the AP view.”</p>
+          <p><strong>Q6.</strong> Why is a swimmer’s view performed?<br>“To demonstrate C7–T1 when the shoulders obscure the cervicothoracic junction on the routine lateral view.”</p>
+          <p><strong>Q7.</strong> What is the purpose of cervical obliques?<br>“They demonstrate the intervertebral foramina and may help assess foraminal narrowing or selected bony abnormalities.”</p>
+          <p><strong>Q8.</strong> How do you collimate the cervical spine?<br>“I restrict the field to the anatomy required. AP and lateral include the cervical vertebrae and relevant soft tissues; lateral should include C7–T1 if possible; open-mouth is tightly collimated to include the dens, C1 lateral masses and C1–C2 joints; obliques include the required foramina.”</p>
+          <p><strong>Q9.</strong> What do you do if C7–T1 is not seen on the lateral?<br>“I assess whether an additional view, such as swimmer’s, is appropriate under the departmental protocol. I do not accept a technically inadequate image if the junction is clinically required.”</p>
+          <p><strong>Q10.</strong> What precautions do you take for suspected trauma?<br>“I maintain spinal precautions, do not remove the collar or manipulate the neck without authorisation, and use the trauma pathway. I do not force flexion, extension, rotation or mouth opening.”</p>
+          <p><strong>Q11.</strong> What is SID/FFD?<br>“The distance from the X-ray focal spot to the image receptor. A longer distance can reduce magnification; exposure is adjusted according to the local chart.”</p>
+          <p><strong>Q12.</strong> What factors influence exposure selection?<br>“Patient thickness, projection, detector system, grid use, generator and departmental technique chart. kVp influences penetration and mAs influences receptor exposure. I would not treat a reference value as universal.”</p>
+        </div>
+      </div>
+
+      <!-- 11. RAPID REVISION -->
+      <div class="section-card">
+        <h2>1️⃣1️⃣ Rapid Revision: 60-Second Recall</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Prompt</th><th>Recall</th></tr>
+            <tr><td>3 basic views</td><td>Lateral erect; AP C3–C7; AP open-mouth C1–C2</td></tr>
+            <tr><td>Lateral centring (source)</td><td>Below mastoid process at thyroid cartilage prominence</td></tr>
+            <tr><td>AP centring (source)</td><td>Just below thyroid cartilage prominence</td></tr>
+            <tr><td>Open-mouth centring (source)</td><td>Centre of open mouth</td></tr>
+            <tr><td>Source exposure</td><td>70–80 kVp; AP 12 mAs; lateral 20 mAs; 17 × 14 in cassette</td></tr>
+            <tr><td>AP axial reference</td><td>C4; 15–20° cephalad; SID about 100 cm</td></tr>
+            <tr><td>Lateral reference</td><td>C4; horizontal/perpendicular; SID about 150–180 cm</td></tr>
+            <tr><td>Open-mouth reference</td><td>Centre open mouth; perpendicular; SID about 100 cm</td></tr>
+            <tr><td>Obliques show</td><td>Intervertebral foramina</td></tr>
+            <tr><td>Swimmer’s shows</td><td>C7–T1 / cervicothoracic junction</td></tr>
+            <tr><td>Flexion/extension</td><td>Only when indicated and safe/cleared</td></tr>
+            <tr><td>Trauma rule</td><td>Do not manipulate neck or remove collar without protocol authorisation</td></tr>
+            <tr><td>Collimation purpose</td><td>Reduce irradiated field and scatter without excluding anatomy</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 12. PRACTICE QUESTIONS -->
+      <div class="section-card">
+        <h2>1️⃣2️⃣ Practice Viva — Answer Out Loud</h2>
+        <p>Use these as an oral drill. Answer each in 20–45 seconds.</p>
+        <ol>
+          <li>List the three basic cervical projections in your material.</li>
+          <li>Give the centring point for each of the three basic projections.</li>
+          <li>What exposure factors does the source give for AP and lateral cervical spine?</li>
+          <li>What is the difference between AP and AP axial cervical positioning?</li>
+          <li>Why is the central ray angled cephalad for AP axial cervical?</li>
+          <li>What anatomy must be visible on the lateral cervical view?</li>
+          <li>Why is C7–T1 important, and what do you do if it is obscured?</li>
+          <li>What structures are demonstrated on the open-mouth view?</li>
+          <li>What positioning error makes the lateral spaces around the dens unequal?</li>
+          <li>What is the purpose of right and left cervical obliques?</li>
+          <li>How does a swimmer’s view separate the shoulders?</li>
+          <li>What are flexion and extension views intended to assess?</li>
+          <li>What is the difference between FFD and SID in practical use?</li>
+          <li>What are the main collimation limits for AP, lateral and open-mouth views?</li>
+          <li>How do you prepare a patient for cervical spine radiography?</li>
+          <li>What are your priorities when cervical trauma is suspected?</li>
+          <li>Name four factors that can affect exposure selection.</li>
+          <li>State four image-quality criteria for the lateral view.</li>
+          <li>What clinical indications for cervical imaging are listed in your source?</li>
+          <li>What do you say if asked for an mAs value that is not in the source or local chart?</li>
+        </ol>
+      </div>
+
+      <!-- 13. FINAL STRATEGY -->
+      <div class="section-card">
+        <h2>1️⃣3️⃣ Final Exam Strategy</h2>
+        <ul>
+          <li>Memorise the three source-listed centring points word-for-word.</li>
+          <li>Memorise source exposure figures separately from reference examples.</li>
+          <li>For every view, answer in this order: purpose → patient/part position → centring → central-ray angle → collimation → SID/FFD → exposure → breathing → image criteria → safety.</li>
+          <li>If a number is not specified, say so. A careful, evidence-based answer is better than inventing an angle or mAs.</li>
+          <li>For trauma, safety overrides ideal positioning. Never demonstrate unsafe neck manipulation just to satisfy a routine-view sequence.</li>
+        </ul>
+        <div class="highlight-box">
+          <p>You can aim for 100/100, but the score depends on your examiner, department’s protocol and how accurately you explain the technique. Practise the questions aloud and compare your answers with the source table.</p>
+        </div>
+      </div>
+
+      <!-- YOUTUBE EMBED PLACEHOLDER -->
+      <div class="section-card">
+        <h2>🎬 Recommended Video Tutorial</h2>
+        <p>Watch a practical demonstration of cervical spine positioning. Replace the placeholder below with your chosen YouTube video ID.</p>
+        <div class="youtube-box">
+          <!-- REPLACE the src below with your actual YouTube embed link -->
+          <iframe 
+            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_HERE" 
+            title="Cervical Spine Radiography Positioning Tutorial"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+          <p style="margin-top:12px;font-size:13px;color:var(--text-secondary)">
+            To embed: Replace <code>YOUR_VIDEO_ID_HERE</code> with the actual YouTube video ID<br>
+            (e.g. from https://www.youtube.com/watch?v=<strong>abc123xyz</strong> → use abc123xyz)
+          </p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='cervicalq.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='next.html'">Next Topic →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
