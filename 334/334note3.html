@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upper Limb X-ray - Radiography Viva Master Guide</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:15px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:17px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:16px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:12px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:10px 8px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:9px 8px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{background:var(--accent-tertiary)}
+    
+    .youtube-box{
+      background:rgba(255,0,0,.08);border:2px dashed #ff4444;border-radius:15px;padding:20px;margin:20px 0;text-align:center
+    }
+    .youtube-box iframe{width:100%;height:220px;border-radius:12px;border:none}
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">Upper Limb Viva</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>🦴 Upper Limb X-ray</h1>
+        <p>Hand • Wrist • Scaphoid • Forearm • Elbow • Humerus • Shoulder • Clavicle • Scapula</p>
+      </div>
+
+      <!-- HOW TO STUDY -->
+      <div class="section-card">
+        <h2>📖 How to Study</h2>
+        <p>Memorise the figures from your course material first. Supplementary positioning, collimation and image-evaluation guidance is labelled separately. Always follow your department’s protocol and exposure chart in clinical practice.</p>
+        <div class="highlight-box">
+          <p>The source itself notes that exposure factors vary with machine and patient size. Details about positioning, collimation, SID and image criteria that are not in the source are supplemental revision guidance.</p>
+        </div>
+      </div>
+
+      <!-- 1. COURSE FIGURES -->
+      <div class="section-card">
+        <h2>1️⃣ Course Figures at a Glance</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Region</th><th>Views & Centring (Course)</th><th>Exposure</th><th>Cassette</th></tr>
+            <tr><td>Hand</td><td>DP: head of 3rd metacarpal<br>DP/anterior oblique: head of 5th metacarpal, CR angled through head of 3rd</td><td>50–55 kVp, 2–3 mAs</td><td>10 × 8 in</td></tr>
+            <tr><td>Wrist</td><td>PA: midway between radial & ulnar styloid<br>Lateral: styloid process of radius</td><td>50–55 kVp, 2.5–4 mAs</td><td>10 × 8 in</td></tr>
+            <tr><td>Forearm</td><td>AP: midway between elbow & wrist joints<br>Lateral also listed</td><td>60–65 kVp, 5–6 mAs</td><td>Verify original</td></tr>
+            <tr><td>Elbow</td><td>Lateral: lateral epicondyle<br>AP: 2.5 cm distal to & midway between medial/lateral epicondyles</td><td>60–65 kVp, 5–6 mAs</td><td>10 × 8 in</td></tr>
+            <tr><td>Humerus</td><td>AP erect: midway between elbow & shoulder<br>Lateral erect also listed</td><td>65–70 kVp, 5.5–6 mAs</td><td>17 × 14 in</td></tr>
+            <tr><td>Shoulder</td><td>AP (15°) erect: palpable coracoid process<br>Supero-inferior axial: mid-glenohumeral joint</td><td>60–75 kVp, 6–7 mAs</td><td>Verify</td></tr>
+            <tr><td>Clavicle</td><td>Middle of clavicle (‘PS’)<br>AP supine & infero-superior listed as supplementary</td><td>60–75 kVp, 8 mAs</td><td>12 × 10 in</td></tr>
+            <tr><td>Scapula</td><td>AP erect: 2.5 cm inferior to medial head of humerus<br>Lateral/oblique: midpoint of medial border</td><td>60–75 kVp, 7 mAs</td><td>12 × 10 in</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2. GENERAL PREP -->
+      <div class="section-card">
+        <h2>2️⃣ General Preparation and Safety</h2>
+        <ul>
+          <li>Confirm: patient identity, request, side and clinical indication. Ask about pain, injury mechanism, surgery and ability to move the limb.</li>
+          <li>Explain and prepare: describe the procedure; remove watches, rings, jewellery and clothing artefacts if safe. Maintain privacy and dignity.</li>
+          <li>Trauma: never force a painful or deformed limb into a textbook position. Support the limb, seek assistance and adapt views to the trauma protocol.</li>
+          <li>Radiation safety: follow local pregnancy-screening and justification policy; collimate carefully and avoid repeats.</li>
+          <li>Marker: use the correct R/L marker before exposure, positioned so it does not obscure anatomy.</li>
+          <li>Two projections: most routine appendicular examinations need views approximately at right angles. Include the region of interest and the required adjacent joint(s).</li>
+          <li>Exposure: course values are educational figures, not universal prescriptions. Use the approved departmental chart in practice.</li>
+        </ul>
+      </div>
+
+      <!-- 3. HAND -->
+      <div class="section-card">
+        <h2>3️⃣ Hand and Fingers</h2>
+        <h3>Course Views and Centring</h3>
+        <ul>
+          <li><strong>Dorsi-palmar (DP):</strong> CP at head of 3rd metacarpal. Position palm flat, fingers extended and slightly separated, without rotation.</li>
+          <li><strong>DP/anterior oblique:</strong> course CP at head of 5th metacarpal; CR angled to pass through head of 3rd metacarpal. Commonly taught oblique rotation is about 45°.</li>
+          <li><strong>Lateral hand:</strong> supplementary; CP at head of 2nd metacarpal. A fan lateral can separate digits where required.</li>
+          <li><strong>Both-hands DP:</strong> course CP midway between interphalangeal joints of both thumbs.</li>
+          <li><strong>Ball-catcher/Nørgaard:</strong> course CP midway between both hands at level of 5th metacarpals.</li>
+        </ul>
+
+        <h3>Collimation & Image Evaluation (Supplemental)</h3>
+        <ul>
+          <li>Include all required digits, metacarpals and soft tissues; for a hand view include the full hand and relevant wrist-side metacarpal ends.</li>
+          <li>DP: fingers separated, no avoidable rotation, joints and soft tissues adequately demonstrated.</li>
+          <li>Oblique: check the degree of rotation and overlap against the view requested.</li>
+          <li>For a single digit, centre to the affected digit’s PIP joint as a common reference, and include the full digit plus adjacent anatomy according to protocol.</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Course factors:</strong> 50–55 kVp, 2–3 mAs. Cassette: 10 × 8 inches listed.</p>
+        </div>
+      </div>
+
+      <!-- 4. WRIST + SCAPHOID -->
+      <div class="section-card">
+        <h2>4️⃣ Wrist + Dedicated Scaphoid Series</h2>
+        <h3>Course Centring and Views</h3>
+        <ul>
+          <li><strong>PA wrist:</strong> midway between radial and ulnar styloid processes.</li>
+          <li><strong>Lateral wrist:</strong> styloid process of radius.</li>
+          <li><strong>Anterior oblique:</strong> supplementary; commonly rotates the wrist about 45°.</li>
+        </ul>
+
+        <h3>Positioning, Collimation & Image Evaluation (Supplemental)</h3>
+        <ul>
+          <li>PA: seat patient beside table, shoulder/elbow/wrist in the same plane, forearm pronated and palm down.</li>
+          <li>Lateral: turn wrist/forearm into a true lateral with thumb side up; avoid hand tilt.</li>
+          <li>Collimate to distal radius/ulna, carpals and proximal metacarpals.</li>
+          <li>Check coverage, motion, rotation and visibility of carpal alignment.</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Course factors:</strong> 50–55 kVp, 2.5–4 mAs. Cassette: 10 × 8 inches listed.</p>
+        </div>
+
+        <h3>🦴 Dedicated Scaphoid Series (Supplemental – Essential for Viva)</h3>
+        <p>The source mentions “suspected scaphoid injury may need dedicated views per protocol” but does not detail them. These are the standard views examiners expect:</p>
+        <ul>
+          <li><strong>PA wrist with ulnar deviation</strong> (elongates the scaphoid)</li>
+          <li><strong>PA oblique (45°)</strong></li>
+          <li><strong>Lateral wrist</strong></li>
+          <li><strong>Stecher view</strong> (PA with 20° cephalic angle or clenched-fist ulnar deviation)</li>
+          <li>Some departments add a 30° elongated view or carpal-tunnel view</li>
+        </ul>
+        <p><strong>Surrounding bones you must name:</strong></p>
+        <ul>
+          <li>Proximal row: Scaphoid, Lunate, Triquetrum, Pisiform</li>
+          <li>Distal row: Trapezium, Trapezoid, Capitate, Hamate</li>
+          <li>Also: distal radius, distal ulna, proximal metacarpals</li>
+        </ul>
+        <div class="memory-tip">
+          <strong>Memory tip for carpals</strong>
+          <p>“Some Lovers Try Positions That They Can’t Handle” → Scaphoid, Lunate, Triquetrum, Pisiform, Trapezium, Trapezoid, Capitate, Hamate.</p>
+        </div>
+        <p><strong>Image criteria for scaphoid series:</strong> entire scaphoid demonstrated without foreshortening; no overlap of adjacent carpals on elongated views; soft-tissue margins included; correct marker and no motion.</p>
+      </div>
+
+      <!-- 5. FOREARM -->
+      <div class="section-card">
+        <h2>5️⃣ Forearm</h2>
+        <ul>
+          <li><strong>AP:</strong> CP midway between elbow and wrist joints. Lateral: listed as the second basic view.</li>
+          <li>AP positioning: extend elbow as tolerated, supinate hand and align shoulder, elbow and wrist in one plane.</li>
+          <li>Lateral positioning: flex elbow about 90° if safe and turn thumb side upward; do not force painful movement.</li>
+          <li><strong>Critical coverage:</strong> include both elbow and wrist joints on each projection.</li>
+          <li>Collimate to the full forearm with soft-tissue margins. Check both joints, rotation, marker and motion.</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Course factors:</strong> 60–65 kVp, 5–6 mAs. Cassette-size alignment unclear in extracted table — verify original.</p>
+        </div>
+      </div>
+
+      <!-- 6. ELBOW -->
+      <div class="section-card">
+        <h2>6️⃣ Elbow</h2>
+        <h3>Course Centring and Views</h3>
+        <ul>
+          <li><strong>Lateral:</strong> lateral epicondyle of humerus.</li>
+          <li><strong>AP:</strong> 2.5 cm distal to and midway between the medial and lateral epicondyles of the humerus.</li>
+          <li>Supplementary views named: AP partial flexion; AP forearm-in-contact; AP upper-arm-in-contact; AP full flexion/axial projections; oblique proximal radioulnar joint; axial ulnar groove.</li>
+        </ul>
+        <h3>Positioning & Image Evaluation (Supplemental)</h3>
+        <ul>
+          <li>AP: extend elbow as tolerated, supinate hand and align epicondyles parallel to receptor.</li>
+          <li>Lateral: flex elbow about 90° if possible, thumb up and epicondyles superimposed.</li>
+          <li>If extension is impossible, do not force it; partial-flexion projections may be used under protocol.</li>
+          <li>Collimate to distal humerus, elbow joint and proximal radius/ulna.</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Course factors:</strong> 60–65 kVp, 5–6 mAs. Cassette: 10 × 8 inches.</p>
+        </div>
+      </div>
+
+      <!-- 7. HUMERUS -->
+      <div class="section-card">
+        <h2>7️⃣ Humerus (Shaft)</h2>
+        <ul>
+          <li><strong>AP erect:</strong> CP midway between elbow and shoulder joints. Lateral erect: second basic view; AP supine and lateral supine are listed as alternatives.</li>
+          <li>Position the arm as tolerated and include the entire humerus plus both shoulder and elbow joints.</li>
+          <li>In trauma, adapt the projection rather than forcing arm rotation; use multiple overlapping images if required by protocol to cover the whole bone.</li>
+          <li>Collimate to the full humerus and adjacent joints; check anatomy coverage, marker, motion and exposure.</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Course factors:</strong> 65–70 kVp, 5.5–6 mAs. Cassette: 17 × 14 inches listed.</p>
+        </div>
+      </div>
+
+      <!-- 8. SHOULDER -->
+      <div class="section-card">
+        <h2>8️⃣ Shoulder</h2>
+        <h3>Course Views and Centring</h3>
+        <ul>
+          <li><strong>AP erect (15° as written):</strong> CP at palpable coracoid process.</li>
+          <li><strong>Supero-inferior axial:</strong> CP at mid-glenohumeral joint.</li>
+          <li>Supplementary views named: infero-superior/reverse axial, apical oblique (Garth), anterior oblique (Y), outlet projections for calcified tendons, AP and lateral outlet.</li>
+        </ul>
+        <h3>Positioning & Image Evaluation (Supplemental)</h3>
+        <ul>
+          <li>Position erect or supine as appropriate; centre the shoulder joint and follow the requested arm rotation and department protocol.</li>
+          <li>For suspected dislocation/trauma, use a safe trauma series. Do not move the arm into a painful rotation; a scapular Y or modified axial view may be selected by protocol.</li>
+          <li>Collimate to the proximal humerus and glenohumeral region.</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Course factors:</strong> 60–75 kVp, 6–7 mAs. Exact cassette-size pairing unclear — verify original.</p>
+        </div>
+      </div>
+
+      <!-- 9. CLAVICLE & SCAPULA -->
+      <div class="section-card">
+        <h2>9️⃣ Clavicle and Scapula</h2>
+        <h3>Clavicle</h3>
+        <ul>
+          <li>Course CP: middle of clavicle. Source lists ‘PS’ and supplementary AP supine, infero-superior erect and infero-superior supine views.</li>
+          <li>Position erect or supine as tolerated; include the whole clavicle from sternoclavicular to acromioclavicular joints.</li>
+          <li>Some protocols use a cephalic CR angle to project the clavicle above ribs; angle and method vary — follow local protocol.</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Course factors:</strong> 60–75 kVp, 8 mAs. Cassette: 12 × 10 inches.</p>
+        </div>
+
+        <h3>Scapula</h3>
+        <ul>
+          <li>Course AP erect CP: 2.5 cm inferior to medial head of humerus (source wording). Lateral/anterior oblique CP: midpoint of medial border of scapula.</li>
+          <li>AP: abduct arm if safe to move scapula laterally. Lateral/oblique: rotate patient as tolerated to profile scapula.</li>
+          <li>Collimate to include the entire scapula, including acromion and inferior angle.</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Course factors:</strong> 60–75 kVp, 7 mAs. Cassette: 12 × 10 inches.</p>
+        </div>
+      </div>
+
+      <!-- 10. COLLIMATION & ERRORS -->
+      <div class="section-card">
+        <h2>🔟 Collimation, Markers and Common Errors</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Error</th><th>Recognition</th><th>Prevention</th></tr>
+            <tr><td>Anatomy clipped</td><td>Digit, bone or required joint missing</td><td>Check coverage before exposure; include both joints for forearm/humerus</td></tr>
+            <tr><td>Rotation</td><td>Contours/joint spaces inconsistent with intended view</td><td>Align limb and receptor; support limb and check view-specific criteria</td></tr>
+            <tr><td>Motion</td><td>Blurred or doubled cortex/trabeculae</td><td>Explain, support limb and use approved factors; do not force position</td></tr>
+            <tr><td>Wrong side marker</td><td>Marker absent or wrong side</td><td>Confirm side and place marker before exposure</td></tr>
+            <tr><td>Over/under-collimation</td><td>Too much irradiated area or required anatomy excluded</td><td>Restrict field but preserve all required anatomy and margins</td></tr>
+            <tr><td>Unsafe manipulation</td><td>Pain, deformity or risk worsens during positioning</td><td>Support limb, adapt views and follow trauma protocol</td></tr>
+          </table>
+        </div>
+        <div class="quick-facts">
+          <h4>General Image-Quality Checklist</h4>
+          <ul>
+            <li>Correct patient/side and projection</li>
+            <li>Required anatomy included</li>
+            <li>Correct marker</li>
+            <li>No significant motion</li>
+            <li>Appropriate exposure</li>
+            <li>Field appropriately collimated</li>
+            <li>Positioning matches the intended view</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 11. CLINICAL REASONING -->
+      <div class="section-card">
+        <h2>1️⃣1️⃣ Clinical Reasoning and Supplementary Views</h2>
+        <ul>
+          <li><strong>Suspected fracture/dislocation:</strong> obtain requested orthogonal views; avoid unnecessary movement and adapt for trauma.</li>
+          <li><strong>Suspected foreign body in hand:</strong> centre to the site and include it fully in appropriate projections.</li>
+          <li><strong>Wrist pain / possible scaphoid injury:</strong> dedicated scaphoid views (ulnar deviation, oblique, Stecher, etc.) may be requested.</li>
+          <li><strong>Elbow cannot extend:</strong> partial-flexion views may show distal humerus and proximal forearm without forcing extension.</li>
+          <li><strong>Shoulder trauma:</strong> scapular Y, axial or modified axial projections may help assess alignment.</li>
+          <li><strong>Clavicle/scapula injury:</strong> centre to the requested bone and include the whole structure; do not confuse these with a routine shoulder series.</li>
+        </ul>
+        <p>For any supplementary view, explain: why it is requested, anatomy demonstrated, patient position, centring/CR, collimation, image criteria and safety considerations.</p>
+      </div>
+
+      <!-- 12. RAPID VIVA -->
+      <div class="section-card">
+        <h2>1️⃣2️⃣ Rapid Viva Questions & Model Answers</h2>
+        <div class="quick-facts">
+          <p><strong>Q. Hand DP centring point?</strong><br>A. Head of the 3rd metacarpal.</p>
+          <p><strong>Q. Hand oblique centring in the source?</strong><br>A. Head of the 5th metacarpal, CR angled to pass through head of 3rd metacarpal.</p>
+          <p><strong>Q. Wrist PA centring?</strong><br>A. Midway between radial and ulnar styloid processes.</p>
+          <p><strong>Q. Wrist lateral centring?</strong><br>A. Styloid process of radius.</p>
+          <p><strong>Q. Forearm AP centring?</strong><br>A. Midway between elbow and wrist joints.</p>
+          <p><strong>Q. Elbow lateral centring?</strong><br>A. Lateral epicondyle of humerus.</p>
+          <p><strong>Q. Elbow AP centring?</strong><br>A. 2.5 cm distal to and midway between medial and lateral epicondyles.</p>
+          <p><strong>Q. Humerus centring?</strong><br>A. Midway between elbow and shoulder joints.</p>
+          <p><strong>Q. Shoulder AP erect centring?</strong><br>A. Palpable coracoid process.</p>
+          <p><strong>Q. Shoulder axial centring?</strong><br>A. Mid-glenohumeral joint.</p>
+          <p><strong>Q. Clavicle centring?</strong><br>A. Middle of clavicle.</p>
+          <p><strong>Q. Scapula lateral/oblique centring?</strong><br>A. Midpoint of medial border of scapula.</p>
+          <p><strong>Q. Why include both joints for forearm?</strong><br>A. To assess the full forearm and adjacent joints and avoid missing associated injury.</p>
+          <p><strong>Q. What if a fracture patient cannot take the standard position?</strong><br>A. Do not force the limb; support it and use an adapted/trauma projection according to protocol.</p>
+          <p><strong>Q. Are the course factors universal?</strong><br>A. No. The course notes say exposure factors vary with machine and patient size.</p>
+        </div>
+      </div>
+
+      <!-- 13. PRACTICE + CHECKLIST -->
+      <div class="section-card">
+        <h2>1️⃣3️⃣ Practice Questions and Final Checklist</h2>
+        <ol>
+          <li><strong>Describe a routine DP hand examination.</strong><br>Model: Verify request, identity and side; explain; position palm flat with fingers extended/separated; centre at head of 3rd metacarpal; collimate to hand; place marker; use approved factors; check coverage, rotation, motion and exposure.</li>
+          <li><strong>Describe AP forearm and centring.</strong><br>Model: Position AP as tolerated with shoulder, elbow and wrist aligned; include both elbow and wrist; centre midway between joints; collimate full forearm; assess rotation and coverage.</li>
+          <li><strong>Describe lateral elbow.</strong><br>Model: Flex to about 90° if tolerated, thumb up, align epicondyles for true lateral and centre to lateral epicondyle. Do not force flexion in trauma.</li>
+          <li><strong>State the course exposure factors.</strong><br>Model: Hand 50–55/2–3; wrist 50–55/2.5–4; forearm 60–65/5–6; elbow 60–65/5–6; humerus 65–70/5.5–6; shoulder 60–75/6–7; clavicle 60–75/8; scapula 60–75/7.</li>
+          <li><strong>How do you prevent repeats?</strong><br>Model: Check patient/side, positioning, centring, field, marker, exposure chart and motion instructions before exposing.</li>
+          <li><strong>What if the cassette-size entry is unclear?</strong><br>Model: Do not guess; verify the original course table or department protocol.</li>
+        </ol>
+
+        <div class="quick-facts">
+          <h4>Final Checklist</h4>
+          <ul>
+            <li>Memorise the source centring points and exposure figures for all eight regions.</li>
+            <li>For every projection, describe indication, preparation, positioning, CP/CR, collimation, factors/SID if taught, marker and image criteria.</li>
+            <li>Remember to include both elbow and wrist joints for forearm and both shoulder and elbow joints for humerus.</li>
+            <li>Never force a painful or unstable limb into position.</li>
+            <li>If a source value is missing or unclear, say so and refer to the original table or approved local chart.</li>
+          </ul>
+        </div>
+
+        <div class="highlight-box">
+          <p><strong>Viva answer sequence:</strong><br>
+          Projection and indication → Preparation and side → Positioning → Centring/CR → Collimation and SID if specified → Exposure chart → Image criteria → Safety.</p>
+        </div>
+      </div>
+
+      <!-- YOUTUBE -->
+      <div class="section-card">
+        <h2>🎬 Recommended Video Tutorial</h2>
+        <p>Watch practical upper-limb positioning demonstrations.</p>
+        <div class="youtube-box">
+          <iframe 
+            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_HERE" 
+            title="Upper Limb Radiography Positioning"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+          <p style="margin-top:12px;font-size:13px;color:var(--text-secondary)">
+          </p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='#'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='#'">Next Topic →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='#'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='#'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='#'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
