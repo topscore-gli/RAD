@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chest X-ray - Radiography Viva Master Guide</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:16px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.7}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:18px;margin-bottom:8px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+    .section-card{
+      background:var(--card-bg);padding:24px 18px;border-radius:20px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .section-card h2{
+      font-size:16px;margin-bottom:14px;color:var(--accent);font-weight:900;
+      display:flex;align-items:center;gap:8px
+    }
+    .section-card h3{
+      font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;
+      padding-left:12px;border-left:3px solid var(--accent-tertiary)
+    }
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p{margin-bottom:12px;font-size:14px;text-align:justify}
+    .section-card ul,.section-card ol{padding-left:20px;margin:10px 0}
+    .section-card li{margin-bottom:7px;font-size:14px}
+
+    .quick-facts{
+      background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(78,205,196,.1));
+      padding:16px;border-radius:15px;margin:14px 0;border:1px solid rgba(29,185,84,.3)
+    }
+    .quick-facts h4{color:var(--accent);margin-bottom:8px;font-size:15px;font-weight:900}
+    .quick-facts li{font-size:13px}
+
+    .highlight-box{
+      background:rgba(78,205,196,.1);padding:12px 16px;border-radius:10px;margin:12px 0;
+      border-left:3px solid var(--accent-tertiary)
+    }
+    .memory-tip{
+      background:rgba(255,107,107,.1);padding:14px 16px;border-radius:12px;margin:14px 0;
+      border-left:4px solid var(--accent-secondary)
+    }
+    .memory-tip strong{color:var(--accent-secondary);display:block;margin-bottom:6px;font-size:14px}
+    .memory-tip p{margin:0;font-size:13px;font-style:italic}
+
+    .table-container{
+      width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;
+      box-shadow:3px 3px 8px var(--shadow-in),-3px -3px 8px var(--shadow-out)
+    }
+    .summary-table{
+      width:100%;min-width:320px;border-collapse:separate;border-spacing:0;font-size:12px
+    }
+    .summary-table th{
+      background:var(--accent);color:#000;padding:10px 8px;text-align:left;font-weight:900;white-space:nowrap
+    }
+    .summary-table td{
+      padding:9px 8px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top
+    }
+    .summary-table tr:last-child td{border-bottom:none}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+    .nav-bar p{display:none;font-size:11px;margin-top:4px;color:var(--text-primary)}
+
+    .explore-btn{
+      background:var(--accent);border:none;padding:14px 28px;border-radius:25px;color:#000;cursor:pointer;
+      box-shadow:4px 4px 8px var(--shadow-in),-4px -4px 8px var(--shadow-out);
+      font-size:16px;margin:16px auto;display:block;font-weight:900;transition:all .3s ease;width:85%
+    }
+    .explore-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.98)
+    }
+    .explore-btn.secondary{background:var(--accent-tertiary)}
+    
+    .youtube-box{
+      background:rgba(255,0,0,.08);border:2px dashed #ff4444;border-radius:15px;padding:20px;margin:20px 0;text-align:center
+    }
+    .youtube-box iframe{width:100%;height:220px;border-radius:12px;border:none}
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">Chest X-ray Viva</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>🫁 Chest X-ray</h1>
+        <p>Radiography Viva Master Guide • Positioning • Technique • Image Criteria</p>
+      </div>
+
+      <!-- HOW TO USE -->
+      <div class="section-card">
+        <h2>📖 How to Use This Guide</h2>
+        <p>Learn the exact figures stated in your course material first. Then study the clearly labelled supplementary reference notes, which help explain routine practice and viva reasoning. Where departments differ, state that you would follow the local protocol and exposure chart.</p>
+        <div class="highlight-box">
+          <p>This is an educational viva aid, not a substitute for your department’s protocol, a supervising radiographer, or a radiologist’s request. Patient condition, equipment, detector, grid, body habitus and local practice affect technique selection.</p>
+        </div>
+      </div>
+
+      <!-- 1. CORE FIGURES -->
+      <div class="section-card">
+        <h2>1️⃣ Core Course Figures and Terminology</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Item</th><th>Course material states</th><th>Viva note</th></tr>
+            <tr><td>Routine view</td><td>PA chest</td><td>Usually the standard erect routine projection when the patient can stand or sit appropriately</td></tr>
+            <tr><td>FFD / SID</td><td>150–180 cm</td><td>Use the distance specified by your department; many routine digital chest protocols use about 180 cm</td></tr>
+            <tr><td>Centring</td><td>Level of T8 (spinous process of T7), coincident with lung midpoint; landmark: inferior angle of scapula</td><td>Memorise the course wording. Other teaching references commonly describe centring at T7</td></tr>
+            <tr><td>Exposure</td><td>70–80 kVp at 8–12 mAs</td><td>These are the values in the supplied course notes. Digital systems may use a different high-kVp/low-mAs chart</td></tr>
+            <tr><td>Cassette / receptor</td><td>17 × 14 inches</td><td>Confirm portrait/landscape orientation and detector size according to patient and department protocol</td></tr>
+            <tr><td>Other views named</td><td>AP erect (CP: sternal notch), AP supine, AP semi-erect, lateral chest, apical, lordotic, PA on expiration</td><td>The notes do not provide full technical factors for all these views</td></tr>
+          </table>
+        </div>
+        <p><strong>Key abbreviations:</strong> FFD/SID = focus-to-film / source-to-image distance; CR = central ray; CP = centring point; PA = posteroanterior; AP = anteroposterior; IR = image receptor.</p>
+      </div>
+
+      <!-- 2. ROUTINE PA CHEST -->
+      <div class="section-card">
+        <h2>2️⃣ Routine PA Chest: Positioning and Technique</h2>
+
+        <h3>Purpose</h3>
+        <ul>
+          <li>To assess the lungs, pleura, heart size and contour, mediastinum, hila, diaphragm, visible ribs and thoracic bony structures.</li>
+          <li>PA erect is preferred for routine chest imaging when the patient can safely stand or sit upright because it reduces magnification of the heart compared with an AP projection.</li>
+          <li>Common indications include cough, fever, dyspnoea, suspected infection/consolidation, pleural effusion, pneumothorax and general chest assessment when clinically requested.</li>
+        </ul>
+
+        <h3>Patient and Equipment Positioning</h3>
+        <ul>
+          <li>Verify the request and patient identity; explain the examination and check relevant pregnancy status according to local policy.</li>
+          <li>Remove necklaces, clothing fasteners and other radiopaque objects from the chest region where feasible; provide a gown and preserve dignity.</li>
+          <li>Position the patient erect facing the image receptor, chest against it, with the median sagittal plane centred and not rotated.</li>
+          <li>Place hands on hips with palms out or wrap arms around the receptor; roll shoulders forward to move the scapulae away from the lung fields.</li>
+          <li>Raise the chin clear of the lung apices. Keep the shoulders level and ensure the chest is close to the receptor.</li>
+        </ul>
+
+        <h3>Centring and Beam</h3>
+        <ul>
+          <li><strong>Course figure:</strong> centre at the level of T8 / spinous process of T7, coincident with the lung midpoint; inferior angle of scapula is the stated surface landmark.</li>
+          <li>Supplementary routine reference: many departments centre the CR perpendicular to the midline at approximately T7. If your lecturer expects the course wording, give that wording first.</li>
+          <li>CR is usually perpendicular to the detector for the routine PA view; do not angle it unless a specific protocol requires it.</li>
+          <li>FFD/SID from the notes: 150–180 cm. Use the department’s specified distance.</li>
+        </ul>
+
+        <h3>Breathing Instruction</h3>
+        <ul>
+          <li>Ask the patient to take a deep breath in, then hold it. Make the exposure at full inspiration.</li>
+          <li>A good inspiratory image generally shows about 10 posterior ribs above the diaphragm, although patient condition and anatomy affect this sign.</li>
+          <li>Clear instruction and rehearsal help reduce motion and improve lung expansion.</li>
+        </ul>
+
+        <h3>Exposure Factors</h3>
+        <div class="highlight-box">
+          <p><strong>Course figures:</strong> 70–80 kVp, 8–12 mAs. Do not silently replace these when answering a question about what the notes say.<br>
+          Supplementary practice note: many modern digital chest protocols use higher kVp and lower mAs, often around 110–125 kVp, but exact values vary. In clinical practice, use the approved departmental chart and exposure index guidance.</p>
+        </div>
+
+        <h3>Image Evaluation: What a Good PA Chest Should Show</h3>
+        <ul>
+          <li>Both lungs from apices to costophrenic angles are included; the lateral chest walls are not cut off.</li>
+          <li>The patient is not rotated: medial ends of the clavicles are approximately equidistant from the spinous processes.</li>
+          <li>Scapulae are largely outside the lung fields; clavicles are not excessively high or low.</li>
+          <li>Adequate inspiration and no significant respiratory motion.</li>
+          <li>Exposure permits assessment of lung markings and mediastinal structures without excessive noise or overexposure.</li>
+          <li>The heart and mediastinum are not disproportionately magnified; no anatomy is clipped and the side marker is visible without obscuring anatomy.</li>
+        </ul>
+      </div>
+
+      <!-- 3. LATERAL CHEST -->
+      <div class="section-card">
+        <h2>3️⃣ Lateral Chest</h2>
+        <h3>Purpose</h3>
+        <ul>
+          <li>Provides a second projection to localise abnormalities and assess areas hidden by the heart, diaphragm or overlapping structures.</li>
+          <li>Used with PA chest when clinically indicated; the left lateral is commonly performed to keep the heart closer to the detector and reduce magnification.</li>
+        </ul>
+
+        <h3>Positioning and Centring (Supplementary Reference)</h3>
+        <ul>
+          <li>Position the patient in a true lateral stance with the side of the chest against the receptor, arms raised above the head and chin clear of the lung fields.</li>
+          <li>Avoid rotation: shoulders and hips should be stacked, and the posterior ribs should be nearly superimposed.</li>
+          <li>A common reference centring level is around T7 at the midcoronal plane, with the CR perpendicular to the receptor.</li>
+          <li>A long SID, commonly around 180 cm, is often used. The course notes do not state lateral-view exposure factors.</li>
+          <li>Expose on full inspiration and include both apices and both costophrenic angles.</li>
+        </ul>
+
+        <h3>Image Evaluation</h3>
+        <ul>
+          <li>Both lungs and the entire thorax are included from apices to costophrenic angles.</li>
+          <li>Posterior ribs are close to superimposed; excessive separation suggests rotation.</li>
+          <li>Arms do not obscure the upper lungs; the diaphragm and retrocardiac region are assessable.</li>
+          <li>There is no significant motion, clipping or avoidable artefact.</li>
+        </ul>
+      </div>
+
+      <!-- 4. AP ERECT / SEMI-ERECT / SUPINE -->
+      <div class="section-card">
+        <h2>4️⃣ AP Erect, Semi-Erect and Supine Chest</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Projection</th><th>When used</th><th>Position / centring</th><th>Limitations</th></tr>
+            <tr><td>AP erect</td><td>Patient cannot use the routine PA position but can sit or stand upright</td><td>Course notes list the sternal notch as CP. Many references use midline around T7</td><td>Heart may appear magnified; scapulae may overlap lungs</td></tr>
+            <tr><td>AP semi-erect</td><td>Patient can be partially elevated but cannot sit fully upright</td><td>Use detector behind the thorax and a horizontal or protocol-specified beam</td><td>Position and degree of elevation must be documented; dependent fluid may layer differently</td></tr>
+            <tr><td>AP supine</td><td>Patient cannot safely sit or stand; often bedside/portable</td><td>Place receptor behind the chest, align the midline, centre according to approved AP portable protocol</td><td>Heart magnification and vascular redistribution can complicate interpretation; small pleural effusions or pneumothoraces may be harder to detect</td></tr>
+          </table>
+        </div>
+        <div class="memory-tip">
+          <strong>Key viva point</strong>
+          <p>AP chest is not interchangeable with PA chest. Always state the patient’s position and projection, and explain why a portable/AP view may be necessary.</p>
+        </div>
+      </div>
+
+      <!-- 5. SUPPLEMENTARY VIEWS -->
+      <div class="section-card">
+        <h2>5️⃣ Supplementary Views</h2>
+        <p>The following summaries are supplementary revision guidance. Your course material names these views but does not provide all their technical factors.</p>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>View</th><th>Purpose / indication</th><th>Positioning concept</th><th>Viva caution</th></tr>
+            <tr><td>Apical view</td><td>To better demonstrate lung apices, especially when the clavicles obscure them</td><td>Use the department’s specified apical technique; position and beam angle vary</td><td>Do not invent one universal angle or exposure factor</td></tr>
+            <tr><td>Lordotic / apical lordotic</td><td>To project clavicles above the apices and assess apical pathology; course examples include right middle-lobe collapse</td><td>Patient leans back or the beam is angled cephalad according to the chosen method</td><td>Different lordotic methods exist; follow the requested method and local instructions</td></tr>
+            <tr><td>PA on expiration</td><td>May help assess a suspected small pneumothorax when requested</td><td>Obtain the exposure at the end of expiration, with clear breathing instruction</td><td>Use only when requested/appropriate; do not delay urgent assessment</td></tr>
+            <tr><td>Lateral decubitus</td><td>Can demonstrate layering pleural fluid or help assess a suspected pneumothorax</td><td>Patient lies on a side; use a horizontal beam. For fluid: affected side down; for pneumothorax: affected side up if appropriate</td><td>Do not roll an unstable or trauma patient without clinical clearance</td></tr>
+            <tr><td>Horizontal-beam AP portable</td><td>Selected patients unable to stand; may help show air-fluid levels</td><td>Maintain a horizontal beam and use the approved portable protocol</td><td>Document position and avoid moving lines, drains or monitoring equipment</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 6. COLLIMATION & IMAGE QUALITY -->
+      <div class="section-card">
+        <h2>6️⃣ Collimation, Markers and Image Quality</h2>
+        <h3>Collimation</h3>
+        <ul>
+          <li>Collimate to include the entire required chest anatomy: apices superiorly, costophrenic angles inferiorly and the lateral chest walls.</li>
+          <li>Set the field before exposure and verify that no required anatomy will be cut off. Adjust to the patient’s size and projection.</li>
+          <li>Tight collimation reduces unnecessary irradiation and scatter, but over-collimation can exclude important anatomy.</li>
+        </ul>
+
+        <h3>Side Markers and Patient Identification</h3>
+        <ul>
+          <li>Place the correct anatomical side marker before exposure, ideally within the collimated field but not obscuring anatomy.</li>
+          <li>Check patient identity, requested projection and any relevant previous images according to departmental workflow.</li>
+          <li>Do not rely on post-processing to correct a missing or incorrect marker.</li>
+        </ul>
+
+        <h3>Grid, Geometry and Scatter</h3>
+        <ul>
+          <li>A grid may be used for routine adult chest imaging according to local protocol to reduce scatter; small children and selected patients may not require the same grid approach.</li>
+          <li>A longer SID reduces magnification and helps standardise chest geometry.</li>
+          <li>High-kVp technique provides useful penetration through the mediastinum while retaining lung detail; mAs must be sufficient to avoid excessive quantum noise but should be optimised to the protocol.</li>
+          <li>Avoid repeat exposures by checking positioning, field coverage, marker placement and breathing instructions before exposure.</li>
+        </ul>
+      </div>
+
+      <!-- 7. PATIENT PREP & SAFETY -->
+      <div class="section-card">
+        <h2>7️⃣ Patient Preparation, Safety and Breathing</h2>
+        <ul>
+          <li><strong>Confirm:</strong> patient identity, request, clinical indication and correct projection; explain the procedure in simple language.</li>
+          <li><strong>Pregnancy:</strong> follow local pregnancy-screening and justification policy; do not make assumptions based on appearance.</li>
+          <li><strong>Metal and clothing:</strong> remove external objects from the chest field when possible and provide a gown.</li>
+          <li><strong>Infection control:</strong> hand hygiene and appropriate cleaning/PPE for the setting, especially for portable examinations.</li>
+          <li><strong>Mobility and trauma:</strong> do not force a patient to stand, raise arms or rotate if unsafe. Follow trauma/portable protocols and obtain help when needed.</li>
+          <li><strong>Lines and devices:</strong> do not disconnect oxygen, drains, IV lines or monitoring devices without authorisation; coordinate movement with clinical staff.</li>
+          <li><strong>Breathing:</strong> give one clear instruction, rehearse if needed, and expose on the requested phase. If the patient cannot cooperate, adapt to the clinical situation and document/follow protocol.</li>
+        </ul>
+      </div>
+
+      <!-- 8. COMMON ERRORS -->
+      <div class="section-card">
+        <h2>8️⃣ Common Errors and Corrections</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Error</th><th>How to recognise it</th><th>Correction / prevention</th></tr>
+            <tr><td>Rotation</td><td>Clavicular heads not equidistant from the spine; ribs asymmetric</td><td>Re-centre the patient, align the midline and check shoulder/hip position before exposure</td></tr>
+            <tr><td>Scapulae over lungs</td><td>Scapular shadows obscure lung fields on PA</td><td>Ask patient to roll shoulders forward and position hands/arms correctly</td></tr>
+            <tr><td>Poor inspiration</td><td>Elevated diaphragms and fewer posterior ribs visible</td><td>Explain and rehearse deep inspiration and breath-hold; adapt if patient cannot cooperate</td></tr>
+            <tr><td>Apices or costophrenic angles cut off</td><td>Required lung anatomy is missing</td><td>Check detector height, chin and field boundaries before exposure</td></tr>
+            <tr><td>Motion blur</td><td>Vessels/ribs appear blurred or doubled</td><td>Give concise breathing instructions, stabilise safely and use the approved exposure technique</td></tr>
+            <tr><td>Incorrect projection/marker</td><td>Marker absent/wrong or projection does not match request</td><td>Verify request and marker before exposure; follow correction/reporting policy if discovered later</td></tr>
+            <tr><td>Underpenetration / excessive noise</td><td>Mediastinum not adequately assessed or image appears noisy</td><td>Use the department’s exposure chart and check detector/exposure index; avoid repeating without evaluating the reason</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 9. CLINICAL INDICATIONS -->
+      <div class="section-card">
+        <h2>9️⃣ Clinical Indications from the Course Material</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Scenario / indication</th><th>View(s) stated</th><th>Exam note</th></tr>
+            <tr><td>Routine chest examination</td><td>PA chest</td><td>Give the course answer as written; explain that a PA chest assesses the thorax</td></tr>
+            <tr><td>Swallowed coin</td><td>Variants including lateral neck, RPO neck, chest and AP abdomen</td><td>View choice depends on the suspected location and local foreign-body protocol</td></tr>
+            <tr><td>Tachycardia with pleural effusion</td><td>PA chest</td><td>A chest radiograph may show effusion or other thoracic findings</td></tr>
+            <tr><td>Sub-phrenic abscess</td><td>PA and lateral chest; notes mention arrested inspiration or expiration, and decubitus if unable to stand</td><td>Use the exact source phrasing if asked about the course notes</td></tr>
+            <tr><td>Dyspnoea / suspected pneumothorax</td><td>PA chest on arrested inspiration and again on arrested expiration</td><td>Expiration views are selective, not a universal requirement; follow current local guidance</td></tr>
+            <tr><td>Poor air entry / suspected consolidation</td><td>PA chest</td><td>Relate the view to assessment of lung fields and possible air-space opacity</td></tr>
+            <tr><td>Right middle-lobe collapse</td><td>Chest lordotic view is listed</td><td>Be prepared to describe the view as a supplementary projection; confirm local protocol</td></tr>
+            <tr><td>Difficulty breathing / pleural effusion</td><td>PA and lateral chest</td><td>If the patient cannot stand safely, a portable projection may be used under local protocol</td></tr>
+          </table>
+        </div>
+        <div class="memory-tip">
+          <strong>Important distinction</strong>
+          <p>A fall from height with suspected thoracic vertebral injury is a thoracic-spine examination, not automatically a chest X-ray. A suspected sternum injury may require a sternum-focused study. Do not confuse these with routine chest projections.</p>
+        </div>
+      </div>
+
+      <!-- 10. RAPID VIVA ANSWERS -->
+      <div class="section-card">
+        <h2>🔟 Rapid Viva Answers</h2>
+        <div class="quick-facts">
+          <p><strong>Q. What is the routine chest projection?</strong><br>A. PA chest, when the patient can safely be positioned erect.</p>
+          <p><strong>Q. What is the FFD in the course notes?</strong><br>A. 150–180 cm.</p>
+          <p><strong>Q. What is the course centring point?</strong><br>A. Level of T8 / spinous process of T7, coincident with the lung midpoint; inferior angle of scapula is the stated landmark.</p>
+          <p><strong>Q. What exposure factors are written in the course notes?</strong><br>A. 70–80 kVp and 8–12 mAs.</p>
+          <p><strong>Q. What cassette size is listed?</strong><br>A. 17 × 14 inches.</p>
+          <p><strong>Q. Why is PA preferred to AP for routine chest imaging?</strong><br>A. The heart is closer to the receptor, reducing magnification; scapulae can also be moved out of the lung fields.</p>
+          <p><strong>Q. Why ask the patient to take a deep breath?</strong><br>A. To expand the lungs and improve visualisation of the lung fields.</p>
+          <p><strong>Q. Why raise the chin?</strong><br>A. To prevent the chin from obscuring the lung apices.</p>
+          <p><strong>Q. Why roll the shoulders forward?</strong><br>A. To move the scapulae laterally away from the lung fields.</p>
+          <p><strong>Q. Why use a long SID?</strong><br>A. To reduce magnification and improve standardisation of chest geometry.</p>
+          <p><strong>Q. What shows rotation on a PA chest?</strong><br>A. The medial ends of the clavicles are not equidistant from the spinous processes.</p>
+          <p><strong>Q. What anatomy must be included?</strong><br>A. Both apices, both lungs, lateral chest walls and both costophrenic angles.</p>
+          <p><strong>Q. What is the purpose of a lateral chest?</strong><br>A. It provides a second projection and helps localise findings obscured on the frontal image.</p>
+          <p><strong>Q. What if the patient cannot stand?</strong><br>A. Use the appropriate AP portable/erect/semi-erect method as clinically safe and according to local protocol.</p>
+          <p><strong>Q. What should you do if the patient is unstable or has drains/lines?</strong><br>A. Do not force movement or disconnect devices; follow the clinical team’s safety instructions and portable/trauma protocol.</p>
+        </div>
+      </div>
+
+      <!-- 11. PRACTICE QUESTIONS -->
+      <div class="section-card">
+        <h2>1️⃣1️⃣ Practice Questions and Model Answers</h2>
+        <ol>
+          <li><strong>Describe the PA chest position from preparation to exposure.</strong><br>
+          Model answer: Confirm identity/request, explain, prepare the chest, position erect facing the receptor, midline centred and not rotated, chin raised, shoulders rolled forward, centre at the course-specified level, collimate to include apices through costophrenic angles, place marker, ask for full inspiration and breath-hold, expose using the approved chart.</li>
+          <li><strong>State the course technique factors.</strong><br>
+          Model answer: FFD 150–180 cm; centring at T8 / spinous process of T7 with inferior angle of scapula as landmark; 70–80 kVp at 8–12 mAs; cassette 17 × 14 inches.</li>
+          <li><strong>Why can an AP chest make the heart look larger?</strong><br>
+          Model answer: The heart is farther from the detector in AP geometry, so magnification is greater than in a PA projection.</li>
+          <li><strong>Give five image-quality criteria for a PA chest.</strong><br>
+          Model answer: Full anatomy included, no rotation, scapulae mostly outside lungs, adequate inspiration, no motion, adequate penetration/exposure and correct marker.</li>
+          <li><strong>What would you do if a patient cannot hold their breath?</strong><br>
+          Model answer: Explain and coach if possible; adapt to the patient’s condition and use the approved protocol. Do not compromise safety to obtain an ideal breath-hold.</li>
+          <li><strong>How does a lateral view complement PA?</strong><br>
+          Model answer: It helps localise lesions and assesses retrocardiac, retrosternal and posterior regions that may be obscured on the frontal image.</li>
+          <li><strong>What is the difference between a chest and thoracic-spine examination?</strong><br>
+          Model answer: Chest imaging evaluates thoracic organs and chest structures; thoracic-spine views specifically assess the vertebral column and require a separate request/protocol.</li>
+          <li><strong>Why is collimation important?</strong><br>
+          Model answer: It limits the irradiated area, reduces scatter and unnecessary exposure, and improves image quality while retaining all required anatomy.</li>
+          <li><strong>What factors influence exposure selection?</strong><br>
+          Model answer: Patient size, projection, detector, grid, equipment, clinical condition and departmental exposure chart.</li>
+          <li><strong>What should you say if asked for lateral exposure factors not present in your notes?</strong><br>
+          Model answer: The supplied notes do not state them. I would use the department’s approved technique chart rather than invent a figure.</li>
+        </ol>
+      </div>
+
+      <!-- 12. LAST-MINUTE CHECKLIST -->
+      <div class="section-card">
+        <h2>1️⃣2️⃣ Last-Minute Revision Checklist</h2>
+        <ul>
+          <li>Memorise the course values exactly: PA chest; FFD 150–180 cm; centring T8 / spinous process T7 with inferior angle of scapula landmark; 70–80 kVp; 8–12 mAs; 17 × 14 inches.</li>
+          <li>Know the routine PA position and why the chin, shoulders, midline and inspiration matter.</li>
+          <li>Be able to evaluate rotation, inspiration, scapular overlap, collimation, marker placement, motion and exposure.</li>
+          <li>Know the purpose and limitations of lateral, AP erect, AP semi-erect, AP supine, apical/lordotic and expiration views.</li>
+          <li>Practise describing patient preparation, safety, and what to do when the patient cannot stand or cooperate.</li>
+          <li>For values missing from the course notes, say so and refer to the department’s protocol. Do not invent exact factors.</li>
+          <li>Answer in a consistent sequence: indication → patient preparation → position → centring/CR → collimation → exposure/breathing → image criteria → safety.</li>
+        </ul>
+
+        <div class="highlight-box">
+          <p><strong>Suggested answer structure for any projection:</strong><br>
+          1. Name the view and indication.<br>
+          2. Prepare and position the patient.<br>
+          3. State the centring point and CR direction.<br>
+          4. State collimation and SID/FFD.<br>
+          5. Give the exposure factors exactly as taught or refer to the approved chart if absent.<br>
+          6. Explain breathing instructions.<br>
+          7. State image-quality criteria and radiation-safety precautions.</p>
+        </div>
+      </div>
+
+      <!-- YOUTUBE -->
+      <div class="section-card">
+        <h2>🎬 Recommended Video Tutorial</h2>
+        <p>Watch a practical demonstration of chest X-ray positioning.</p>
+        <div class="youtube-box">
+          <iframe 
+            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_HERE" 
+            title="Chest X-ray Positioning Tutorial"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+          <p style="margin-top:12px;font-size:13px;color:var(--text-secondary)">
+          </p>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button class="explore-btn" onclick="window.location.href='chestq.html'">📝 Past Questions</button>
+      <button class="explore-btn secondary" onclick="window.location.href='next.html'">Next Topic →</button>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='#'">💬</button><p>Chat</p></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='#'">⭐</button><p>Favourite</p></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='#'">📚</button><p>Library</p></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
