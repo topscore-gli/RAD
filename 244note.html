@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medical Instruments & Equipment Guide</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{
+      background:var(--background);color:var(--text-primary);
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;overflow-x:hidden
+    }
+    .container{
+      width:100%;max-width:420px;height:750px;overflow-y:auto;
+      background:var(--background);border-radius:20px;
+      box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);
+      padding-top:70px;padding-bottom:80px;position:relative
+    }
+    .neumorphic{
+      background:var(--background);
+      box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);
+      border-radius:15px
+    }
+    .neumorphic-btn{
+      background:var(--background);border:none;border-radius:50%;
+      width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+      box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease
+    }
+    .neumorphic-btn:active{
+      box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);
+      transform:scale(.95)
+    }
+    .top-bar{
+      position:fixed;top:0;width:100%;max-width:420px;
+      background:var(--background);padding:15px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 5px 10px var(--shadow-in);z-index:20
+    }
+    .top-bar .header{font-size:15px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{
+      position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;
+      background:var(--shadow-in);z-index:15
+    }
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
+    .content{padding:20px 16px;line-height:1.6}
+    .main-header{
+      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      background:rgba(29,185,84,.1)
+    }
+    .main-header h1{font-size:18px;margin-bottom:6px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary)}
+
+    .letter-header{
+      font-size:22px;font-weight:900;color:var(--accent);
+      margin:30px 0 16px;padding-bottom:6px;
+      border-bottom:2px solid var(--accent)
+    }
+
+    .item-card{
+      background:var(--card-bg);padding:20px;border-radius:18px;
+      box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);
+      margin-bottom:24px;border-left:4px solid var(--accent)
+    }
+    .item-card h3{
+      font-size:16px;color:var(--accent);margin-bottom:14px;font-weight:900
+    }
+
+    /* Image style - ready for your uploads */
+    .item-card img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border-radius:14px;
+      margin-bottom:16px;
+      background:#2a2a3f;
+      border:2px dashed var(--accent);
+    }
+
+    .section-title{
+      font-size:14px;font-weight:800;color:var(--accent-tertiary);
+      margin:14px 0 6px;display:flex;align-items:center;gap:6px
+    }
+    .item-card ul{padding-left:18px;margin-bottom:8px}
+    .item-card li{font-size:13.5px;margin-bottom:5px;color:var(--text-primary)}
+
+    .nav-bar{
+      position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
+      display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20
+    }
+    .nav-bar .nav-item{text-align:center}
+    .nav-bar .nav-item.center button{
+      width:50px;height:50px;font-size:24px;background:var(--accent);
+      box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);
+      color:#000
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">Medical Instruments</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>🩺 Medical Instruments & Equipment</h1>
+        <p>Complete Guide with Parts • Uses • Maintenance</p>
+      </div>
+
+      <!-- ==================== A ==================== -->
+      <div class="letter-header">A</div>
+
+      <!-- 1. Adhesive Bandage -->
+      <div class="item-card">
+        <h3>1. Adhesive Bandage</h3>
+        <img src="images/adhesive-bandage.jpg" alt="Adhesive Bandage">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Absorbent pad</li>
+          <li>Adhesive sheet</li>
+          <li>Base layer</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>For covering small wounds</li>
+          <li>To minimize contact with other surfaces</li>
+          <li>To fasten the healing process</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Ensure wound is clean before applying bandage</li>
+          <li>Change the bandage if it becomes wet or soiled</li>
+          <li>Store in a cool, dry place away from direct sunlight</li>
+        </ul>
+      </div>
+
+      <!-- 2. Air Cushion -->
+      <div class="item-card">
+        <h3>2. Air Cushion</h3>
+        <img src="images/air-cushion.jpg" alt="Air Cushion">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Air cells (inflation chambers)</li>
+          <li>Connecting tubes</li>
+          <li>Air pump/compressor unit</li>
+          <li>Mattress cover</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To reduce bed sores in bedridden patients</li>
+          <li>To distribute body weight evenly</li>
+          <li>To improve blood circulation in immobile patients</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Check for leaks and damages regularly</li>
+          <li>Clean the surface with a mild disinfectant</li>
+          <li>Ensure the pump filter is clean and free of dust</li>
+        </ul>
+      </div>
+
+      <!-- 3. Anglepoise Lamp -->
+      <div class="item-card">
+        <h3>3. Anglepoise Lamp</h3>
+        <img src="images/anglepoise-lamp.jpg" alt="Anglepoise Lamp">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Base</li>
+          <li>Articulated arms (joints/springs)</li>
+          <li>Lamp shade</li>
+          <li>Bulb</li>
+          <li>Power cord/switch</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Can be angled as a source of light in procedures like HSG</li>
+          <li>For focused illumination during minor examinations</li>
+          <li>As a reading light for patients</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Keep in a cool dry place</li>
+          <li>Wipe the shade and base with a damp cloth</li>
+          <li>Check the power cord for fraying or damage</li>
+        </ul>
+      </div>
+
+      <!-- 4. Autoclave -->
+      <div class="item-card">
+        <h3>4. Autoclave</h3>
+        <img src="images/autoclave.jpg" alt="Autoclave">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Pressure regulating device</li>
+          <li>Pressure gauge</li>
+          <li>Safety valve</li>
+          <li>Autoclave lid & handles</li>
+          <li>Autoclave body</li>
+          <li>Steam release valve</li>
+          <li>Vacuum release valve</li>
+          <li>Outer stand</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>For sterilization of surgical instruments</li>
+          <li>For chemical reactions requiring high temperature and pressure</li>
+          <li>To destroy microorganisms (bacteria, viruses, fungi, spores)</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Instruments that can't withstand high temperature should not be put in</li>
+          <li>Regular calibration for optimal accuracy</li>
+          <li>Switch off when required temperature is reached</li>
+        </ul>
+      </div>
+
+      <!-- 5. Automatic Ventilator -->
+      <div class="item-card">
+        <h3>5. Automatic Ventilator</h3>
+        <img src="images/automatic-ventilator.jpg" alt="Automatic Ventilator">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Monitor screen</li>
+          <li>Control panel</li>
+          <li>Breathing circuit tubing</li>
+          <li>Humidifier</li>
+          <li>Flow sensors</li>
+          <li>Wheeled stand</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Automatically delivers oxygen to a patient</li>
+          <li>To assist or replace spontaneous breathing</li>
+          <li>To maintain adequate oxygenation and ventilation in critical care</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Periodic checks for repairs</li>
+          <li>Replace breathing circuits and filters regularly</li>
+          <li>Clean and disinfect the external surfaces and sensors</li>
+        </ul>
+      </div>
+
+      <!-- ==================== B ==================== -->
+      <div class="letter-header">B</div>
+
+      <!-- 6. Bag-Valve-Mask -->
+      <div class="item-card">
+        <h3>6. Big Valve Mask (Bag-Valve-Mask)</h3>
+        <img src="images/bag-valve-mask.jpg" alt="Bag Valve Mask">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Self-inflating bag</li>
+          <li>Oxygen reservoir</li>
+          <li>Oxygen connector tubing</li>
+          <li>Inlet & outlet ports</li>
+          <li>Face mask & mask cushion</li>
+          <li>Pressure gauge</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To resuscitate a patient</li>
+          <li>To provide positive pressure ventilation</li>
+          <li>To deliver oxygen to a patient who is not breathing adequately</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Store in a cool dry place</li>
+          <li>Clean and disinfect the mask and bag after each use</li>
+          <li>Check valves and reservoir bag for tears or leaks</li>
+        </ul>
+      </div>
+
+      <!-- ==================== C ==================== -->
+      <div class="letter-header">C</div>
+
+      <!-- 7. Cannula -->
+      <div class="item-card">
+        <h3>7. Cannula</h3>
+        <img src="images/cannula.jpg" alt="Cannula">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Flashback chamber</li>
+          <li>Needle grip</li>
+          <li>Injection port cap</li>
+          <li>Luer connector & lock plug</li>
+          <li>Bushing & valve</li>
+          <li>Catheter hub + wings</li>
+          <li>Catheter & needle</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To drain fluid from the body</li>
+          <li>To administer medications</li>
+          <li>To provide oxygen</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular sterilization</li>
+          <li>Replacement after use</li>
+          <li>Flush with saline to maintain patency if left in situ</li>
+        </ul>
+      </div>
+
+      <!-- 8. Cervical Osmotic Dilators -->
+      <div class="item-card">
+        <h3>8. Cervical Osmotic Dilators</h3>
+        <img src="images/cervical-osmotic-dilators.jpg" alt="Cervical Osmotic Dilators">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Handle</li>
+          <li>Osmotic dilator rod (laminaria or synthetic)</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Used in patients with cervical synechiae</li>
+          <li>To gradually dilate the cervix before procedures</li>
+          <li>To soften and prepare the cervix for induction</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Dispose after use</li>
+          <li>Store in a sterile, dry package</li>
+          <li>Check expiry date before use</li>
+        </ul>
+      </div>
+
+      <!-- 9. Cilia Tweezers -->
+      <div class="item-card">
+        <h3>9. Cilia Tweezers</h3>
+        <img src="images/cilia-tweezers.jpg" alt="Cilia Tweezers">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Fine tips</li>
+          <li>Hinge mechanism</li>
+          <li>Handle/body</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To pick hair and tiny objects during ophthalmologic procedures</li>
+          <li>For removing foreign bodies from the eye</li>
+          <li>For precise handling of delicate tissues</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning and sterilization</li>
+          <li>Lubrication of the hinge mechanism for smooth movement</li>
+          <li>Inspect tips for misalignment or damage</li>
+        </ul>
+      </div>
+
+      <!-- 10. Ishihara Test Chart -->
+      <div class="item-card">
+        <h3>10. Colour Blind Test / Ishihara Chart</h3>
+        <img src="images/ishihara-chart.jpg" alt="Ishihara Colour Test Chart">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Test plates (pages with colored dot patterns)</li>
+          <li>Instruction booklet</li>
+          <li>Binding</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To test patient’s ability to identify and differentiate between colours</li>
+          <li>To screen for red-green color blindness</li>
+          <li>To assess visual acuity related to color perception</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Store in a cool dry place to ensure longevity of the chart</li>
+          <li>Keep pages clean and free from fingerprints</li>
+          <li>Avoid exposure to direct sunlight to prevent fading</li>
+        </ul>
+      </div>
+
+      <!-- 11. Colostomy Bag -->
+      <div class="item-card">
+        <h3>11. Colostomy Bag</h3>
+        <img src="images/colostomy-bag.jpg" alt="Colostomy Bag">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Adhesive flange/wafer</li>
+          <li>Pouch/bag</li>
+          <li>Filter</li>
+          <li>Closure clamp/tail</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To collect waste directly from the intestine</li>
+          <li>To protect the stoma and surrounding skin</li>
+          <li>To manage fecal output in patients with a stoma</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular emptying and cleaning of the bag</li>
+          <li>Regular changing of the bag</li>
+          <li>Clean the stoma and surrounding skin gently with warm water</li>
+        </ul>
+      </div>
+
+      <!-- ==================== D ==================== -->
+      <div class="letter-header">D</div>
+
+      <!-- 12. Defibrillator -->
+      <div class="item-card">
+        <h3>12. Defibrillator</h3>
+        <img src="images/defibrillator.jpg" alt="Defibrillator">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Monitor screen</li>
+          <li>Control panel (energy select, charge, shock buttons)</li>
+          <li>Paddle handles & electrodes</li>
+          <li>Connecting cables</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To excite the muscles of the heart and create a heartbeat</li>
+          <li>To regulate abnormal heart rate</li>
+          <li>To terminate life-threatening cardiac arrhythmias (e.g. ventricular fibrillation)</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Keep in a cool dry place</li>
+          <li>Regularly check battery charge and replace as needed</li>
+          <li>Inspect paddles and cables for damage; clean after use</li>
+        </ul>
+      </div>
+
+      <!-- ==================== E ==================== -->
+      <div class="letter-header">E</div>
+
+      <!-- 13. Emesis Basin -->
+      <div class="item-card">
+        <h3>13. Emesis Basin</h3>
+        <img src="images/emesis-basin.jpg" alt="Emesis Basin">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Kidney-shaped basin body</li>
+          <li>Rim</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To collect body fluids like vomit</li>
+          <li>To collect soiled dressings</li>
+          <li>To hold small instruments or solutions during procedures</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regularly clean after use</li>
+          <li>Regularly check for wear or damage</li>
+          <li>Sterilize if used in sterile procedures</li>
+        </ul>
+      </div>
+
+      <!-- ==================== F ==================== -->
+      <div class="letter-header">F</div>
+
+      <!-- 14. Feeding Tube -->
+      <div class="item-card">
+        <h3>14. Feeding Tube</h3>
+        <img src="images/feeding-tube.jpg" alt="Feeding Tube">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Tube body</li>
+          <li>Connector ports (feeding & medication)</li>
+          <li>Guide wire/stylet</li>
+          <li>Weighted tip</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Passed to the oesophagus in patients unable to feed themselves</li>
+          <li>For enteral nutrition delivery</li>
+          <li>For administration of medications directly into the stomach</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular flushing and cleaning of the tube</li>
+          <li>Periodic checks for blockages and leaks</li>
+          <li>Regular replacement of the tube</li>
+        </ul>
+      </div>
+
+      <!-- 15. Foley’s Catheter -->
+      <div class="item-card">
+        <h3>15. Foley’s Catheter</h3>
+        <img src="images/foley-catheter.jpg" alt="Foley Catheter">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Drainage tube</li>
+          <li>Tear-resistant balloon</li>
+          <li>Bladder opening</li>
+          <li>Size identification (French scale)</li>
+          <li>Balloon inflation port</li>
+          <li>Urine drainage port</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To extract or introduce substances into or from the body</li>
+          <li>To drain urine from the bladder</li>
+          <li>To monitor urine output in critically ill patients</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular flushing with sterile solution</li>
+          <li>Regular check for leakages or blockages</li>
+          <li>Maintain a closed drainage system to prevent infection</li>
+        </ul>
+      </div>
+
+      <!-- 16. Forceps -->
+      <div class="item-card">
+        <h3>16. Forceps</h3>
+        <img src="images/forceps.jpg" alt="Forceps">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Handles (ring or spring)</li>
+          <li>Hinge/joint</li>
+          <li>Jaws/serrated tips</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To hold and pick up instruments during surgery</li>
+          <li>To grasp tissue during procedures</li>
+          <li>To remove foreign bodies</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning and sterilisation</li>
+          <li>Check joints for stiffness or rust</li>
+          <li>Inspect tips for alignment</li>
+        </ul>
+      </div>
+
+      <!-- ==================== G ==================== -->
+      <div class="letter-header">G</div>
+
+      <!-- 17. Gallipot -->
+      <div class="item-card">
+        <h3>17. Gallipot</h3>
+        <img src="images/gallipot.jpg" alt="Gallipot">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Cup body</li>
+          <li>Rim</li>
+          <li>Base</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Used to collect and mix solutions</li>
+          <li>To hold swabs or small instruments</li>
+          <li>To dispense solutions during wound care</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Clean with disinfecting solution after use</li>
+          <li>Regular sterilization</li>
+          <li>Check for dents or cracks</li>
+        </ul>
+      </div>
+
+      <!-- 18. Gauze Cloth -->
+      <div class="item-card">
+        <h3>18. Gauze Cloth</h3>
+        <img src="images/gauze-cloth.jpg" alt="Gauze Cloth">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Woven cotton fibers (mesh)</li>
+          <li>Edges</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>For dressing open wounds</li>
+          <li>To prevent germ entry</li>
+          <li>Used in surgical teeth extraction</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Wash with soap only</li>
+          <li>Air dry away from direct sunlight</li>
+          <li>Store in a sterile package if intended for wound care</li>
+        </ul>
+      </div>
+
+      <!-- ==================== H ==================== -->
+      <div class="letter-header">H</div>
+
+      <!-- 19. Hot Water Bottle -->
+      <div class="item-card">
+        <h3>19. Hot Water Bottle</h3>
+        <img src="images/hot-water-bottle.jpg" alt="Hot Water Bottle">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Bottle body (ribbed)</li>
+          <li>Screw cap</li>
+          <li>Stopper washer</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Physical pain relief by enhancing blood flow to an area</li>
+          <li>To provide warmth to a patient</li>
+          <li>To relieve muscle cramps</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Do not pour boiling hot water into the bottle</li>
+          <li>Clean after each use</li>
+          <li>Store away from direct sunlight</li>
+        </ul>
+      </div>
+
+      <!-- ==================== I ==================== -->
+      <div class="letter-header">I</div>
+
+      <!-- 20. Ice Bag -->
+      <div class="item-card">
+        <h3>20. Ice Bag</h3>
+        <img src="images/ice-bag.jpg" alt="Ice Bag">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Bag body (waterproof)</li>
+          <li>Screw cap</li>
+          <li>Opening</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To induce constriction of blood vessels to numb an area</li>
+          <li>To reduce inflammation</li>
+          <li>To lower body temperature in cases of fever</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Clean after each use</li>
+          <li>Store in cool dry place</li>
+          <li>Check for leaks before filling</li>
+        </ul>
+      </div>
+
+      <!-- 21. IV Infusion Set -->
+      <div class="item-card">
+        <h3>21. IV Infusion Set</h3>
+        <img src="images/iv-infusion-set.jpg" alt="IV Infusion Set">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Spike</li>
+          <li>Drip chamber</li>
+          <li>Solution filter</li>
+          <li>Roller clamp</li>
+          <li>Tubing</li>
+          <li>Injection site</li>
+          <li>Luer connector</li>
+          <li>Needle/cannula</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To deliver fluids directly to a vein (usually mid-cubital vein)</li>
+          <li>To administer medications intravenously</li>
+          <li>To transfuse blood products</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Dispose after use per patient</li>
+          <li>Check for leaks or air bubbles before use</li>
+          <li>Store in a sterile package until ready to use</li>
+        </ul>
+      </div>
+
+      <!-- ==================== J ==================== -->
+      <div class="letter-header">J</div>
+
+      <!-- 22. Jump Bag -->
+      <div class="item-card">
+        <h3>22. Jump Bag</h3>
+        <img src="images/jump-bag.jpg" alt="Jump Bag">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Main compartment</li>
+          <li>Side pockets</li>
+          <li>Carrying handles/strap</li>
+          <li>Internal dividers</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To carry medications and objects needed for emergency situations</li>
+          <li>To organize and transport emergency equipment</li>
+          <li>To ensure quick access to life-saving supplies</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Store in a cool dry place</li>
+          <li>Regular cleaning of the bag</li>
+          <li>Regularly check and restock expired supplies</li>
+        </ul>
+      </div>
+
+      <!-- ==================== L ==================== -->
+      <div class="letter-header">L</div>
+
+      <!-- 23. Laryngeal Mirror -->
+      <div class="item-card">
+        <h3>23. Laryngeal Mirror</h3>
+        <img src="images/laryngeal-mirror.jpg" alt="Laryngeal Mirror">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Mirror head</li>
+          <li>Angled stem</li>
+          <li>Handle</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Inspection of larynx and vocal cords</li>
+          <li>To visualize the pharynx and larynx during examination</li>
+          <li>To assist in procedures like intubation</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular sterilization of the mirror</li>
+          <li>Handle with care to avoid scratching the mirror surface</li>
+          <li>Store in a protective case</li>
+        </ul>
+      </div>
+
+      <!-- 24. Latex Hand Gloves -->
+      <div class="item-card">
+        <h3>24. Latex Hand Gloves</h3>
+        <img src="images/latex-gloves.jpg" alt="Latex Hand Gloves">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Palm</li>
+          <li>Fingers</li>
+          <li>Cuff</li>
+          <li>Thumb</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To protect from contact with body fluids and nosocomial infections</li>
+          <li>To maintain asepsis during procedures</li>
+          <li>To prevent transfer of bacteria between surfaces</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Proper disposal after use</li>
+          <li>Check for tear and dispose if any</li>
+          <li>Store in a cool, dry place away from direct sunlight</li>
+        </ul>
+      </div>
+
+      <!-- ==================== M ==================== -->
+      <div class="letter-header">M</div>
+
+      <!-- 25. Milk Pump -->
+      <div class="item-card">
+        <h3>25. Milk Pump (Breast Pump)</h3>
+        <img src="images/milk-pump.jpg" alt="Breast Pump">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Breast shield/funnel</li>
+          <li>Handle/lever</li>
+          <li>Pump mechanism</li>
+          <li>Bottle</li>
+          <li>Valve & membrane</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To extract breast milk</li>
+          <li>To relieve pain from an engorged breast</li>
+          <li>To stimulate milk production</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Clean properly after each use in warm water</li>
+          <li>Replace worn out parts regularly</li>
+          <li>Sterilize all parts that contact breast milk</li>
+        </ul>
+      </div>
+
+      <!-- ==================== N ==================== -->
+      <div class="letter-header">N</div>
+
+      <!-- 26. Neck Collar -->
+      <div class="item-card">
+        <h3>26. Neck Collar (Cervical Collar)</h3>
+        <img src="images/neck-collar.jpg" alt="Cervical Collar">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Rigid plastic shell</li>
+          <li>Foam padding</li>
+          <li>Velcro straps</li>
+          <li>Ventilation holes</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To reduce rate of movement of the neck (immobilization)</li>
+          <li>To support the head and neck after injury</li>
+          <li>To prevent further damage to the cervical spine</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning</li>
+          <li>Check velcro straps for wear</li>
+          <li>Replace if the rigid shell is cracked</li>
+        </ul>
+      </div>
+
+      <!-- 27. Needle Holder -->
+      <div class="item-card">
+        <h3>27. Needle Holder</h3>
+        <img src="images/needle-holder.jpg" alt="Needle Holder">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Jaws (serrated)</li>
+          <li>Box lock/hinge</li>
+          <li>Ring handles</li>
+          <li>Ratchet mechanism</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Used to hold a suturing needle when making stitches</li>
+          <li>To grasp small needles during surgery</li>
+          <li>To assist in passing the needle through tissue</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning and sterilisation</li>
+          <li>Lubricate the joint periodically</li>
+          <li>Check the ratchet for smooth function</li>
+        </ul>
+      </div>
+
+      <!-- 28. Nipple Cover -->
+      <div class="item-card">
+        <h3>28. Nipple Cover (Nipple Shield)</h3>
+        <img src="images/nipple-cover.jpg" alt="Nipple Shield">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Silicone shield</li>
+          <li>Nipple tunnel</li>
+          <li>Holes for milk flow</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Used when the baby cannot latch on to the mother’s nipple</li>
+          <li>To protect sore or cracked nipples</li>
+          <li>To help premature babies latch</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Clean after use</li>
+          <li>Keep away from all forms of heat</li>
+          <li>Sterilize regularly according to manufacturer instructions</li>
+        </ul>
+      </div>
+
+      <!-- 29. Non-Contact Tonometer -->
+      <div class="item-card">
+        <h3>29. Non-Contact / Air Puff Tonometer</h3>
+        <img src="images/tonometer.jpg" alt="Tonometer">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Chin rest</li>
+          <li>Forehead rest</li>
+          <li>Air puff nozzle</li>
+          <li>Alignment system</li>
+          <li>Monitor</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To check ocular pressure by sending a puff of air</li>
+          <li>To screen for glaucoma</li>
+          <li>To monitor intraocular pressure over time</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular checks for repairs</li>
+          <li>Clean the chin and forehead rests after each patient</li>
+          <li>Calibrate the device regularly</li>
+        </ul>
+      </div>
+
+      <!-- ==================== O ==================== -->
+      <div class="letter-header">O</div>
+
+      <!-- 30. Oxygen Tank -->
+      <div class="item-card">
+        <h3>30. Oxygen Tank</h3>
+        <img src="images/oxygen-tank.jpg" alt="Oxygen Tank">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Cylinder body</li>
+          <li>Valve</li>
+          <li>Pressure gauge</li>
+          <li>Flowmeter</li>
+          <li>Regulator</li>
+          <li>Outlet</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Filled with oxygen and attached to bag-valve-mask to resuscitate a patient</li>
+          <li>To provide supplemental oxygen therapy</li>
+          <li>To maintain oxygen saturation in hypoxic patients</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Keep in a cool dry place</li>
+          <li>Check pressure gauge regularly to ensure adequate supply</li>
+          <li>Inspect valve and regulator for leaks</li>
+        </ul>
+      </div>
+
+      <!-- ==================== P ==================== -->
+      <div class="letter-header">P</div>
+
+      <!-- 31. Pulse Oximeter -->
+      <div class="item-card">
+        <h3>31. Pulse Oximeter</h3>
+        <img src="images/pulse-oximeter.jpg" alt="Pulse Oximeter">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Finger clip/sensor</li>
+          <li>Display screen</li>
+          <li>Battery compartment</li>
+          <li>Cable (if reusable)</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Used to check the oxygen concentration of the body</li>
+          <li>To monitor pulse rate</li>
+          <li>To detect hypoxemia early</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Store in a cool dry place</li>
+          <li>Clean the sensor with alcohol wipes after use</li>
+          <li>Replace batteries regularly</li>
+        </ul>
+      </div>
+
+      <!-- ==================== R ==================== -->
+      <div class="letter-header">R</div>
+
+      <!-- 32. Reflex Hammer -->
+      <div class="item-card">
+        <h3>32. Reflex Hammer</h3>
+        <img src="images/reflex-hammer.jpg" alt="Reflex Hammer">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Head (rubber)</li>
+          <li>Handle</li>
+          <li>Tip (pointed or rounded)</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To test deep tendon reflexes</li>
+          <li>To assess neurological function</li>
+          <li>To elicit Babinski reflex</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Clean after use with a disinfectant</li>
+          <li>Check the rubber head for cracks</li>
+          <li>Store in a cool, dry place</li>
+        </ul>
+      </div>
+
+      <!-- ==================== S ==================== -->
+      <div class="letter-header">S</div>
+
+      <!-- 33. Scalp Vein Needle -->
+      <div class="item-card">
+        <h3>33. Scalp Vein Needle / Butterfly Needle</h3>
+        <img src="images/scalp-vein-needle.jpg" alt="Butterfly Needle">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Wings</li>
+          <li>Tube</li>
+          <li>Cannula</li>
+          <li>Needle</li>
+          <li>Female luer lock connector</li>
+          <li>Plastic cap</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To cannulate small veins and capillaries</li>
+          <li>For intravenous infusions</li>
+          <li>For blood sampling from small veins</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning and sterilization</li>
+          <li>Periodic inspection and replacement</li>
+          <li>Dispose safely in a sharps container after use</li>
+        </ul>
+      </div>
+
+      <!-- 34. Scalpel / Lancet -->
+      <div class="item-card">
+        <h3>34. Scalpel or Lancet</h3>
+        <img src="images/scalpel.jpg" alt="Scalpel">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Blade</li>
+          <li>Handle</li>
+          <li>Blade guard</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>For dissection and making incisions during surgery</li>
+          <li>For puncturing skin for blood sampling (lancet)</li>
+          <li>For precise cutting of tissue</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Sterilization after each use</li>
+          <li>Periodic inspection and sharpening of blades</li>
+          <li>Dispose of used blades in a sharps container</li>
+        </ul>
+      </div>
+
+      <!-- 35. Snellen’s Chart -->
+      <div class="item-card">
+        <h3>35. Snellen’s Chart</h3>
+        <img src="images/snellen-chart.jpg" alt="Snellen Chart">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Chart with rows of letters (optotypes)</li>
+          <li>Numbers indicating visual acuity</li>
+          <li>Red/green line</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Used to measure visual acuity</li>
+          <li>To screen for visual impairment</li>
+          <li>To determine the need for corrective lenses</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Clean with a damp cloth</li>
+          <li>Periodically check for damages</li>
+          <li>Store in a cool, dry place away from direct sunlight</li>
+        </ul>
+      </div>
+
+      <!-- 36. Speculum -->
+      <div class="item-card">
+        <h3>36. Speculum (Vaginal)</h3>
+        <img src="images/speculum.jpg" alt="Vaginal Speculum">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Bills/blades</li>
+          <li>Hinge</li>
+          <li>Handle</li>
+          <li>Thumb rest</li>
+          <li>Locking screw</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To examine body openings (e.g. during HSG)</li>
+          <li>To visualize the cervix and vaginal walls</li>
+          <li>To facilitate Pap smears and other gynecological procedures</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Sterilize after each use</li>
+          <li>Check the locking mechanism for smooth operation</li>
+          <li>Lubricate the hinge with surgical lubricant</li>
+        </ul>
+      </div>
+
+      <!-- 37. Sphygmomanometer -->
+      <div class="item-card">
+        <h3>37. Sphygmomanometer</h3>
+        <img src="images/sphygmomanometer.jpg" alt="Sphygmomanometer">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Inflation bulb</li>
+          <li>Pressure cuff</li>
+          <li>Aneroid manometer gauge</li>
+          <li>Air release valve</li>
+          <li>Tube connectors</li>
+          <li>Index marking</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To measure blood pressure</li>
+          <li>To monitor hypertension or hypotension</li>
+          <li>To assess cardiovascular status</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Store in a protective casing</li>
+          <li>Check the cuff for leaks or tears</li>
+          <li>Calibrate the gauge regularly</li>
+        </ul>
+      </div>
+
+      <!-- 38. Stethoscope -->
+      <div class="item-card">
+        <h3>38. Stethoscope</h3>
+        <img src="images/stethoscope.jpg" alt="Stethoscope">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Ear tube & ear piece</li>
+          <li>Binaural spring</li>
+          <li>Tubing</li>
+          <li>Stem</li>
+          <li>Bell</li>
+          <li>Chest piece & diaphragm</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>For auscultation of internal sounds</li>
+          <li>To listen to heart sounds</li>
+          <li>To listen to lung sounds</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>The tubing should be regularly checked for air leaks</li>
+          <li>Clean the earpieces and chest piece with alcohol</li>
+          <li>Store in a cool, dry place to prevent tubing damage</li>
+        </ul>
+      </div>
+
+      <!-- 39. Stretcher -->
+      <div class="item-card">
+        <h3>39. Stretcher</h3>
+        <img src="images/stretcher.jpg" alt="Stretcher">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Mattress</li>
+          <li>Side rails</li>
+          <li>Wheels/casters</li>
+          <li>Frame</li>
+          <li>Brake system</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To convey patient from one point to another in emergency cases</li>
+          <li>To transport patients to and from surgery</li>
+          <li>To move patients who cannot walk</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning of the mattress to prevent spread of infections</li>
+          <li>Check wheels and brakes for proper function</li>
+          <li>Inspect side rails for stability</li>
+        </ul>
+      </div>
+
+      <!-- 40. Suction Machine -->
+      <div class="item-card">
+        <h3>40. Suction Machine and Catheter</h3>
+        <img src="images/suction-machine.jpg" alt="Suction Machine">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Suction pump</li>
+          <li>Collection canister</li>
+          <li>Tubing</li>
+          <li>Suction catheter</li>
+          <li>Filter</li>
+          <li>Control knob</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To suck unwanted fluids from a patient’s body during surgery</li>
+          <li>To remove fluids such as mucus, blood etc from a patient’s airways</li>
+          <li>To clear the airway and maintain patency</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Clean and disinfect the collecting bottle after use</li>
+          <li>Replace the suction canister and filters regularly</li>
+          <li>Check tubing for kinks or blockages</li>
+        </ul>
+      </div>
+
+      <!-- 41. Surgical Clamp -->
+      <div class="item-card">
+        <h3>41. Surgical Clamp</h3>
+        <img src="images/surgical-clamp.jpg" alt="Surgical Clamp">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Jaws</li>
+          <li>Box lock</li>
+          <li>Ring handles</li>
+          <li>Ratchet</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Used to occlude blood vessels during surgery</li>
+          <li>To hold tissue or organs in place</li>
+          <li>To clamp tubing or drains</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning and sterilisation</li>
+          <li>Check the ratchet for proper locking</li>
+          <li>Lubricate the joint if stiff</li>
+        </ul>
+      </div>
+
+      <!-- 42. Surgical Scissors -->
+      <div class="item-card">
+        <h3>42. Surgical Scissors</h3>
+        <img src="images/surgical-scissors.jpg" alt="Surgical Scissors">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Blades</li>
+          <li>Pivot screw</li>
+          <li>Ring handles</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>For cutting of tissues during surgery</li>
+          <li>To cut sutures or dressings</li>
+          <li>To dissect tissue planes</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning and sterilisation</li>
+          <li>Sharpen blades periodically</li>
+          <li>Check the pivot screw for tightness</li>
+        </ul>
+      </div>
+
+      <!-- 43. Surgical Thread -->
+      <div class="item-card">
+        <h3>43. Surgical Thread</h3>
+        <img src="images/surgical-thread.jpg" alt="Surgical Thread">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Thread (suture material)</li>
+          <li>Spool</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>For making stitches in tissues or blood vessels</li>
+          <li>To close wounds</li>
+          <li>To ligate blood vessels</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Store in a cool dry place</li>
+          <li>Check expiry date before use</li>
+          <li>Keep spool clean and free from contamination</li>
+        </ul>
+      </div>
+
+      <!-- ==================== T ==================== -->
+      <div class="letter-header">T</div>
+
+      <!-- 44. Thermometer -->
+      <div class="item-card">
+        <h3>44. Thermometer</h3>
+        <img src="images/thermometer.jpg" alt="Thermometer">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Sensor/probe</li>
+          <li>Display screen</li>
+          <li>Battery compartment</li>
+          <li>Power button</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To measure body temperature</li>
+          <li>To detect fever</li>
+          <li>To monitor temperature trends</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular calibration</li>
+          <li>Periodic inspection for any damage</li>
+          <li>Clean the probe with alcohol after each use</li>
+        </ul>
+      </div>
+
+      <!-- 45. Tongue Spatula -->
+      <div class="item-card">
+        <h3>45. Tongue Spatula</h3>
+        <img src="images/tongue-spatula.jpg" alt="Tongue Spatula">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Blade (flat stick)</li>
+          <li>Handle (if metal)</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To depress the tongue to examine the mouth and throat</li>
+          <li>To hold the tongue aside during procedures</li>
+          <li>To check for oral lesions</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Properly dispose the wooden ones</li>
+          <li>Sterilize metal spatulas after use</li>
+          <li>Store in a clean, dry place</li>
+        </ul>
+      </div>
+
+      <!-- 46. Trolley -->
+      <div class="item-card">
+        <h3>46. Trolley</h3>
+        <img src="images/trolley.jpg" alt="Medical Trolley">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Top shelf</li>
+          <li>Bottom shelf</li>
+          <li>Drawer</li>
+          <li>Wheels/casters</li>
+          <li>Trash bucket</li>
+          <li>Handles</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Upper shelf is used to contain sterilizable instruments like syringes</li>
+          <li>Lower shelf contains instruments that don’t require highly aseptic procedures</li>
+          <li>It is also used to dispense drugs</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning</li>
+          <li>The trash bucket of the trolley should be disposed regularly</li>
+          <li>Check wheels for smooth movement</li>
+        </ul>
+      </div>
+
+      <!-- ==================== U ==================== -->
+      <div class="letter-header">U</div>
+
+      <!-- 47. Urinary Bag -->
+      <div class="item-card">
+        <h3>47. Urinary Bag</h3>
+        <img src="images/urinary-bag.jpg" alt="Urinary Bag">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Collection bag</li>
+          <li>Inlet tube</li>
+          <li>Drainage port</li>
+          <li>Hanging hook</li>
+          <li>Volume markings</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To collect urine when normal micturition is not possible</li>
+          <li>To monitor urine output</li>
+          <li>To keep the patient dry and comfortable</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Empty and clean with alcohol after each use</li>
+          <li>The bag should be changed regularly</li>
+          <li>Keep the drainage port clean to prevent infection</li>
+        </ul>
+      </div>
+
+      <!-- 48. Uterine Cannula -->
+      <div class="item-card">
+        <h3>48. Uterine Cannula</h3>
+        <img src="images/uterine-cannula.jpg" alt="Uterine Cannula">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Cannula tip (screw or non-screw)</li>
+          <li>Shaft</li>
+          <li>Handle/connector</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>To prevent backflow of radiographic contrast medium during HSG</li>
+          <li>To inject contrast or saline into the uterus</li>
+          <li>To assess tubal patency</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning and sterilization</li>
+          <li>Check the tip for damage</li>
+          <li>Store in a sterile container</li>
+        </ul>
+      </div>
+
+      <!-- ==================== V ==================== -->
+      <div class="letter-header">V</div>
+
+      <!-- 49. Vulpellum Forceps -->
+      <div class="item-card">
+        <h3>49. Vulpellum Forceps</h3>
+        <img src="images/vulpellum-forceps.jpg" alt="Vulpellum Forceps">
+        <div class="section-title">🔧 Parts</div>
+        <ul>
+          <li>Jaws (with tooth)</li>
+          <li>Hinge</li>
+          <li>Handles</li>
+          <li>Ratchet</li>
+        </ul>
+        <div class="section-title">✅ Uses</div>
+        <ul>
+          <li>Used in radiographic examination of uterus and fallopian tube by gripping it firmly</li>
+          <li>To grasp and stabilize the cervix</li>
+          <li>To apply traction during gynecological procedures</li>
+        </ul>
+        <div class="section-title">🛠️ Maintenance</div>
+        <ul>
+          <li>Regular cleaning and sterilization</li>
+          <li>Check the teeth for sharpness or damage</li>
+          <li>Lubricate the hinge for smooth movement</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/chat.html'">💬</button></div>
+    <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='/dashboard.html'">⭐</button></div>
+    <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='/library.html'">📚</button></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light', 'dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    container.addEventListener('scroll', () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+    });
+  </script>
+</body>
+</html>
