@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upper Limb – Complete Radiographic Anatomy</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{background:var(--background);color:var(--text-primary);display:flex;justify-content:center;align-items:center;min-height:100vh;overflow-x:hidden}
+    .container{width:100%;max-width:420px;height:750px;overflow-y:auto;background:var(--background);border-radius:20px;box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);padding-top:70px;padding-bottom:90px;position:relative}
+    .neumorphic{background:var(--background);box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);border-radius:15px}
+    .neumorphic-btn{background:var(--background);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease}
+    .neumorphic-btn:active{box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);transform:scale(.95)}
+    .top-bar{position:fixed;top:0;width:100%;max-width:420px;background:var(--background);padding:15px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 5px 10px var(--shadow-in);z-index:20}
+    .top-bar .header{font-size:15px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;background:var(--shadow-in);z-index:15}
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+    .content{padding:20px 16px;line-height:1.65}
+    .main-header{text-align:center;margin-bottom:24px;padding:20px;border-radius:20px;background:rgba(29,185,84,.1)}
+    .main-header h1{font-size:18px;margin-bottom:6px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary)}
+    .section-card{background:var(--card-bg);padding:22px 18px;border-radius:18px;box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);margin-bottom:22px;border-left:4px solid var(--accent)}
+    .section-card h2{font-size:16px;margin-bottom:14px;color:var(--accent);font-weight:900}
+    .section-card h3{font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;padding-left:10px;border-left:3px solid var(--accent-tertiary)}
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p,.section-card li{font-size:13.5px;margin-bottom:6px}
+    .section-card ul,.section-card ol{padding-left:18px;margin:8px 0}
+    .highlight{background:rgba(78,205,196,.12);padding:12px 14px;border-radius:10px;margin:12px 0;border-left:3px solid var(--accent-tertiary)}
+    .memory{background:rgba(255,107,107,.12);padding:12px 14px;border-radius:10px;margin:12px 0;border-left:4px solid var(--accent-secondary)}
+    .memory strong{color:var(--accent-secondary);display:block;margin-bottom:4px}
+    .table-container{width:100%;overflow-x:auto;margin:12px 0;border-radius:12px}
+    .summary-table{width:100%;min-width:300px;border-collapse:separate;border-spacing:0;font-size:12px}
+    .summary-table th{background:var(--accent);color:#000;padding:9px 8px;text-align:left;font-weight:900}
+    .summary-table td{padding:8px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+    .exam-btn{display:block;width:100%;padding:15px;margin:10px 0 8px;background:linear-gradient(135deg,#1db954,#17a347);color:#000;font-size:15px;font-weight:900;border:none;border-radius:14px;cursor:pointer;box-shadow:4px 4px 10px var(--shadow-in),-4px -4px 10px var(--shadow-out)}
+    .exam-btn.secondary{background:linear-gradient(135deg,#4ecdc4,#3db8b0)}
+    .exam-btn:active{transform:scale(0.97)}
+    .nav-bar{position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20}
+    .nav-bar .nav-item.center button{width:50px;height:50px;font-size:24px;background:var(--accent);box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);color:#000}
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">Upper Limb</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>🦴 Upper Limb – Complete Guide</h1>
+        <p>Every point from the combined material<br>Shoulder • Elbow • Wrist & Hand</p>
+      </div>
+
+      <button class="exam-btn" onclick="window.location.href='exam-paper1.html'">📝 Paper 1 – Start Exam</button>
+      <button class="exam-btn secondary" onclick="window.location.href='exam-paper2.html'">📝 Paper 2 – Start Exam</button>
+
+      <!-- ===================== I. SHOULDER ===================== -->
+      <div class="section-card">
+        <h2>I. SHOULDER</h2>
+
+        <h3>A. Anatomy of the Shoulder and Axillary Regions</h3>
+
+        <h4>1. Bones</h4>
+        <p><strong>a. Clavicle</strong></p>
+        <ul>
+          <li>The S-shaped clavicle is palpable along its entire length within the anterior part of the shoulder region.</li>
+          <li>The clavicle lies anteriorly along its whole part and forms part of the anterior border of the shoulder region.</li>
+          <li>The clavicle is the first bone in the body to undergo ossification, which occurs via the intramembranous mode.</li>
+        </ul>
+
+        <p><strong>b. Scapula</strong></p>
+        <ul>
+          <li>The acromion process of the scapula underlies the point of the shoulder.</li>
+          <li>In its anatomic position, the inferior angle of the scapula lies at the level of the seventh intercostal space.</li>
+          <li>The scapula resembles a tilted triangle with the inferior border at the level of the 7th intercostal space.</li>
+          <li>The scapula has two projections: the coracoid process and the acromion process, with the latter underlying the point of the shoulder.</li>
+        </ul>
+
+        <p><strong>c. Proximal end of the humerus</strong></p>
+        <ul>
+          <li>Longitudinal growth of the humeral shaft during childhood and adolescence occurs more actively at the proximal than at the distal end.</li>
+          <li>The proximal end has two prominent secondary centres of ossification:
+            <ul>
+              <li>(a) The centre for the head appears during the first 3 months after birth.</li>
+              <li>(b) The centre for the greater tuberosity appears at 1 to 2 years of age.</li>
+            </ul>
+          </li>
+          <li>The surgical neck of the humerus is the most common fracture site in the proximal half of the bone.</li>
+          <li>The proximal part of the humerus is made up of the head, the anatomical neck, the surgical neck, greater tuberosity and lesser tuberosity.</li>
+        </ul>
+
+        <h4>2. Joints</h4>
+        <p><strong>a. Sternoclavicular joint</strong> — provides for protraction and retraction of the pectoral girdle.</p>
+        <ul>
+          <li>Articulates the medial end of the clavicle with the manubrium sterni.</li>
+          <li>The costoclavicular ligament stabilizes the joint by serving as the strongest nonmuscular structure binding the clavicle to the rib cage.</li>
+        </ul>
+
+        <p><strong>b. Acromioclavicular joint</strong> — provides for lateral and medial rotation of the scapula.</p>
+        <ul>
+          <li>Articulates the acromion process of the scapula with the lateral end of the clavicle.</li>
+          <li>The coracoclavicular ligament stabilizes the joint by serving as the strongest nonmuscular structure suspending the scapula from the clavicle.</li>
+          <li>The coracoclavicular ligament comprises the <strong>conoid</strong> and <strong>trapezoid</strong> ligaments.</li>
+        </ul>
+
+        <p><strong>c. Shoulder joint</strong> — provides for flexion, extension, and medial and lateral rotation of the arm; also provides for about 60° arm abduction and adduction.</p>
+        <ul>
+          <li>Articulates the head of the humerus with the glenoid fossa of the scapula.</li>
+          <li>Two prominent bursae are associated with the joint:
+            <ul>
+              <li>(a) The subacromion-subdeltoid bursa separates the tendinous insertion of supraspinatus onto the joint capsule from the overlying deltoid.</li>
+              <li>(b) The subscapular bursa intervenes between the scapular fossa and the tendinous insertion of subscapularis onto the joint capsule; the bursa is an extracapsular extension of the joint’s synovial lining.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4>3. Muscles</h4>
+        <p><strong>a. Muscles that suspend the pectoral girdle from the back</strong></p>
+        <ul>
+          <li><strong>Trapezius</strong> — the most powerful elevator and retractor of the pectoral girdle and one of the two prime movers that raise the arm above the level of the shoulder.
+            <ul>
+              <li>(a) The spinal part of the accessory nerve provides motor fibres; C3 and C4 provide proprioceptive fibres.</li>
+              <li>(b) Loss of trapezius function produces a dropped shoulder.</li>
+            </ul>
+          </li>
+          <li>Levator scapulae, rhomboid major and rhomboid minor assist the trapezius in elevation and retraction. All three are innervated by the dorsal scapular nerve; levator scapulae also receives innervation from C3 and C4.</li>
+          <li>These muscles got their innervations from C3–C4 and loss of function leads to drooped shoulder.</li>
+        </ul>
+
+        <p><strong>b. Muscles that pull upon the pectoral girdle from the anterior surface of the rib cage</strong></p>
+        <ul>
+          <li><strong>Serratus anterior</strong> — the most powerful protractor of the pectoral girdle and the other prime mover used to raise the arm above the shoulder.
+            <ul>
+              <li>(a) Innervation is by the long thoracic nerve.</li>
+              <li>(b) Loss of function produces a winged scapula.</li>
+            </ul>
+          </li>
+          <li>Pectoralis minor assists serratus anterior in protraction; innervated by the medial and lateral pectoral nerves.</li>
+          <li>Subclavius can depress the pectoral girdle; innervated by the nerve to subclavius.</li>
+        </ul>
+
+        <p><strong>c. Muscles of the rotator cuff</strong></p>
+        <ul>
+          <li>Supraspinatus — one of the two prime movers that initiate arm abduction from the anatomic position (deltoid is the other); innervated by the suprascapular nerve.</li>
+          <li>Infraspinatus — a lateral rotator of the arm; innervated by the suprascapular nerve.</li>
+          <li>Teres minor — a lateral rotator of the arm; innervated by C5 and C6 fibres in the axillary nerve.</li>
+          <li>Subscapularis — a medial rotator of the arm; innervated by the upper and lower subscapular nerves.</li>
+        </ul>
+
+        <p><strong>d. Prime movers of arm abduction and adduction</strong></p>
+        <ul>
+          <li>Deltoid — prime mover of arm abduction up to about the level of the shoulder; innervated by C5 and C6 fibres in the axillary nerve.</li>
+          <li>Latissimus dorsi — a powerful extensor, adductor and medial rotator of the arm; innervated by the thoracodorsal (middle subscapular) nerve. Accounts for most of the muscle mass of the posterior axillary fold.</li>
+          <li>Pectoralis major — a powerful flexor, adductor and medial rotator of the arm; innervated by the medial and lateral pectoral nerves. Accounts for most of the muscle mass of the anterior axillary fold.</li>
+          <li>Teres major — a major adductor and medial rotator of the arm; innervated by the lower subscapular nerve.</li>
+        </ul>
+
+        <h4>4. Nerves – Brachial Plexus</h4>
+        <p><strong>a. Brachial plexus</strong></p>
+        <div class="highlight">
+          Roots (anterior rami of C5–T1) → three trunks (upper, middle, lower) → six divisions → cords named for their relationship to the second part of the axillary artery (lateral, posterior, medial).
+        </div>
+
+        <p><strong>(1) Roots</strong></p>
+        <ul>
+          <li>Anterior rami of C5, C6, C7, C8 and T1 form the five roots.</li>
+          <li>Only two nerves arise from the roots:
+            <ul>
+              <li>(a) The dorsal scapular nerve arises from the C5 root.</li>
+              <li>(b) The long thoracic nerve arises from the C5, C6 and C7 roots.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><strong>(2) Trunks</strong></p>
+        <ul>
+          <li>(a) Upper trunk — union of C5 and C6 roots.</li>
+          <li>(b) Middle trunk — extension of the C7 root.</li>
+          <li>(c) Lower trunk — union of C8 and T1 roots.</li>
+          <li>Only two nerves arise from the trunks — the suprascapular nerve and the nerve to subclavius — both from the upper trunk.</li>
+        </ul>
+
+        <p><strong>(3) Divisions</strong></p>
+        <ul>
+          <li>Each trunk divides into an anterior and a posterior division (six divisions). No nerves arise from the divisions.</li>
+        </ul>
+
+        <p><strong>(4) Cords</strong></p>
+        <ul>
+          <li>Each cord is named for its relationship to the second part of the axillary artery.
+            <ul>
+              <li>(i) Lateral cord — union of the anterior divisions of the upper and middle trunks.</li>
+              <li>(ii) Posterior cord — union of all three posterior divisions.</li>
+              <li>(iii) Medial cord — continuation of the anterior division of the lower trunk.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><strong>Nerves arising from each cord:</strong></p>
+        <ul>
+          <li>(i) Lateral cord: lateral pectoral nerve, musculocutaneous nerve, and lateral root of the median nerve.</li>
+          <li>(ii) Posterior cord: upper, middle (thoracodorsal) and lower subscapular nerves; axillary nerve; and radial nerve.</li>
+          <li>(iii) Medial cord: medial pectoral nerve, medial cutaneous nerves of the arm and forearm, ulnar nerve, and medial root of the median nerve.</li>
+        </ul>
+
+        <p><strong>b. Brachial plexus injuries</strong></p>
+        <ul>
+          <li><strong>Erb-Duchenne paralysis (waiter’s tip palsy)</strong> — caused by irreversible damage to the C5 and C6 roots or to the upper trunk. The upper limb hangs by the side of the body (due to loss of deltoid function) and the forearm is noticeably pronated (due to loss of biceps brachii function).</li>
+          <li><strong>Klumpke’s paralysis</strong> — caused by irreversible damage to the C8 and T1 roots or to the lower trunk.
+            <ul>
+              <li>(a) Characterised by absence of oppositional movement of the thumb (loss of opponens pollicis) and inability to abduct or adduct the fingers (loss of palmar and dorsal interossei and abductor digiti minimi).</li>
+              <li>(b) Disfigurement of the hand resulting from hyperextension of the fingers at the metacarpophalangeal joints (loss of lumbricals).</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4>5. Blood Vessels and Lymph Nodes</h4>
+        <p><strong>a. Axillary artery</strong></p>
+        <ul>
+          <li>Begins at the lateral border of the first rib as a continuation of the subclavian artery and ends at the lower border of the insertion of teres major onto the humerus; continuous with the brachial artery.</li>
+          <li>Divided into three parts:
+            <ul>
+              <li>(a) First part — one branch: the superior thoracic artery.</li>
+              <li>(b) Second part — lies behind pectoralis minor; two branches: the thoracoacromial trunk and the lateral thoracic artery. The lateral thoracic artery is the chief artery supplying the lateral half of the mammary gland.</li>
+              <li>(c) Third part — three branches: the subscapular artery and the anterior and posterior humeral circumflex arteries.
+                <ul>
+                  <li>(i) Branches of the subscapular artery anastomose with branches of the suprascapular and transverse cervical arteries to form an arterial network around the scapula.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><strong>b. Axillary vein</strong></p>
+        <ul>
+          <li>Begins at the union of the basilic vein with the venae comitantes of the brachial artery and ends at the lateral border of the first rib; continuous with the subclavian vein.</li>
+          <li>The cephalic vein, the largest tributary of the axillary vein, passes deeply through the deltopectoral triangle before joining the axillary vein.</li>
+        </ul>
+
+        <p><strong>c. Axillary lymph nodes — six groups</strong></p>
+        <ul>
+          <li>1. Anterior (pectoral) group — drains superficial tissues of the anterolateral trunk down to the umbilicus; also drains the lateral half of the mammary gland. Palpable posterior to the lateral border of pectoralis major.</li>
+          <li>2. Posterior (subscapular) group — drains superficial tissues of the posterior trunk down to the iliac crest. Palpable anterior to the lateral border of latissimus dorsi.</li>
+          <li>3. Lateral group — drains all tissues of the hand, forearm and arm except the superficial tissues on the lateral side of the upper limb. Palpable along the axillary vein.</li>
+          <li>4. Central group — drains efferent lymphatic vessels from the pectoral, subscapular and lateral groups. Palpable against the chest wall in the centre of the axilla.</li>
+          <li>5. Deltopectoral group — drains superficial tissues on the lateral side of the hand, forearm and arm. Palpable in the deltopectoral triangle beneath the clavicle.</li>
+          <li>6. Apical group — lies immediately lateral to the lateral border of the first rib; drains efferent lymphatic vessels from all of the other five groups.</li>
+        </ul>
+      </div>
+
+      <!-- B. AP Radiograph of the Shoulder -->
+      <div class="section-card">
+        <h2>B. Major Features of the AP Radiograph of the Shoulder</h2>
+        <div class="highlight">
+          Basic projections for shoulder x-ray are Antero-posterior (15 degrees) in erect/supine position and the axial position. Two views of the shoulder joint are usually done in suspected cases of dislocation.
+        </div>
+        <ul>
+          <li>The radiograph shows all or parts of the following most proximal bones:
+            <ul>
+              <li>a. Most or all of the clavicle.</li>
+              <li>b. The coracoid process, acromion process and glenoid fossa of the scapula.</li>
+              <li>c. The head, anatomic neck and surgical neck of the humerus.
+                <ul>
+                  <li>(1) The greater tuberosity is shown in profile if the humerus is externally rotated to the extent that the line between the epicondyles lies in a coronal plane.</li>
+                  <li>(2) The lesser tuberosity is shown in profile if the humerus is internally rotated to the extent that the line between the epicondyles lies in a parasagittal plane.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>The radiograph shows the following most proximal joints:
+            <ul>
+              <li>a. The sternoclavicular joint (in some instances lies medial to the medial extent of the radiograph).</li>
+              <li>b. The acromioclavicular joint.</li>
+              <li>c. The shoulder joint.</li>
+            </ul>
+          </li>
+          <li>The radiograph shows a radiolucent space called the coracoclavicular space between the coracoid process and the clavicle; it marks the location of the coracoclavicular ligament.</li>
+          <li>The radiograph shows a radiolucent space called the acromioclavicular space between the acromion process and the lateral end of the clavicle; it represents the apposed articular cartilages in the acromioclavicular joint.</li>
+          <li>The perspective superimposes the head of the humerus over an obliquely oriented glenoid fossa; the region of superimposition approximates an ellipse in shape.</li>
+          <li>The head of the humerus should superimpose over an obliquely oriented glenoid fossa with the region of superimposition having an eclipse (ellipse) shape.</li>
+        </ul>
+      </div>
+
+      <!-- C. Clinical Features -->
+      <div class="section-card">
+        <h2>C. Clinical and Radiographic Features of Common Traumatic Injuries</h2>
+        <div class="highlight">
+          Traumatic injuries remain the leading request for shoulder x-ray. Injury can come as subluxation of the acromioclavicular joint, dislocation of the shoulder joint, and fracture to the bones of the shoulder girdle.
+        </div>
+
+        <h4>1. Subluxation or Dislocation of the Acromioclavicular Joint (Shoulder Separations)</h4>
+        <p>Simple sprains, subluxations (partial dislocations) and dislocations are different grades of injuries known as shoulder separations. They generally occur as a result of a downward blow on the point of the shoulder. Graded I to III.</p>
+        <ul>
+          <li><strong>Grade I</strong> — simple sprain of the fibrous capsule of the acromioclavicular joint. Neither the fibrous capsule nor the coracoclavicular ligament is significantly damaged; the radiograph shows acromioclavicular and coracoclavicular spaces of normal width.</li>
+          <li><strong>Grade II</strong> — subluxation of the acromioclavicular joint. Significant damage to the joint’s ligamentous supports is limited to its fibrous capsule; the radiograph shows a coracoclavicular space of normal width but an acromioclavicular space at least 50% wider than that measured in an AP radiograph of the contralateral, uninjured shoulder.</li>
+          <li><strong>Grade III</strong> — dislocation of the acromioclavicular joint. Both the joint’s fibrous capsule and the coracoclavicular ligament are significantly disrupted; the radiograph shows the acromioclavicular and coracoclavicular spaces both at least 50% wider than the corresponding spaces in the AP radiograph of the contralateral, uninjured shoulder.</li>
+          <li>Grade III is described as complete dislocation of the acromioclavicular joint occurring when there is significant injury to the fibrous capsule and coracoclavicular ligament; both spaces are at least 50% wider than contralateral normal AP radiograph.</li>
+        </ul>
+
+        <h4>2. Dislocation of the Shoulder Joint</h4>
+        <p>The shoulder joint is the joint most commonly dislocated in adults. Dislocation can be classified into anterior, posterior, inferior and superior, with anterior dislocation being the most common occurrence.</p>
+
+        <p><strong>a. Anterior (forward) dislocation of the humeral head</strong> — the most common type.</p>
+        <ul>
+          <li>(1) Description: produced by trauma that drives the humeral head anteroinferiorly from its articulation with the glenoid fossa. In many cases accompanied by a cleavage-shaped indentation (called a hatchet, or Hill-Sachs, defect) in the posterolateral aspect of the humeral head, produced by abutment of the displaced head onto the inferior rim of the glenoid fossa.</li>
+          <li>(2) Clinical features:
+            <ul>
+              <li>(a) The shoulder has lost its normal rounded contour and acquired the contour of the acromion process.</li>
+              <li>(b) Damage to the axillary nerve (which extends posteriorly through the quadrangular space beneath the fibrous capsule of the shoulder joint) should be tested via assessment of pinprick sensation on the lateral aspect of the upper arm.</li>
+            </ul>
+          </li>
+          <li>(3) Radiographic features:
+            <ul>
+              <li>(a) The radiograph shows the humeral head in a subglenoid, subcoracoid or subclavicular position.</li>
+              <li>(b) Following reduction, an AP radiograph taken with the arm internally rotated provides the best view for detection of a hatchet defect.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><strong>b. Posterior dislocation of the humeral head</strong></p>
+        <ul>
+          <li>(1) Description: produced by trauma that drives the humeral head posteriorly from its articulation with the glenoid fossa.</li>
+          <li>(2) Clinical features: the shoulder is flattened anteriorly and bulging posteriorly; abduction and external rotation of the arm are markedly limited.</li>
+          <li>(3) Radiographic features: posterior dislocations are difficult to ascertain in AP radiographs because the humeral head almost always assumes a subacromial position and thus lies at approximately its normal “level.” However, most are associated with:
+            <ul>
+              <li>(a) The partially overlapped images of the humeral head and glenoid fossa do not present a normal elliptic outline.</li>
+              <li>(b) An angled AP radiograph (patient’s body turned 35° to 40° toward the x-ray film cassette) shows the glenoid fossa in profile. In a normal shoulder, this shows a radiolucent space between the humeral head and the profiled glenoid fossa; a posteriorly dislocated humeral head always shows a partially overlapped humeral head and glenoid fossa.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4>3. Fracture of the Shoulder Girdle</h4>
+        <ul>
+          <li>The clavicle is the most frequent fractured bone of the shoulder girdle. The clavicle transmits all forces from the arm to the trunk of the body.</li>
+          <li>Clinical features: normally the clavicle props the shoulder posterosuperiorly on the trunk. A person with a fractured clavicle presents with a shoulder that is anteriorly dislocated.</li>
+          <li>Radiographic features: the most common fracture site is the border region between the middle and lateral thirds of the bone. The fracture site generally is evident because of angulation of the fragments.</li>
+          <li>The surgical neck of the humerus is another area where fracture frequently occurs. Avulsion fracture of the greater tuberosity also occurs often.</li>
+        </ul>
+
+        <h4>4. Degenerative Bone Disease of the Shoulder Joint — Osteoarthritis</h4>
+        <ul>
+          <li>The glenohumeral joint is one of the less common joints affected by osteoarthritis.</li>
+          <li>Osteoarthritis is characterised by progressive joint alteration.</li>
+          <li>Radiographic features: osteophyte formation, joint space narrowing, and sclerosis of the subchondral bone plate. Subchondral cyst formation and remodelling of the articular surfaces or deformity are seen in more advanced stages.</li>
+        </ul>
+      </div>
+
+      <!-- ===================== II. ELBOW ===================== -->
+      <div class="section-card">
+        <h2>II. ELBOW</h2>
+        <h3>A. Anatomy of the Elbow Region</h3>
+        <div class="highlight">The elbow is made up of bones, joints, muscles, nerves and vascular supply.</div>
+
+        <h4>1. Bones</h4>
+        <p><strong>a. Distal end of the humerus</strong></p>
+        <ul>
+          <li>The medial and lateral epicondyles are palpable on the sides of the elbow.</li>
+          <li>The distal end bears four secondary centres of ossification during childhood and adolescence:
+            <ul>
+              <li>(a) The centre for the capitulum appears during the first 6 months after birth.</li>
+              <li>(b) The centre for the medial epicondyle appears at 4 to 6 years of age.</li>
+              <li>(c) The centre for the trochlea appears at 8 to 9 years of age.</li>
+              <li>(d) The centre for the lateral epicondyle appears at 11 to 12 years of age.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><strong>b. Proximal ends of the ulna and radius</strong></p>
+        <ul>
+          <li>The olecranon process of the ulna is palpable in the posterior elbow region.
+            <ul>
+              <li>(a) When the forearm is flexed 90° at the elbow, the olecranon process and the humeral epicondyles lie at the vertices of an equilateral triangle.</li>
+              <li>(b) When the forearm is fully extended, the three bony prominences are colinear.</li>
+            </ul>
+          </li>
+          <li>The head of the radius is palpable on the lateral side of the elbow, immediately distal to the lateral epicondyle of the humerus.</li>
+        </ul>
+
+        <h4>2. Joints</h4>
+        <p><strong>a. Elbow joint</strong> — provides for flexion and extension of the forearm; consists of two articulations:</p>
+        <ul>
+          <li>1. Humeroulnar articulation — the trochlear notch of the ulna articulates with the trochlea of the humerus. When forces are transmitted from the forearm to the arm under normal conditions, this articulation bears most of the force transmitted.</li>
+          <li>2. Humeroradial articulation — the head of the radius articulates with the capitulum of the humerus.</li>
+        </ul>
+        <p><strong>b. Proximal radioulnar joint</strong> — the proximal and distal radioulnar joints provide for pronation and supination of the forearm.</p>
+        <ul>
+          <li>Articulates the radial head with the radial notch of the ulna and the annular ligament.</li>
+          <li>The synovial cavity of the proximal radioulnar joint is continuous with that of the elbow joint.</li>
+        </ul>
+
+        <h4>3. Muscles</h4>
+        <div class="highlight">The muscles of the elbow can be grouped into flexors, extensors, pronators and supinators.</div>
+        <ul>
+          <li><strong>a. Flexor muscles</strong>: The major flexors of the elbow are the biceps brachii and brachialis. The flexor muscles are innervated by the musculocutaneous nerve.</li>
+          <li><strong>b. Extensor muscles</strong>: These include triceps brachii and are innervated by the radial nerve.</li>
+          <li><strong>c. Pronator muscles</strong>: The pronator muscles pronate and also flex the forearm. They include pronator teres and pronator quadratus muscles. The pronator muscles are innervated by the median nerve.</li>
+          <li><strong>d. Brachioradialis</strong> stabilises the forearm in the midprone position and is innervated by the radial nerve. The brachioradialis tendon reflex test is a phasic stretch reflex test at the C5 and C6 levels.</li>
+          <li><strong>e. Supinator</strong>: Supinator muscles supinate the forearm and are innervated by the radial nerve (deep branch).</li>
+        </ul>
+        <ul>
+          <li>Biceps brachii — a major flexor and the chief supinator of the forearm; innervated by the musculocutaneous nerve. The biceps brachii tendon reflex test is a phasic stretch reflex test at the C5 and C6 levels.</li>
+          <li>Brachialis — a major flexor of the forearm; innervated by the musculocutaneous nerve.</li>
+          <li>Triceps brachii — the chief extensor of the forearm; innervated by the radial nerve. The triceps brachii tendon reflex test is a phasic stretch reflex test at the C7 and C8 levels.</li>
+          <li>Pronator teres — a flexor and pronator of the forearm; innervated by the median nerve.</li>
+          <li>Pronator quadratus — assists pronator teres in pronation; innervated by the anterior interosseous branch of the median nerve.</li>
+        </ul>
+      </div>
+
+      <!-- ===================== III. WRIST & HAND ===================== -->
+      <div class="section-card">
+        <h2>III. WRIST AND HAND</h2>
+
+        <h3>Major Features of the PA Radiograph of the Wrist</h3>
+        <ul>
+          <li>Ulnar angulation of the radial articular surface is measured as the acute angle between two imaginary lines: one drawn from the tip of the radial styloid process to the base of the ulnar styloid process, and another drawn perpendicular to the central axis of the radius. Normal value ranges from <strong>7° to 18°</strong>.</li>
+        </ul>
+
+        <p><strong>b. The carpals</strong></p>
+        <ul>
+          <li>The four most proximal carpals — scaphoid (navicular), lunate, triquetrum and pisiform — form a semilunar array of radiopaque shadows immediately distal to the distal end of the radius and the head of the ulna.
+            <ul>
+              <li>(a) The roughly circular outline of the pisiform overlies the triquetrum.</li>
+              <li>(b) The lunate casts a quadrangular (four-sided) shadow.</li>
+            </ul>
+          </li>
+          <li>The fibrocartilaginous disk of the wrist joint lies within the gaping, radiolucent space between the head of the ulna and the proximal edges of the lunate and triquetrum.</li>
+          <li>The capitate and hamate occupy the concavity in the semilunar array. The ovoid radiopacity overlying the distal part of the hamate represents the hook of the hamate.</li>
+          <li>The radiopaque shadows of the trapezium (greater multangular) and trapezoid (lesser multangular) largely overlap each other, and lie interposed between the distal pole of the scaphoid and the bases of the first and second metacarpals.</li>
+        </ul>
+
+        <p><strong>c. The metacarpals, phalanges and sesamoid bones</strong></p>
+        <ul>
+          <li>The central axis of the third metacarpal lies along the major axis by which forces are transmitted from the hand across the wrist to the forearm. From the third metacarpal, this axis extends proximally:
+            <ul>
+              <li>(a) Along the central axis of the capitate</li>
+              <li>(b) Between the scaphoid and lunate</li>
+              <li>(c) Along the central axis of the radius</li>
+            </ul>
+          </li>
+          <li>The bases of the metacarpals partially overlap each other or one of the distal carpals.</li>
+          <li>Provides an unobstructed view of the metacarpophalangeal and interphalangeal joints of all five digits.</li>
+          <li>Shows one or both of the sesamoid bones on the anterior side of the first metacarpophalangeal joint.
+            <ul>
+              <li>(a) The more medial sesamoid bone lies embedded in the common tendon of insertion of adductor pollicis and the first palmar interosseous.</li>
+              <li>(b) The more lateral sesamoid bone lies embedded in the common tendon of insertion of flexor pollicis brevis and abductor pollicis brevis.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="highlight">
+          <strong>Additional PA assessment points</strong><br>
+          • The distal radioulnar joint appears as a radiolucent space between the head of the ulna and the ulnar notch of the radius.<br>
+          • To assess for normal PA positioning: (1) the axis from the third metacarpal must pass along the central axis of the capitate, between the scaphoid and lunate, and along the central axis of the radius; (2) the bases of the metacarpals partially overlap each other or one of the distal carpals; (3) the metacarpophalangeal and interphalangeal joints of all five digits should be well demonstrated without obstruction; (4) one or two sesamoid bones should be demonstrated at the first metacarpophalangeal joint.
+        </div>
+
+        <h3>2. Lateral Radiograph of the Wrist</h3>
+        <ul>
+          <li>Shows the anterior (volar) angulation of the articular surface at the distal end of the radius. Quantitated by measuring the acute angle between a line drawn through the anterior and posterior margins of the radial articular surface and a line drawn perpendicular to the central axis of the radius. The angle normally measures <strong>15° to 23°</strong>.</li>
+          <li>Two convex bony outlines overlap the distal end of the radius:
+            <ul>
+              <li>1. The more proximal outline represents the proximal surface of the lunate.</li>
+              <li>2. The more distal outline represents the proximal surface of the scaphoid.</li>
+            </ul>
+          </li>
+          <li>The rounded head of the capitate lies immediately distal to the concave bony outline cast by the distal surface of the lunate.</li>
+          <li>The tuberosity of the scaphoid projects anterior to the head of the capitate.</li>
+          <li>The central axis of the third metacarpal extends proximally:
+            <ul>
+              <li>1. Along the central axis of the capitate</li>
+              <li>2. Through the centre of the lunate</li>
+              <li>3. Along the central axis of the radius</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Clinical Features of Wrist & Hand -->
+      <div class="section-card">
+        <h2>C. Clinical and Radiographic Features of Common Traumatic Injuries and Arthritides</h2>
+
+        <h4>1. Dislocation of one or more of the carpals</h4>
+        <p><strong>a. Dislocations of the lunate</strong></p>
+        <ul>
+          <li>1. Whenever the lunate is dislocated either anteriorly or posteriorly, it undergoes an anterior rotation on its convex, proximal surface. This rotation transforms its PA outline from a quadrangular to a triangular shadow.</li>
+          <li>2. Dislocations of the lunate displace the centre of the bone from the line in the lateral wrist radiograph that extends from the central axes of the third metacarpal and capitate to the central axis of the radius.</li>
+          <li>3. Anterior dislocation of the lunate is one of the most common carpal dislocations. It thrusts the bone into the carpal tunnel and thus may result in injury to the median nerve.</li>
+        </ul>
+        <p><strong>b. Posterior dislocation of all the carpals relative to the lunate (posterior perilunate dislocation)</strong></p>
+        <ul>
+          <li>A lateral radiograph characteristically shows that the central axis of the capitate extends proximally posterior to the central axis of the radius.</li>
+        </ul>
+        <p><strong>c. Tear of the scapholunate ligament</strong></p>
+        <ul>
+          <li>Can lead to a rotational dislocation of the scaphoid in which the proximal pole is directed posteriorly and the distal pole anteriorly. Such a dislocation increases the width of the radiolucent space between the scaphoid and lunate in a PA radiograph.</li>
+        </ul>
+
+        <h4>2. Fracture of the distal radius</h4>
+        <ul>
+          <li>a. Fractures of the distal third of the radial shaft commonly occur in association with a dislocation of the distal radioulnar joint (a Galeazzi fracture-dislocation).</li>
+          <li>b. Fractures in a young child — the bones are relatively supple and easily deformed.
+            <ul>
+              <li>1. Torus fracture — compression failure of the cortical bone in the distal third of a young child’s radial shaft can cause the cortical bone to buckle outward. So called because the radiographic outline of the fracture site resembles the outline of an architectural column bearing a torus moulding at its base.</li>
+              <li>2. Greenstick fracture — frequently incomplete. Radiographs show a discontinuity of the cortical bone on one side of the shaft and a bent cortical bone on the opposite side. So called because of their similarity to a break in a supple branch of a tree or bush.</li>
+            </ul>
+          </li>
+          <li>c. Colles’ fracture — a fracture of the distal radius in which there is posterior displacement and rotation of the distal fragment. Generally produced by a fall on an outstretched hand. More than 50% of Colles’ fractures are accompanied by a fracture of the ulnar styloid process.</li>
+          <li>d. Smith’s (reversed Colles’) fracture — a fracture of the distal radius in which there is anterior displacement and rotation of the distal fragment. Encountered much less frequently than Colles’ fractures.</li>
+          <li>e. Reduction of fractures at the distal end of the radius requires that:
+            <ul>
+              <li>1. The anterior angulation of the articular surface be restored in order to ensure adequate grip function.</li>
+              <li>2. The medial angulation of the articular surface be restored in order to ensure sufficient adduction of the hand at the wrist joint.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4>3. Fracture of the scaphoid</h4>
+        <ul>
+          <li>The scaphoid is the most frequently fractured carpal bone. Fully 80% of scaphoid fractures occur in its waist (the narrowed midregion that joins the proximal and distal poles).</li>
+          <li>a. Clinical features and diagnosis: A fractured scaphoid is indicated if pain in the anatomic snuffbox occurs with two or all three of the following procedures:
+            <ul>
+              <li>1. Deep palpation of the anatomic snuffbox.</li>
+              <li>2. Axial compression of the thumb toward the anatomic snuffbox.</li>
+              <li>3. An attempt by the patient to supinate the forearm against resistance (with the examiner holding the patient’s hand in a neutral position).</li>
+            </ul>
+          </li>
+          <li>b. Radiographic features
+            <ul>
+              <li>1. Commonly difficult to detect radiographically during the first 1 to 2 days after injury. The subsequent bone resorption which occurs at the fracture site renders the site more radiolucent and thus more apparent in radiographs taken 7 to 10 days after the injury. It is advisable to order a PA radiograph of the wrist with the hand ulnar-deviated (adducted) at the wrist joint, because adduction diminishes the extent to which the surrounding carpals overlap the image of the scaphoid.</li>
+              <li>2. It is not uncommon for bony union of the fragments to be delayed or not occur at all. Failure of bony union frequently results in avascular necrosis of the proximal fragment; this is because most or all of the scaphoid’s nutrient foramina are located on the surface of the distal half of the bone.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4>4. Primary osteoarthritis</h4>
+        <ul>
+          <li>a. Affected joints: Within the hand, primary osteoarthritis most commonly affects the distal and proximal interphalangeal joints of the fingers and the carpometacarpal joint of the thumb.</li>
+          <li>b. Radiographic features
+            <ul>
+              <li>1. The radiolucent joint space narrows in width as a result of degeneration and thinning of the articular cartilage surfaces.</li>
+              <li>2. The subchondral bone areas exhibit osteosclerosis (become more radiopaque).</li>
+              <li>3. Hypertrophy of the subchondral bone areas generates osteophytes (amorphous outgrowths).
+                <ul>
+                  <li>(a) Heberden’s nodes are osteophytes of the distal interphalangeal joints.</li>
+                  <li>(b) Bouchard’s nodes are osteophytes of the proximal interphalangeal joints.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4>5. Rheumatoid arthritis</h4>
+        <ul>
+          <li>a. Affected joints: Within the hand, rheumatoid arthritis most commonly affects the proximal interphalangeal and metacarpophalangeal joints of the fingers and joints of the wrist region.</li>
+          <li>b. Radiographic features
+            <ul>
+              <li>1. The radiolucent joint space narrows in width as a result of degeneration and thinning of the articular cartilage surfaces.</li>
+              <li>2. The periarticular bone areas exhibit osteopenia (become more radiolucent). The osteopenia is a result of osteoporosis (diminished bone mass).</li>
+              <li>3. The peripheral regions of subchondral bone exhibit erosions (seen as notch-shaped deficiencies).</li>
+              <li>4. In advanced rheumatoid arthritis, the fingers become deformed or malaligned.
+                <ul>
+                  <li>(a) Permanent flexion of the distal interphalangeal joint and hyperextension of the proximal interphalangeal joint produces a swan-neck deformity.</li>
+                  <li>(b) Permanent hyperextension of the distal interphalangeal joint and flexion of the proximal interphalangeal joint produces a boutonnière deformity.</li>
+                  <li>(c) The fingers may also exhibit ulnar deviation at the metacarpophalangeal joints.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4>6. Determining the degree of bone mineralisation</h4>
+        <ul>
+          <li>a. The mineral content of a patient’s bones can be determined by measuring the thickness of cortical bone in the second metacarpal as displayed in a PA radiograph of the hand.</li>
+          <li>b. The thickness of the cortex is measured on both the medial and the lateral sides at the midpoint of the diaphysis. Bone loss (as in osteoporosis) is indicated if the sum of these two cortical thicknesses is less than 4 mm.</li>
+        </ul>
+      </div>
+
+      <!-- Ligaments & Nerves Tables -->
+      <div class="section-card">
+        <h2>Ligaments Summary (Upper Limb)</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Ligament</th><th>Location / Key Facts</th></tr>
+            <tr><td>Costoclavicular</td><td>Sternoclavicular joint – strongest nonmuscular structure binding clavicle to rib cage</td></tr>
+            <tr><td>Coracoclavicular</td><td>Acromioclavicular joint – strongest nonmuscular structure suspending scapula from clavicle; comprises conoid and trapezoid ligaments</td></tr>
+            <tr><td>Annular</td><td>Proximal radioulnar joint – encircles radial head; torn in almost all radial head dislocations; displaced/entrapped in nursemaid’s elbow</td></tr>
+            <tr><td>Triangular disk of fibrous cartilage</td><td>Distal radioulnar joint – separates synovial cavity of distal radioulnar joint from wrist joint</td></tr>
+            <tr><td>Scapholunate</td><td>Wrist – tear leads to rotational dislocation of the scaphoid (widened scapholunate space)</td></tr>
+            <tr><td>Joint capsules (fibrous)</td><td>Shoulder, elbow, wrist – Grade I/II/III shoulder separations involve fibrous capsule damage; elbow effusion displaces fat pads</td></tr>
+            <tr><td>Bicipital aponeurosis</td><td>Cubital fossa – brachial artery courses deep to it</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h2>Nerves Summary (Upper Limb)</h2>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Nerve</th><th>Root/Cord</th><th>Key Supply</th></tr>
+            <tr><td>Dorsal scapular</td><td>C5 root</td><td>Levator scapulae, rhomboids</td></tr>
+            <tr><td>Long thoracic</td><td>C5, C6, C7 roots</td><td>Serratus anterior (winged scapula)</td></tr>
+            <tr><td>Suprascapular</td><td>Upper trunk</td><td>Supraspinatus, infraspinatus</td></tr>
+            <tr><td>Nerve to subclavius</td><td>Upper trunk</td><td>Subclavius</td></tr>
+            <tr><td>Lateral pectoral</td><td>Lateral cord</td><td>Pectoralis major/minor</td></tr>
+            <tr><td>Musculocutaneous</td><td>Lateral cord</td><td>Biceps brachii, brachialis; terminal branch = lateral cutaneous nerve of forearm</td></tr>
+            <tr><td>Upper / middle (thoracodorsal) / lower subscapular</td><td>Posterior cord</td><td>Subscapularis, latissimus dorsi, teres major</td></tr>
+            <tr><td>Axillary</td><td>Posterior cord (C5, C6)</td><td>Deltoid, teres minor; at risk in anterior shoulder dislocation</td></tr>
+            <tr><td>Radial</td><td>Posterior cord</td><td>Triceps, brachioradialis, ECRL, supinator (deep branch), extensors, ECRB (deep branch)</td></tr>
+            <tr><td>Medial pectoral</td><td>Medial cord</td><td>Pectoralis major/minor</td></tr>
+            <tr><td>Ulnar</td><td>Medial cord</td><td>FCU, medial half FDP, interossei, adductor pollicis, 3rd/4th lumbricals, hypothenar muscles; passes superficial to flexor retinaculum</td></tr>
+            <tr><td>Median</td><td>Lateral + medial roots</td><td>Thenar muscles, 1st/2nd lumbricals, lateral half FDP, FDS, FCR, PL, FPL, pronators; passes through carpal tunnel</td></tr>
+            <tr><td>Anterior interosseous</td><td>Branch of median</td><td>FPL, lateral half FDP, pronator quadratus</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Study Questions -->
+      
+
+      <button class="exam-btn" onclick="window.location.href='352note1q.html'">📝 Paper 1 – Start Exam</button>
+      <button class="exam-btn secondary" onclick="window.location.href='352note1q1.html'">📝 Paper 2 – Start Exam</button>
+    <button class="exam-btn secondary" onclick="window.location.href='352note2.html'">Next Page</button>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn">💬</button></div>
+    <div class="nav-item center"><button class="neumorphic-btn">⭐</button></div>
+    <div class="nav-item"><button class="neumorphic-btn">📚</button></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light','dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+    setTheme(localStorage.getItem('theme') || 'dark');
+    themeToggle.addEventListener('click', () => {
+      setTheme(body.classList.contains('light') ? 'dark' : 'light');
+    });
+
+    container.addEventListener('scroll', () => {
+      const st = container.scrollTop;
+      const sh = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = (st / sh * 100) + '%';
+    });
+  </script>
+</body>
+</html>
