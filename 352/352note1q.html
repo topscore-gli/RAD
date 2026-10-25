@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upper Limb MCQs (1–100)</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:14px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgbargba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="history.back()">←</button>
+      <h1>Upper Limb MCQs</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 40:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 2400, PASS: 60 };
+
+const SECTIONS = {
+  0:  "A: Shoulder — Bones, Joints, Ligaments",
+  12: "B: Shoulder — Muscles & Innervation",
+  27: "C: Brachial Plexus & Injuries",
+  37: "D: Axillary Vessels & Lymph Nodes",
+  47: "E: Shoulder Radiograph & Trauma",
+  62: "F: Elbow — Bones, Joints, Ossification",
+  72: "G: Elbow — Muscles, Nerves, Vessels",
+  82: "H: Elbow Radiographs, Fat Pads, Lines, Salter-Harris",
+  95: "I: Hand & Wrist — Bones, Joints, Muscles, Nerves"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  // 1–12  Shoulder — Bones, Joints, Ligaments
+  {q:"Which bone is the first in the body to undergo ossification?",o:["Scapula","Clavicle","Humerus","Sternum"],a:1,e:"The clavicle is the first bone to ossify and does so by intramembranous ossification."},
+  {q:"The inferior angle of the scapula in its anatomic position lies at the level of the:",o:["Fifth intercostal space","Sixth intercostal space","Seventh intercostal space","Eighth intercostal space"],a:2,e:"The inferior angle of the scapula lies at the level of the seventh intercostal space."},
+  {q:"Which structure underlies the point of the shoulder?",o:["Coracoid process","Acromion process","Glenoid fossa","Greater tuberosity"],a:1,e:"The acromion process of the scapula underlies the point of the shoulder."},
+  {q:"The center of ossification for the head of the humerus appears:",o:["At birth","During the first 3 months after birth","At 1–2 years of age","At 4–6 years of age"],a:1,e:"The humeral head center appears during the first 3 months after birth; the greater tuberosity center appears at 1–2 years."},
+  {q:"The most common fracture site in the proximal half of the humerus is the:",o:["Anatomical neck","Surgical neck","Greater tuberosity","Head"],a:1,e:"The surgical neck is the most common fracture site in the proximal half of the humerus."},
+  {q:"The strongest nonmuscular structure binding the clavicle to the rib cage is the:",o:["Coracoclavicular ligament","Costoclavicular ligament","Acromioclavicular ligament","Sternoclavicular ligament"],a:1,e:"The costoclavicular ligament stabilizes the sternoclavicular joint and is the strongest nonmuscular structure binding the clavicle to the rib cage."},
+  {q:"The coracoclavicular ligament is composed of which two parts?",o:["Conoid and trapezoid","Conoid and deltoid","Trapezoid and deltoid","Coracoid and trapezoid"],a:0,e:"The coracoclavicular ligament comprises the conoid and trapezoid ligaments."},
+  {q:"The subscapular bursa is best described as:",o:["A separate bursa unrelated to the joint","An extracapsular extension of the joint's synovial lining","A fibrous band stabilizing the joint","A fat pad within the joint"],a:1,e:"The subscapular bursa is an extracapsular extension of the synovial lining of the shoulder joint."},
+  {q:"The shoulder joint provides for about how much arm abduction and adduction?",o:["30°","45°","60°","90°"],a:2,e:"The shoulder joint provides for about 60° arm abduction and adduction."},
+  {q:"The sternoclavicular joint allows which movements of the pectoral girdle?",o:["Elevation and depression","Protraction and retraction","Lateral and medial rotation","Flexion and extension"],a:1,e:"The sternoclavicular joint provides for protraction and retraction of the pectoral girdle."},
+  {q:"The acromioclavicular joint permits which movements of the scapula?",o:["Protraction and retraction","Elevation and depression","Lateral and medial rotation","Flexion and extension"],a:2,e:"The acromioclavicular joint permits lateral and medial rotation of the scapula."},
+  {q:"Which bursa separates the tendinous insertion of supraspinatus from the overlying deltoid?",o:["Subscapular bursa","Subacromion-subdeltoid bursa","Subcoracoid bursa","Infraspinatus bursa"],a:1,e:"The subacromion-subdeltoid bursa separates the supraspinatus tendon from the overlying deltoid."},
+
+  // 13–27  Shoulder — Muscles & Innervation
+  {q:"The most powerful elevator and retractor of the pectoral girdle is the:",o:["Serratus anterior","Trapezius","Levator scapulae","Pectoralis minor"],a:1,e:"Trapezius is the most powerful elevator and retractor of the pectoral girdle."},
+  {q:"Loss of trapezius function produces:",o:["Winged scapula","Dropped shoulder","Claw hand","Wrist drop"],a:1,e:"Loss of trapezius function produces a dropped shoulder."},
+  {q:"Which nerve supplies motor fibers to the trapezius?",o:["Dorsal scapular nerve","Long thoracic nerve","Spinal part of the accessory nerve","Suprascapular nerve"],a:2,e:"The spinal part of the accessory nerve provides motor fibers to trapezius; C3 and C4 carry proprioceptive fibers."},
+  {q:"Levator scapulae, rhomboid major, and rhomboid minor are all innervated by the:",o:["Long thoracic nerve","Dorsal scapular nerve","Suprascapular nerve","Axillary nerve"],a:1,e:"All three are innervated by the dorsal scapular nerve; levator scapulae also receives C3 and C4."},
+  {q:"The most powerful protractor of the pectoral girdle is the:",o:["Pectoralis minor","Serratus anterior","Subclavius","Trapezius"],a:1,e:"Serratus anterior is the most powerful protractor of the pectoral girdle."},
+  {q:"A winged scapula results from loss of function of which muscle?",o:["Trapezius","Serratus anterior","Rhomboid major","Levator scapulae"],a:1,e:"Loss of serratus anterior function produces a winged scapula."},
+  {q:"The long thoracic nerve arises from which roots?",o:["C3, C4, C5","C5, C6, C7","C6, C7, C8","C7, C8, T1"],a:1,e:"The long thoracic nerve arises from the C5, C6, and C7 roots."},
+  {q:"Which of the following is NOT a rotator cuff muscle?",o:["Supraspinatus","Infraspinatus","Teres major","Subscapularis"],a:2,e:"The rotator cuff comprises supraspinatus, infraspinatus, teres minor, and subscapularis; teres major is not part of it."},
+  {q:"The supraspinatus is innervated by the:",o:["Suprascapular nerve","Axillary nerve","Upper subscapular nerve","Dorsal scapular nerve"],a:0,e:"Supraspinatus and infraspinatus are both innervated by the suprascapular nerve."},
+  {q:"Teres minor is innervated by:",o:["Suprascapular nerve","Axillary nerve (C5, C6 fibers)","Lower subscapular nerve","Thoracodorsal nerve"],a:1,e:"Teres minor receives C5 and C6 fibers in the axillary nerve."},
+  {q:"Subscapularis is innervated by the:",o:["Suprascapular nerve","Upper and lower subscapular nerves","Axillary nerve","Thoracodorsal nerve"],a:1,e:"Subscapularis is innervated by the upper and lower subscapular nerves."},
+  {q:"Which muscle accounts for most of the muscle mass of the posterior axillary fold?",o:["Pectoralis major","Latissimus dorsi","Teres major","Deltoid"],a:1,e:"Latissimus dorsi accounts for most of the posterior axillary fold and is innervated by the thoracodorsal nerve."},
+  {q:"Which muscle accounts for most of the muscle mass of the anterior axillary fold?",o:["Pectoralis major","Latissimus dorsi","Serratus anterior","Subscapularis"],a:0,e:"Pectoralis major accounts for most of the anterior axillary fold and is innervated by the medial and lateral pectoral nerves."},
+  {q:"Teres major is innervated by the:",o:["Upper subscapular nerve","Lower subscapular nerve","Thoracodorsal nerve","Axillary nerve"],a:1,e:"Teres major is innervated by the lower subscapular nerve."},
+  {q:"The deltoid is innervated by:",o:["Suprascapular nerve","C5 and C6 fibers in the axillary nerve","Thoracodorsal nerve","Medial pectoral nerve"],a:1,e:"The deltoid is innervated by C5 and C6 fibers in the axillary nerve."},
+
+  // 28–37  Brachial Plexus & Injuries
+  {q:"The five roots of the brachial plexus are formed by the anterior rami of:",o:["C4–C8","C5–T1","C6–T2","C3–T1"],a:1,e:"The roots are the anterior rami of C5, C6, C7, C8, and T1."},
+  {q:"Which two nerves arise from the roots of the brachial plexus?",o:["Suprascapular and nerve to subclavius","Dorsal scapular and long thoracic","Lateral and medial pectoral","Axillary and radial"],a:1,e:"Only the dorsal scapular nerve (C5) and long thoracic nerve (C5–C7) arise from the roots."},
+  {q:"The upper trunk of the brachial plexus is formed by the union of:",o:["C5 and C6 roots","C6 and C7 roots","C7 and C8 roots","C8 and T1 roots"],a:0,e:"The upper trunk is formed by the union of C5 and C6."},
+  {q:"Which nerves arise from the trunks of the brachial plexus?",o:["Dorsal scapular and long thoracic","Suprascapular and nerve to subclavius","Lateral and medial pectoral","Upper and lower subscapular"],a:1,e:"Only the suprascapular nerve and nerve to subclavius arise from the trunks, both from the upper trunk."},
+  {q:"The posterior cord of the brachial plexus gives rise to all of the following EXCEPT:",o:["Upper subscapular nerve","Suprascapular nerve","Thoracodorsal nerve","Axillary nerve"],a:1,e:"The suprascapular nerve arises from the upper trunk, not the posterior cord. The posterior cord gives upper, middle (thoracodorsal), and lower subscapular, axillary, and radial nerves."},
+  {q:"Erb-Duchenne paralysis (waiter's tip palsy) is caused by damage to:",o:["C8 and T1 roots","C5 and C6 roots or upper trunk","Lower trunk","Posterior cord"],a:1,e:"Erb-Duchenne paralysis results from irreversible damage to C5 and C6 roots or the upper trunk."},
+  {q:"In Erb-Duchenne paralysis, the forearm is noticeably:",o:["Supinated","Pronated","Extended","Abducted"],a:1,e:"Loss of biceps brachii function causes the forearm to be noticeably pronated."},
+  {q:"Klumpke's paralysis is caused by damage to:",o:["C5 and C6 roots","C8 and T1 roots or lower trunk","Upper trunk","Lateral cord"],a:1,e:"Klumpke's paralysis results from irreversible damage to C8 and T1 roots or the lower trunk."},
+  {q:"Which movement is lost in Klumpke's paralysis due to loss of opponens pollicis?",o:["Abduction of the fingers","Opposition of the thumb","Extension of the wrist","Flexion of the elbow"],a:1,e:"Absence of oppositional movement of the thumb occurs due to loss of opponens pollicis function."},
+  {q:"Hyperextension of the fingers at the metacarpophalangeal joints in Klumpke's paralysis is due to loss of function of the:",o:["Interossei","Lumbricals","Thenar muscles","Hypothenar muscles"],a:1,e:"Loss of lumbrical function produces hyperextension at the MCP joints."},
+
+  // 38–47  Axillary Vessels & Lymph Nodes
+  {q:"The axillary artery begins at the:",o:["Medial border of the first rib","Lateral border of the first rib","Lower border of teres major","Upper border of pectoralis minor"],a:1,e:"The axillary artery begins at the lateral border of the first rib as a continuation of the subclavian artery."},
+  {q:"The axillary artery ends at the:",o:["Lateral border of the first rib","Lower border of the insertion of teres major","Upper border of pectoralis minor","Surgical neck of the humerus"],a:1,e:"It ends at the lower border of the insertion of teres major, becoming the brachial artery."},
+  {q:"The second part of the axillary artery lies behind which muscle?",o:["Pectoralis major","Pectoralis minor","Subclavius","Latissimus dorsi"],a:1,e:"The second part lies behind pectoralis minor and gives the thoracoacromial trunk and lateral thoracic artery."},
+  {q:"The chief artery supplying the lateral half of the mammary gland is the:",o:["Superior thoracic artery","Thoracoacromial trunk","Lateral thoracic artery","Subscapular artery"],a:2,e:"The lateral thoracic artery is the chief artery supplying the lateral half of the mammary gland."},
+  {q:"Which group of axillary lymph nodes is palpable against the chest wall in the center of the axilla?",o:["Anterior (pectoral) group","Posterior (subscapular) group","Lateral group","Central group"],a:3,e:"The central group is palpable against the chest wall in the center of the axilla."},
+  {q:"Which axillary lymph node group is palpable posterior to the lateral border of pectoralis major?",o:["Anterior (pectoral) group","Posterior (subscapular) group","Lateral group","Apical group"],a:0,e:"The anterior (pectoral) group is palpable posterior to the lateral border of pectoralis major."},
+  {q:"The apical group of axillary lymph nodes lies immediately lateral to the:",o:["Lateral border of the first rib","Medial border of the first rib","Lower border of teres major","Clavicle"],a:0,e:"The apical group lies immediately lateral to the lateral border of the first rib and drains all other groups."},
+  {q:"The largest tributary of the axillary vein is the:",o:["Basilic vein","Cephalic vein","Brachial vein","Median cubital vein"],a:1,e:"The cephalic vein is the largest tributary of the axillary vein; it passes through the deltopectoral triangle."},
+  {q:"The axillary vein begins at the union of the basilic vein with the:",o:["Cephalic vein","Venae comitantes of the brachial artery","Median cubital vein","Subclavian vein"],a:1,e:"The axillary vein begins at the union of the basilic vein with the venae comitantes of the brachial artery."},
+  {q:"The posterior (subscapular) group of axillary nodes drains superficial tissues of the posterior trunk down to the level of the:",o:["Umbilicus","Iliac crest","First rib","Pubic symphysis"],a:1,e:"The posterior group drains down to the iliac crest."},
+
+  // 48–62  Shoulder Radiograph & Trauma
+  {q:"On an AP shoulder radiograph, the greater tuberosity is seen in profile when the humerus is:",o:["Internally rotated so the epicondylar line is parasagittal","Externally rotated so the epicondylar line is coronal","Neutrally rotated","Abducted 90°"],a:1,e:"External rotation to bring the epicondylar line into a coronal plane profiles the greater tuberosity."},
+  {q:"The lesser tuberosity is seen in profile when the humerus is:",o:["Externally rotated so the epicondylar line is coronal","Internally rotated so the epicondylar line is parasagittal","Neutrally rotated","Fully abducted"],a:1,e:"Internal rotation to a parasagittal epicondylar line profiles the lesser tuberosity."},
+  {q:"On an AP shoulder radiograph, the superimposition of the humeral head over the glenoid fossa approximates which shape?",o:["Circular","Triangular","Ellipse","Quadrangular"],a:2,e:"The region of superimposition approximates an ellipse (eclipse) shape."},
+  {q:"A grade I shoulder separation shows:",o:["Acromioclavicular and coracoclavicular spaces of normal width","Acromioclavicular space 50% wider only","Both spaces 50% wider","Coracoclavicular space 50% wider only"],a:0,e:"Grade I is a simple sprain with neither the capsule nor the coracoclavicular ligament significantly damaged; both spaces are normal."},
+  {q:"In a grade II shoulder separation, the radiograph shows:",o:["Normal acromioclavicular space, widened coracoclavicular space","Normal coracoclavicular space, acromioclavicular space at least 50% wider","Both spaces at least 50% wider","Both spaces normal"],a:1,e:"Grade II subluxation: coracoclavicular space normal, acromioclavicular space ≥50% wider than the contralateral side."},
+  {q:"A grade III shoulder separation requires both spaces to be wider than the contralateral side by at least:",o:["25%","33%","50%","75%"],a:2,e:"Grade III (dislocation) requires both spaces to be at least 50% wider."},
+  {q:"A Hill-Sachs defect is associated with:",o:["Posterior shoulder dislocation","Anterior shoulder dislocation","Acromioclavicular separation","Clavicle fracture"],a:1,e:"The hatchet (Hill-Sachs) defect is a posterolateral humeral head indentation seen with anterior dislocation."},
+  {q:"Which nerve is most at risk in anterior shoulder dislocation?",o:["Musculocutaneous","Radial","Ulnar","Axillary"],a:3,e:"The axillary nerve runs beneath the fibrous capsule through the quadrangular space and is at risk."},
+  {q:"In posterior shoulder dislocation, the limb is typically:",o:["Abducted and externally rotated","Flattened anteriorly with posterior bulging; abduction and external rotation limited","Shortened and internally rotated","Normal in appearance"],a:1,e:"Posterior dislocation flattens the shoulder anteriorly and bulges posteriorly, limiting abduction and external rotation."},
+  {q:"The angled AP radiograph for posterior shoulder dislocation is taken with the patient's body turned:",o:["10°–15° toward the cassette","20°–25° toward the cassette","35°–40° toward the cassette","60° toward the cassette"],a:2,e:"Turning the body 35°–40° toward the cassette profiles the glenoid fossa."},
+  {q:"The most commonly fractured bone of the shoulder girdle is the:",o:["Scapula","Clavicle","Humerus","Rib"],a:1,e:"The clavicle is the most frequent fractured bone of the shoulder girdle and transmits all forces from arm to trunk."},
+  {q:"The most common site of clavicular fracture is the:",o:["Medial third","Border between middle and lateral thirds","Lateral third only","Acromial end"],a:1,e:"The border region between the middle and lateral thirds is the most common site."},
+  {q:"In a fractured clavicle, the shoulder appears:",o:["Posteriorly dislocated","Anteriorly dislocated","Superiorly dislocated","Inferiorly dislocated"],a:1,e:"Loss of the clavicular prop causes the shoulder to appear anteriorly dislocated."},
+  {q:"Osteoarthritis of the glenohumeral joint radiographically shows all of the following EXCEPT:",o:["Osteophyte formation","Joint space narrowing","Subchondral sclerosis","Periarticular osteopenia"],a:3,e:"Periarticular osteopenia is characteristic of rheumatoid arthritis, not osteoarthritis."},
+  {q:"The glenohumeral joint is:",o:["The most common joint affected by osteoarthritis","One of the less common joints affected by osteoarthritis","Never affected by osteoarthritis","Affected only in rheumatoid arthritis"],a:1,e:"The glenohumeral joint is one of the less common joints affected by osteoarthritis."},
+
+  // 63–72  Elbow — Bones, Joints, Ossification
+  {q:"The ossification center for the capitulum appears:",o:["At birth","During the first 6 months after birth","At 4–6 years","At 8–9 years"],a:1,e:"The capitulum center appears during the first 6 months after birth."},
+  {q:"The ossification center for the medial epicondyle appears at:",o:["1–2 years","4–6 years","8–9 years","11–12 years"],a:1,e:"The medial epicondyle center appears at 4–6 years."},
+  {q:"The last ossification center to appear at the distal humerus is the:",o:["Capitulum","Medial epicondyle","Trochlea","Lateral epicondyle"],a:3,e:"The lateral epicondyle center appears last, at 11–12 years."},
+  {q:"With the forearm flexed 90° at the elbow, the olecranon process and humeral epicondyles form:",o:["A straight line","An equilateral triangle","A right angle","An isosceles triangle"],a:1,e:"Flexed 90°, they lie at the vertices of an equilateral triangle; fully extended, they are colinear."},
+  {q:"The humeroulnar articulation bears:",o:["No transmitted force","Most of the force transmitted from forearm to arm","Only rotational force","Only tensile force"],a:1,e:"The humeroulnar articulation bears most of the transmitted force."},
+  {q:"The synovial cavity of the proximal radioulnar joint is:",o:["Separate from the elbow joint","Continuous with the elbow joint","Continuous with the wrist joint","Absent"],a:1,e:"The proximal radioulnar joint's synovial cavity is continuous with that of the elbow joint."},
+  {q:"The annular ligament encircles the:",o:["Olecranon","Radial head","Trochlea","Capitulum"],a:1,e:"The annular ligament encircles the radial head at the proximal radioulnar joint."},
+  {q:"The carrying angle of the elbow averages:",o:["150° in males, 145° in females","169° in males, 167° in females","180° in both sexes","120° in both sexes"],a:1,e:"It averages 169° in males and 167° in females."},
+  {q:"An abnormally small carrying angle is called:",o:["Cubitus valgus","Cubitus varus (gunstock deformity)","Excessive carrying angle","Normal variant"],a:1,e:"A reduced carrying angle is gunstock deformity (cubitus varus); an increased angle is cubitus valgus."},
+  {q:"The carrying angle measured as the angle the forearm and hand make with the body is normally:",o:["0°–5°","5°–15°","20°–30°","30°–45°"],a:1,e:"This clinical definition gives a normal range of 5°–15°."},
+
+  // 73–82  Elbow — Muscles, Nerves, Vessels
+  {q:"The major flexors of the elbow are innervated by the:",o:["Radial nerve","Median nerve","Musculocutaneous nerve","Ulnar nerve"],a:2,e:"Biceps brachii and brachialis (major flexors) are innervated by the musculocutaneous nerve."},
+  {q:"The triceps brachii is innervated by the:",o:["Musculocutaneous nerve","Radial nerve","Median nerve","Ulnar nerve"],a:1,e:"Triceps brachii is innervated by the radial nerve."},
+  {q:"Pronator teres and pronator quadratus are innervated by the:",o:["Radial nerve","Median nerve","Ulnar nerve","Musculocutaneous nerve"],a:1,e:"The pronator muscles are innervated by the median nerve (pronator quadratus via the anterior interosseous branch)."},
+  {q:"The brachioradialis tendon reflex tests neuronal integrity at:",o:["C3–C4","C5–C6","C7–C8","T1"],a:1,e:"The brachioradialis reflex tests C5–C6 pathways."},
+  {q:"The triceps brachii tendon reflex tests:",o:["C5–C6","C6–C7","C7–C8","C8–T1"],a:2,e:"The triceps reflex tests C7–C8 pathways."},
+  {q:"Fracture of the medial epicondyle places which nerve at risk?",o:["Median nerve","Radial nerve","Ulnar nerve","Musculocutaneous nerve"],a:2,e:"The ulnar nerve passes directly behind the medial epicondyle."},
+  {q:"A cubitus valgus deformity increases pressure on the:",o:["Median nerve","Radial nerve","Ulnar nerve","Lateral cutaneous nerve"],a:2,e:"Cubitus valgus increases pressure on the ulnar nerve behind the medial epicondyle."},
+  {q:"The brachial artery bifurcates into the ulnar and radial arteries at the level of the:",o:["Surgical neck of the humerus","Radial neck","Medial epicondyle","Wrist crease"],a:1,e:"The brachial artery bifurcates at the level of the radial neck."},
+  {q:"The supratrochlear nodes of the cubital fossa drain lymph from:",o:["The lateral half of the hand","The medial half of the hand and middle, ring, and little fingers","The thumb only","The entire upper limb"],a:1,e:"They receive lymph from the medial half of the hand and the middle, ring, and little fingers."},
+  {q:"Efferent lymphatics from the supratrochlear nodes drain into the:",o:["Apical group of axillary nodes","Lateral group of axillary nodes","Central group of axillary nodes","Deltopectoral group"],a:1,e:"They drain into the lateral group of axillary nodes."},
+
+  // 83–95  Elbow Radiographs, Fat Pads, Lines, Salter-Harris
+  {q:"A normal lateral elbow radiograph shows:",o:["Both anterior and posterior fat pads","Anterior fat pad only","Posterior fat pad only","Neither fat pad"],a:1,e:"The anterior fat pad is visible; the posterior fat pad lies deep in the olecranon fossa and is not seen."},
+  {q:"The \"sail sign\" on a lateral elbow radiograph represents:",o:["Displacement of the posterior fat pad","Displacement of the anterior fat pad","A fracture of the capitulum","A normal variant"],a:1,e:"The sail sign is the triangular fat-density area from anterior fat pad displacement."},
+  {q:"A positive posterior fat pad sign indicates:",o:["Normal elbow","Joint effusion","Osteoarthritis","Muscle tear"],a:1,e:"Displacement of the posterior fat pad indicates joint effusion (e.g., from fracture or dislocation)."},
+  {q:"The radiocapitellar line passes through the center of the capitulum and the:",o:["Central axis of the ulnar shaft","Central axis of the radial shaft","Anterior humeral margin","Olecranon fossa"],a:1,e:"The radiocapitellar line is colinear with the central axis of the radial shaft."},
+  {q:"The anterior humeral line normally projects through which part of the capitulum?",o:["Anterior one-third","Middle one-third","Posterior one-third","It does not touch the capitulum"],a:1,e:"The anterior humeral line projects through the middle one-third of the capitulum."},
+  {q:"The anterior humeral line is of significance in surgical reduction of:",o:["Radial head fractures","Supracondylar fractures in children","Olecranon fractures","Clavicle fractures"],a:1,e:"It guides reduction of pediatric supracondylar fractures."},
+  {q:"A Salter-Harris Type I fracture extends through:",o:["Only the growth plate","Growth plate and metaphysis","Growth plate and epiphysis","Metaphysis, growth plate, and epiphysis"],a:0,e:"Type I extends through only the growth plate."},
+  {q:"Which Salter-Harris type accounts for more than 50% of all growth plate fractures?",o:["Type I","Type II","Type III","Type IV"],a:1,e:"Type II accounts for more than 50% of growth plate fractures."},
+  {q:"A Salter-Harris Type III fracture extends through:",o:["Only the growth plate","Growth plate and part of the epiphysis","Growth plate and part of the metaphysis","Metaphysis, growth plate, and epiphysis"],a:1,e:"Type III extends through part of the growth plate and part of the epiphysis."},
+  {q:"A Salter-Harris Type IV fracture extends through:",o:["Only the growth plate","Growth plate and epiphysis only","Metaphysis, growth plate, and epiphysis","Only the metaphysis"],a:2,e:"Type IV extends through metaphysis, growth plate, and epiphysis."},
+  {q:"A Salter-Harris Type V fracture is:",o:["A compression injury to the growth plate","A metaphyseal fracture","An epiphyseal fracture","A complete dislocation"],a:0,e:"Type V is a compression injury to the growth plate."},
+  {q:"Which Salter-Harris types have a more favorable prognosis?",o:["Types I and II","Types II and III","Types III and IV","Types IV and V"],a:0,e:"Types I and II have a better prognosis; Types III–V injure proliferating chondrocytes."},
+  {q:"The most common type of elbow fracture in adults is:",o:["Olecranon fracture","Radial head fracture","Supracondylar fracture","Monteggia fracture"],a:1,e:"Radial head fracture is the most common elbow fracture in adults."},
+
+  // 96–100  Hand & Wrist
+  {q:"The scaphoid and trapezium are palpable in the floor of the:",o:["Cubital fossa","Anatomic snuffbox","Deltopectoral triangle","Carpal tunnel"],a:1,e:"The scaphoid and trapezium are palpable in the floor of the anatomic snuffbox."},
+  {q:"The epiphysis of the first metacarpal resides at the:",o:["Head","Base","Shaft","Neck"],a:1,e:"The first metacarpal epiphysis is at the base; those of the second to fifth are at the heads."},
+  {q:"Which carpal ossification center is commonly the last to appear?",o:["Capitate","Hamate","Pisiform","Lunate"],a:2,e:"The pisiform ossification center is commonly the last to appear; capitate and hamate are present at birth."},
+  {q:"The median nerve passes through the carpal tunnel along with the tendons of all of the following EXCEPT:",o:["Flexor digitorum profundus","Flexor digitorum superficialis","Flexor pollicis longus","Flexor carpi ulnaris"],a:3,e:"Flexor carpi ulnaris is not in the carpal tunnel; it is innervated by the ulnar nerve."},
+  {q:"The ulnar nerve crosses the wrist by passing:",o:["Through the carpal tunnel","Over (superficial to) the flexor retinaculum","Deep to the flexor retinaculum","Through the anatomic snuffbox"],a:1,e:"The ulnar nerve passes superficial to the flexor retinaculum, medial to the ulnar artery."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('upper_limb_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/' + state.data.length;
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('upper_limb_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of Upper Limb Anatomy! You have a strong grasp of bones, joints, muscles, nerves, vessels, radiographs and trauma. Superb work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review the brachial plexus injuries, Salter-Harris classification and axillary lymph node groups to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on rotator cuff muscles, nerve innervations, radiographic lines (anterior humeral / radiocapitellar) and common fracture patterns. Practice will raise your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this topic has many detailed points. Go through the explanations carefully, revise the key landmarks and innervations, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 12, 27, 37, 47, 62, 72, 82, 95, 100];
+  var sectionNames = [
+    "A: Shoulder — Bones, Joints, Ligaments",
+    "B: Shoulder — Muscles & Innervation",
+    "C: Brachial Plexus & Injuries",
+    "D: Axillary Vessels & Lymph Nodes",
+    "E: Shoulder Radiograph & Trauma",
+    "F: Elbow — Bones, Joints, Ossification",
+    "G: Elbow — Muscles, Nerves, Vessels",
+    "H: Elbow Radiographs, Fat Pads, Lines, Salter-Harris",
+    "I: Hand & Wrist — Bones, Joints, Muscles, Nerves"
+  ];
+
+  for (var s = 0; s < sectionNames.length; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('upper_limb_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('upper_limb_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('upper_limb_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
