@@ -58,7 +58,7 @@
 
     .content{padding:20px 16px;line-height:1.6}
     .main-header{
-      text-align:center;margin-bottom:28px;padding:20px;border-radius:20px;
+      text-align:center;margin-bottom:20px;padding:20px;border-radius:20px;
       background:rgba(29,185,84,.1)
     }
     .main-header h1{font-size:18px;margin-bottom:6px;color:var(--accent);font-weight:900}
@@ -79,7 +79,7 @@
       font-size:16px;color:var(--accent);margin-bottom:14px;font-weight:900
     }
 
-    /* Image style - ready for your uploads */
+    /* Image style */
     .item-card img{
       width:100%;
       height:180px;
@@ -88,6 +88,11 @@
       margin-bottom:16px;
       background:#2a2a3f;
       border:2px dashed var(--accent);
+      cursor:pointer;
+      transition: transform 0.2s;
+    }
+    .item-card img:active{
+      transform: scale(0.98);
     }
 
     .section-title{
@@ -96,6 +101,70 @@
     }
     .item-card ul{padding-left:18px;margin-bottom:8px}
     .item-card li{font-size:13.5px;margin-bottom:5px;color:var(--text-primary)}
+
+    /* Start Exam Button */
+    .exam-btn{
+      display:block;
+      width:100%;
+      padding:16px;
+      margin:10px 0 24px;
+      background:linear-gradient(135deg, #1db954, #17a347);
+      color:#000;
+      font-size:16px;
+      font-weight:900;
+      border:none;
+      border-radius:16px;
+      cursor:pointer;
+      box-shadow:4px 4px 12px var(--shadow-in), -4px -4px 12px var(--shadow-out);
+      transition:all .25s ease;
+    }
+    .exam-btn:active{
+      transform:scale(0.97);
+      box-shadow:inset 3px 3px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Lightbox / Zoom Modal */
+    .lightbox{
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.92);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:1000;
+      opacity:0;
+      visibility:hidden;
+      transition:all 0.3s ease;
+      padding:20px;
+    }
+    .lightbox.active{
+      opacity:1;
+      visibility:visible;
+    }
+    .lightbox img{
+      max-width:100%;
+      max-height:85vh;
+      border-radius:12px;
+      object-fit:contain;
+      box-shadow:0 10px 40px rgba(0,0,0,0.5);
+    }
+    .lightbox-close{
+      position:absolute;
+      top:20px;
+      right:20px;
+      width:44px;
+      height:44px;
+      background:rgba(255,255,255,0.15);
+      border:none;
+      border-radius:50%;
+      color:white;
+      font-size:24px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
 
     .nav-bar{
       position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;
@@ -128,13 +197,16 @@
         <p>Complete Guide with Parts • Uses • Maintenance</p>
       </div>
 
+      <!-- Start Exam Button -->
+      <button class="exam-btn" onclick="startExam()">📝 Start Exam</button>
+
       <!-- ==================== A ==================== -->
       <div class="letter-header">A</div>
 
       <!-- 1. Adhesive Bandage -->
       <div class="item-card">
         <h3>1. Adhesive Bandage</h3>
-        <img src="./img/1.png" alt="Adhesive Bandage">
+        <img src="./img/1.png" alt="Adhesive Bandage" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Absorbent pad</li>
@@ -158,7 +230,7 @@
       <!-- 2. Air Cushion -->
       <div class="item-card">
         <h3>2. Air Cushion</h3>
-        <img src="./img/2.png" alt="Air Cushion">
+        <img src="./img/2.png" alt="Air Cushion" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Air cells (inflation chambers)</li>
@@ -183,7 +255,7 @@
       <!-- 3. Anglepoise Lamp -->
       <div class="item-card">
         <h3>3. Anglepoise Lamp</h3>
-        <img src="./img/3.png" alt="Anglepoise Lamp">
+        <img src="./img/3.png" alt="Anglepoise Lamp" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Base</li>
@@ -209,7 +281,7 @@
       <!-- 4. Autoclave -->
       <div class="item-card">
         <h3>4. Autoclave</h3>
-        <img src="./img/4.png" alt="Autoclave">
+        <img src="./img/4.png" alt="Autoclave" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Pressure regulating device</li>
@@ -238,7 +310,7 @@
       <!-- 5. Automatic Ventilator -->
       <div class="item-card">
         <h3>5. Automatic Ventilator</h3>
-        <img src="./img/5.png" alt="Automatic Ventilator">
+        <img src="./img/5.png" alt="Automatic Ventilator" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Monitor screen</li>
@@ -268,7 +340,7 @@
       <!-- 6. Bag-Valve-Mask -->
       <div class="item-card">
         <h3>6. Big Valve Mask (Bag-Valve-Mask)</h3>
-        <img src="./img/6.png" alt="Bag Valve Mask">
+        <img src="./img/6.png" alt="Bag Valve Mask" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Self-inflating bag</li>
@@ -298,7 +370,7 @@
       <!-- 7. Cannula -->
       <div class="item-card">
         <h3>7. Cannula</h3>
-        <img src="./img/7.png" alt="Cannula">
+        <img src="./img/7.png" alt="Cannula" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Flashback chamber</li>
@@ -326,7 +398,7 @@
       <!-- 8. Cervical Osmotic Dilators -->
       <div class="item-card">
         <h3>8. Cervical Osmotic Dilators</h3>
-        <img src="./img/8.png" alt="Cervical Osmotic Dilators">
+        <img src="./img/8.png" alt="Cervical Osmotic Dilators" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Handle</li>
@@ -349,7 +421,7 @@
       <!-- 9. Cilia Tweezers -->
       <div class="item-card">
         <h3>9. Cilia Tweezers</h3>
-        <img src="./img/9.png" alt="Cilia Tweezers">
+        <img src="./img/9.png" alt="Cilia Tweezers" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Fine tips</li>
@@ -373,7 +445,7 @@
       <!-- 10. Ishihara Test Chart -->
       <div class="item-card">
         <h3>10. Colour Blind Test / Ishihara Chart</h3>
-        <img src="./img/10.png" alt="Ishihara Colour Test Chart">
+        <img src="./img/10.png" alt="Ishihara Colour Test Chart" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Test plates (pages with colored dot patterns)</li>
@@ -397,7 +469,7 @@
       <!-- 11. Colostomy Bag -->
       <div class="item-card">
         <h3>11. Colostomy Bag</h3>
-        <img src="./img/11.png" alt="Colostomy Bag">
+        <img src="./img/11.png" alt="Colostomy Bag" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Adhesive flange/wafer</li>
@@ -425,7 +497,7 @@
       <!-- 12. Defibrillator -->
       <div class="item-card">
         <h3>12. Defibrillator</h3>
-        <img src="./img/12.png" alt="Defibrillator">
+        <img src="./img/12.png" alt="Defibrillator" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Monitor screen</li>
@@ -453,7 +525,7 @@
       <!-- 13. Emesis Basin -->
       <div class="item-card">
         <h3>13. Emesis Basin</h3>
-        <img src="./img/13.png" alt="Emesis Basin">
+        <img src="./img/13.png" alt="Emesis Basin" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Kidney-shaped basin body</li>
@@ -479,7 +551,7 @@
       <!-- 14. Feeding Tube -->
       <div class="item-card">
         <h3>14. Feeding Tube</h3>
-        <img src="./img/14.png" alt="Feeding Tube">
+        <img src="./img/14.png" alt="Feeding Tube" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Tube body</li>
@@ -504,7 +576,7 @@
       <!-- 15. Foley’s Catheter -->
       <div class="item-card">
         <h3>15. Foley’s Catheter</h3>
-        <img src="./img/15.png" alt="Foley Catheter">
+        <img src="./img/15.png" alt="Foley Catheter" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Drainage tube</li>
@@ -531,7 +603,7 @@
       <!-- 16. Forceps -->
       <div class="item-card">
         <h3>16. Forceps</h3>
-        <img src="./img/16.png" alt="Forceps">
+        <img src="./img/16.png" alt="Forceps" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Handles (ring or spring)</li>
@@ -558,7 +630,7 @@
       <!-- 17. Gallipot -->
       <div class="item-card">
         <h3>17. Gallipot</h3>
-        <img src="./img/17.png" alt="Gallipot">
+        <img src="./img/17.png" alt="Gallipot" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Cup body</li>
@@ -582,7 +654,7 @@
       <!-- 18. Gauze Cloth -->
       <div class="item-card">
         <h3>18. Gauze Cloth</h3>
-        <img src="./img/18.png" alt="Gauze Cloth">
+        <img src="./img/18.png" alt="Gauze Cloth" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Woven cotton fibers (mesh)</li>
@@ -608,7 +680,7 @@
       <!-- 19. Hot Water Bottle -->
       <div class="item-card">
         <h3>19. Hot Water Bottle</h3>
-        <img src="./img/19.png" alt="Hot Water Bottle">
+        <img src="./img/19.png" alt="Hot Water Bottle" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Bottle body (ribbed)</li>
@@ -635,7 +707,7 @@
       <!-- 20. Ice Bag -->
       <div class="item-card">
         <h3>20. Ice Bag</h3>
-        <img src="./img/20.png" alt="Ice Bag">
+        <img src="./img/20.png" alt="Ice Bag" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Bag body (waterproof)</li>
@@ -659,7 +731,7 @@
       <!-- 21. IV Infusion Set -->
       <div class="item-card">
         <h3>21. IV Infusion Set</h3>
-        <img src="./img/21.png" alt="IV Infusion Set">
+        <img src="./img/21.png" alt="IV Infusion Set" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Spike</li>
@@ -691,7 +763,7 @@
       <!-- 22. Jump Bag -->
       <div class="item-card">
         <h3>22. Jump Bag</h3>
-        <img src="./img/22.png" alt="Jump Bag">
+        <img src="./img/22.png" alt="Jump Bag" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Main compartment</li>
@@ -719,7 +791,7 @@
       <!-- 23. Laryngeal Mirror -->
       <div class="item-card">
         <h3>23. Laryngeal Mirror</h3>
-        <img src="./img/23.png" alt="Laryngeal Mirror">
+        <img src="./img/23.png" alt="Laryngeal Mirror" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Mirror head</li>
@@ -743,7 +815,7 @@
       <!-- 24. Latex Hand Gloves -->
       <div class="item-card">
         <h3>24. Latex Hand Gloves</h3>
-        <img src="./img/24.png" alt="Latex Hand Gloves">
+        <img src="./img/24.png" alt="Latex Hand Gloves" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Palm</li>
@@ -771,7 +843,7 @@
       <!-- 25. Milk Pump -->
       <div class="item-card">
         <h3>25. Milk Pump (Breast Pump)</h3>
-        <img src="./img/25.png" alt="Breast Pump">
+        <img src="./img/25.png" alt="Breast Pump" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Breast shield/funnel</li>
@@ -800,7 +872,7 @@
       <!-- 26. Neck Collar -->
       <div class="item-card">
         <h3>26. Neck Collar (Cervical Collar)</h3>
-        <img src="./img/26.png" alt="Cervical Collar">
+        <img src="./img/26.png" alt="Cervical Collar" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Rigid plastic shell</li>
@@ -825,7 +897,7 @@
       <!-- 27. Needle Holder -->
       <div class="item-card">
         <h3>27. Needle Holder</h3>
-        <img src="./img/27.png" alt="Needle Holder">
+        <img src="./img/27.png" alt="Needle Holder" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Jaws (serrated)</li>
@@ -850,7 +922,7 @@
       <!-- 28. Nipple Cover -->
       <div class="item-card">
         <h3>28. Nipple Cover (Nipple Shield)</h3>
-        <img src="./img/28.png" alt="Nipple Shield">
+        <img src="./img/28.png" alt="Nipple Shield" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Silicone shield</li>
@@ -874,7 +946,7 @@
       <!-- 29. Non-Contact Tonometer -->
       <div class="item-card">
         <h3>29. Non-Contact / Air Puff Tonometer</h3>
-        <img src="./img/29.png" alt="Tonometer">
+        <img src="./img/29.png" alt="Tonometer" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Chin rest</li>
@@ -903,7 +975,7 @@
       <!-- 30. Oxygen Tank -->
       <div class="item-card">
         <h3>30. Oxygen Tank</h3>
-        <img src="./img/30.png" alt="Oxygen Tank">
+        <img src="./img/30.png" alt="Oxygen Tank" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Cylinder body</li>
@@ -933,7 +1005,7 @@
       <!-- 31. Pulse Oximeter -->
       <div class="item-card">
         <h3>31. Pulse Oximeter</h3>
-        <img src="./img/31.png" alt="Pulse Oximeter">
+        <img src="./img/31.png" alt="Pulse Oximeter" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Finger clip/sensor</li>
@@ -961,7 +1033,7 @@
       <!-- 32. Reflex Hammer -->
       <div class="item-card">
         <h3>32. Reflex Hammer</h3>
-        <img src="./img/32.png" alt="Reflex Hammer">
+        <img src="./img/32.png" alt="Reflex Hammer" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Head (rubber)</li>
@@ -988,7 +1060,7 @@
       <!-- 33. Scalp Vein Needle -->
       <div class="item-card">
         <h3>33. Scalp Vein Needle / Butterfly Needle</h3>
-        <img src="./img/33.png" alt="Butterfly Needle">
+        <img src="./img/33.png" alt="Butterfly Needle" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Wings</li>
@@ -1015,7 +1087,7 @@
       <!-- 34. Scalpel / Lancet -->
       <div class="item-card">
         <h3>34. Scalpel or Lancet</h3>
-        <img src="./img/34.png" alt="Scalpel">
+        <img src="./img/34.png" alt="Scalpel" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Blade</li>
@@ -1039,7 +1111,7 @@
       <!-- 35. Snellen’s Chart -->
       <div class="item-card">
         <h3>35. Snellen’s Chart</h3>
-        <img src="./img/35.png" alt="Snellen Chart">
+        <img src="./img/35.png" alt="Snellen Chart" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Chart with rows of letters (optotypes)</li>
@@ -1063,7 +1135,7 @@
       <!-- 36. Speculum -->
       <div class="item-card">
         <h3>36. Speculum (Vaginal)</h3>
-        <img src="./img/36.png" alt="Vaginal Speculum">
+        <img src="./img/36.png" alt="Vaginal Speculum" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Bills/blades</li>
@@ -1089,7 +1161,7 @@
       <!-- 37. Sphygmomanometer -->
       <div class="item-card">
         <h3>37. Sphygmomanometer</h3>
-        <img src="./img/37.png" alt="Sphygmomanometer">
+        <img src="./img/37.png" alt="Sphygmomanometer" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Inflation bulb</li>
@@ -1116,7 +1188,7 @@
       <!-- 38. Stethoscope -->
       <div class="item-card">
         <h3>38. Stethoscope</h3>
-        <img src="./img/38.png" alt="Stethoscope">
+        <img src="./img/38.png" alt="Stethoscope" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Ear tube & ear piece</li>
@@ -1143,7 +1215,7 @@
       <!-- 39. Stretcher -->
       <div class="item-card">
         <h3>39. Stretcher</h3>
-        <img src="./img/39.png" alt="Stretcher">
+        <img src="./img/39.png" alt="Stretcher" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Mattress</li>
@@ -1169,7 +1241,7 @@
       <!-- 40. Suction Machine -->
       <div class="item-card">
         <h3>40. Suction Machine and Catheter</h3>
-        <img src="./img/40.png" alt="Suction Machine">
+        <img src="./img/40.png" alt="Suction Machine" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Suction pump</li>
@@ -1196,7 +1268,7 @@
       <!-- 41. Surgical Clamp -->
       <div class="item-card">
         <h3>41. Surgical Clamp</h3>
-        <img src="./img/41.png" alt="Surgical Clamp">
+        <img src="./img/41.png" alt="Surgical Clamp" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Jaws</li>
@@ -1221,7 +1293,7 @@
       <!-- 42. Surgical Scissors -->
       <div class="item-card">
         <h3>42. Surgical Scissors</h3>
-        <img src="./img/42.png" alt="Surgical Scissors">
+        <img src="./img/42.png" alt="Surgical Scissors" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Blades</li>
@@ -1245,7 +1317,7 @@
       <!-- 43. Surgical Thread -->
       <div class="item-card">
         <h3>43. Surgical Thread</h3>
-        <img src="./img/43.png" alt="Surgical Thread">
+        <img src="./img/43.png" alt="Surgical Thread" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Thread (suture material)</li>
@@ -1271,7 +1343,7 @@
       <!-- 44. Thermometer -->
       <div class="item-card">
         <h3>44. Thermometer</h3>
-        <img src="./img/44.png" alt="Thermometer">
+        <img src="./img/44.png" alt="Thermometer" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Sensor/probe</li>
@@ -1296,7 +1368,7 @@
       <!-- 45. Tongue Spatula -->
       <div class="item-card">
         <h3>45. Tongue Spatula</h3>
-        <img src="./img/45.png" alt="Tongue Spatula">
+        <img src="./img/45.png" alt="Tongue Spatula" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Blade (flat stick)</li>
@@ -1319,7 +1391,7 @@
       <!-- 46. Trolley -->
       <div class="item-card">
         <h3>46. Trolley</h3>
-        <img src="./img/46.png" alt="Medical Trolley">
+        <img src="./img/46.png" alt="Medical Trolley" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Top shelf</li>
@@ -1349,7 +1421,7 @@
       <!-- 47. Urinary Bag -->
       <div class="item-card">
         <h3>47. Urinary Bag</h3>
-        <img src="./img/47.png" alt="Urinary Bag">
+        <img src="./img/47.png" alt="Urinary Bag" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Collection bag</li>
@@ -1375,7 +1447,7 @@
       <!-- 48. Uterine Cannula -->
       <div class="item-card">
         <h3>48. Uterine Cannula</h3>
-        <img src="./img/48.png" alt="Uterine Cannula">
+        <img src="./img/48.png" alt="Uterine Cannula" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Cannula tip (screw or non-screw)</li>
@@ -1402,7 +1474,7 @@
       <!-- 49. Vulpellum Forceps -->
       <div class="item-card">
         <h3>49. Vulpellum Forceps</h3>
-        <img src="./img/49.png" alt="Vulpellum Forceps">
+        <img src="./img/49.png" alt="Vulpellum Forceps" onclick="openLightbox(this)">
         <div class="section-title">🔧 Parts</div>
         <ul>
           <li>Jaws (with tooth)</li>
@@ -1427,6 +1499,12 @@
     </div>
   </div>
 
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightbox-img" src="" alt="Zoomed Image" onclick="event.stopPropagation()">
+  </div>
+
   <div class="nav-bar">
     <div class="nav-item"><button class="neumorphic-btn" onclick="window.location.href='#'">💬</button></div>
     <div class="nav-item center"><button class="neumorphic-btn" onclick="window.location.href='#'">⭐</button></div>
@@ -1438,27 +1516,59 @@
     const body = document.body;
     const container = document.getElementById('scroll-container');
     const progressBar = document.getElementById('progress-bar');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
 
+    // Theme
     function setTheme(theme) {
       body.classList.remove('light', 'dark');
       body.classList.add(theme);
       themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
       localStorage.setItem('theme', theme);
     }
-
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
-
     themeToggle.addEventListener('click', () => {
       const newTheme = body.classList.contains('light') ? 'dark' : 'light';
       setTheme(newTheme);
     });
 
+    // Progress bar
     container.addEventListener('scroll', () => {
       const scrollTop = container.scrollTop;
       const scrollHeight = container.scrollHeight - container.clientHeight;
       progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
     });
+
+    // Lightbox functions
+    function openLightbox(imgElement) {
+      lightboxImg.src = imgElement.src;
+      lightboxImg.alt = imgElement.alt;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close lightbox with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Start Exam function
+    function startExam() {
+      const examDate = new Date('2026-10-27');
+      const today = new Date();
+      
+      if (today < examDate) {
+        alert('📝 Exam is not yet available.\n\nThe exam will be ready on 27 October 2026.\nPlease check back then!');
+      } else {
+        window.location.href = 'exam.html';
+      }
+    }
   </script>
 </body>
 </html>
