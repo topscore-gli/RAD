@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lower Limb MCQs – Set 1 (1–100)</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:14px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="history.back()">←</button>
+      <h1>Lower Limb – Set 1</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 40:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 2400, PASS: 60 };
+
+const SECTIONS = {
+  0:  "A: Gluteal Region & Thigh — Bones",
+  12: "B: Gluteal Region & Thigh — Joints",
+  18: "C: Gluteal Region & Thigh — Muscles",
+  40: "D: Sciatic Nerve & Femoral Triangle",
+  60: "E: AP Pelvis Radiograph",
+  75: "F: Hip & Pelvis Pathology"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  // 1–12  Bones
+  {q:"At birth, the innominate bone consists of how many bones united by cartilage?",o:["Two","Three","Four","Five"],a:1,e:"The innominate bone at birth consists of three bones — ilium, ischium, and pubis — united by cartilage."},
+  {q:"The most superior point of the iliac crest lies at the level of the spinous process of which vertebra?",o:["Second lumbar vertebra","Third lumbar vertebra","Fourth lumbar vertebra","Fifth lumbar vertebra"],a:2,e:"This relationship identifies the L3–L4 and L4–L5 interspinous spaces for lumbar puncture or epidural anesthesia."},
+  {q:"The neck of a direct inguinal hernia lies in which relation to the pubic tubercle?",o:["Inferolateral","Superolateral","Directly posterior","Directly anterior"],a:1,e:"Direct inguinal hernia neck = superolateral; femoral hernia neck = inferolateral to the pubic tubercle."},
+  {q:"The neck of a femoral hernia lies in which relation to the pubic tubercle?",o:["Superolateral","Superomedial","Inferolateral","Inferomedial"],a:2,e:"Femoral hernia neck lies inferolateral to the pubic tubercle."},
+  {q:"The secondary ossification center for the head of the femur appears at what age?",o:["At birth","First 6 months after birth","4 years","12–14 years"],a:1,e:"Head center appears in the first 6 months; greater trochanter at 4 years; lesser trochanter at 12–14 years."},
+  {q:"The secondary ossification center for the greater trochanter appears at what age?",o:["First 6 months after birth","4 years","8–9 years","12–14 years"],a:1,e:"Greater trochanter center appears at 4 years of age."},
+  {q:"The secondary ossification center for the lesser trochanter appears at what age?",o:["4 years","8–9 years","12–14 years","18 years"],a:2,e:"Lesser trochanter center appears at 12–14 years."},
+  {q:"The angle of anteversion of the femoral neck decreases from what range at birth to what range in adulthood?",o:["10°–15° → 30°–50°","30°–50° → 10°–15°","20°–30° → 5°–10°","50°–60° → 20°–25°"],a:1,e:"Anteversion decreases from 30°–50° at birth to 10°–15° in adulthood."},
+  {q:"The neck–shaft angle of the femur decreases from an average of what at birth to what in adulthood?",o:["127° → 146°","146° → 127°","120° → 110°","150° → 130°"],a:1,e:"Average 146° at birth → average 127° by adulthood."},
+  {q:"The lesser trochanter is seen in profile on an AP radiograph when the lower limb is:",o:["Internally rotated 10°–15°","Neutrally or laterally rotated","Abducted 30°","Flexed 90°"],a:1,e:"Neutral or lateral rotation profiles the lesser trochanter and foreshortens the neck due to anteversion."},
+  {q:"On internal rotation of the femur by 10°–15°, which structure is NOT seen in profile?",o:["Greater trochanter","Lesser trochanter","Femoral head","Fovea capitis"],a:1,e:"Internal rotation of 10°–15° compensates for anteversion and the lesser trochanter is not in profile."},
+  {q:"Contusions of muscles attached to the iliac crest and anterior superior iliac spine are colloquially called:",o:["Hip pointers","Shin splints","Runner's knee","Jumpers knee"],a:0,e:"These contusions are called hip pointers."},
+
+  // 13–18  Joints
+  {q:"The symphysis pubis is classified as what type of joint?",o:["Primary cartilaginous","Secondary cartilaginous","Fibrous","Synovial"],a:1,e:"It is a secondary cartilaginous joint uniting the pubic bodies of the innominate bones."},
+  {q:"The osseocartilaginous arch of the symphysis pubis serves as a tie beam that:",o:["Resists the tendency of upper body weight to thrust the innominate bones apart laterally","Resists the tendency of the lower limbs to thrust the innominate bones medially","Transmits body weight to the lower limbs","Prevents anterior rotation of the sacrum"],a:0,e:"The tie beam resists lateral thrust of the innominate bones by upper body weight; the compression strut resists medial thrust by the lower limbs."},
+  {q:"The sacroiliac joint is stabilized by all of the following ligaments EXCEPT:",o:["Sacroiliac ligament","Sacrotuberous ligament","Sacrospinous ligament","Iliofemoral ligament"],a:3,e:"The iliofemoral ligament is a hip joint ligament, not a sacroiliac stabilizer."},
+  {q:"The hip joint is formed by articulation of the head of the femur with:",o:["The acetabular fossa and acetabular labrum","The obturator foramen","The ischial tuberosity","The greater sciatic notch"],a:0,e:"The hip joint = head of femur + acetabular fossa + acetabular labrum."},
+  {q:"Which of the following movements is NOT provided by the hip joint?",o:["Flexion","Extension","Abduction","Pronation"],a:3,e:"Pronation is a forearm movement; the hip provides flexion, extension, adduction, abduction, and medial/lateral rotation."},
+  {q:"The sacroiliac joint and its ligaments, together with the pelvic girdle, form an osseoligamentous arch that:",o:["Transmits upper body weight to the lower limbs","Prevents hip dislocation","Stabilizes the knee","Anchors the patella"],a:0,e:"The posterosuperior osseoligamentous arch transmits upper body weight to the lower limbs."},
+
+  // 19–40  Muscles
+  {q:"Which muscle is the most powerful flexor of the thigh?",o:["Sartorius","Rectus femoris","Iliopsoas","Pectineus"],a:2,e:"Iliopsoas (iliacus + psoas major) is the most powerful flexor of the thigh."},
+  {q:"The iliacus is innervated by which nerve?",o:["Obturator nerve","Femoral nerve","Sciatic nerve","Superior gluteal nerve"],a:1,e:"Iliacus = femoral nerve; psoas major = anterior rami of L1–L3."},
+  {q:"The psoas major is innervated by branches of which spinal levels?",o:["L1–L3","L4–S1","T12–L1","S1–S3"],a:0,e:"Psoas major is innervated by branches of the anterior rami of L1–L3."},
+  {q:"Which muscle is the chief extensor of the trunk relative to the thigh when rising from a seated position?",o:["Gluteus medius","Gluteus maximus","Hamstrings","Adductor magnus"],a:1,e:"Gluteus maximus is the chief extensor of the body trunk relative to the thigh when rising from seated."},
+  {q:"The hamstring muscles include all of the following EXCEPT:",o:["Semitendinosus","Semimembranosus","Long head of biceps femoris","Short head of biceps femoris"],a:3,e:"The hamstrings are semitendinosus, semimembranosus, and the long head of biceps femoris. The short head is not a hamstring."},
+  {q:"The hamstring muscles are innervated by which portion of the sciatic nerve?",o:["Common peroneal portion","Tibial portion","Both portions equally","Neither portion"],a:1,e:"Hamstrings are innervated by the tibial portion of the sciatic nerve."},
+  {q:"The short head of biceps femoris is innervated by which portion of the sciatic nerve?",o:["Tibial portion","Common peroneal portion","Obturator nerve","Femoral nerve"],a:1,e:"The short head of biceps femoris is the only lower limb muscle innervated by the common peroneal portion of the sciatic nerve."},
+  {q:"The hamstring portion of adductor magnus is innervated by:",o:["Obturator nerve","Tibial portion of the sciatic nerve","Common peroneal portion of the sciatic nerve","Femoral nerve"],a:1,e:"The hamstring portion of adductor magnus is innervated by the tibial portion of the sciatic nerve."},
+  {q:"Which muscle is the chief abductor and medial rotator of the thigh?",o:["Gluteus maximus","Gluteus medius and minimus","Piriformis","Adductor longus"],a:1,e:"Gluteus medius and minimus are the chief abductors and medial rotators of the thigh."},
+  {q:"Gluteus medius and minimus are innervated by which nerve?",o:["Inferior gluteal nerve","Superior gluteal nerve","Sciatic nerve","Obturator nerve"],a:1,e:"Both are innervated by the superior gluteal nerve."},
+  {q:"The chief adductors of the thigh include all of the following EXCEPT:",o:["Adductor longus","Adductor brevis","Adductor portion of adductor magnus","Obturator externus"],a:3,e:"Obturator externus is a lateral rotator, not an adductor."},
+  {q:"The adductor muscles of the thigh are innervated by which nerve?",o:["Femoral nerve","Obturator nerve","Sciatic nerve","Superior gluteal nerve"],a:1,e:"Adductor longus, adductor brevis, and the adductor portion of adductor magnus are innervated by the obturator nerve."},
+  {q:"The reflex test of the adductor portion of adductor magnus assesses neuronal pathways at which spinal levels?",o:["L1–L2","L2–L4","L5–S1","S2–S4"],a:1,e:"The adductor reflex tests L2, L3, and L4 pathways."},
+  {q:"Which muscle is innervated by nerve fibers derived from S1 and S2?",o:["Obturator externus","Obturator internus","Piriformis","Quadratus femoris"],a:2,e:"Piriformis is innervated by fibers from S1 and S2."},
+  {q:"The nerve to obturator internus innervates which muscles?",o:["Obturator internus and superior gemellus","Obturator externus and inferior gemellus","Inferior gemellus and quadratus femoris","Piriformis and superior gemellus"],a:0,e:"Nerve to obturator internus supplies obturator internus and superior gemellus."},
+  {q:"The nerve to quadratus femoris innervates which muscles?",o:["Obturator internus and superior gemellus","Inferior gemellus and quadratus femoris","Piriformis and obturator externus","Superior gemellus and piriformis"],a:1,e:"Nerve to quadratus femoris supplies inferior gemellus and quadratus femoris."},
+  {q:"Obturator externus is innervated by which nerve?",o:["Obturator nerve","Nerve to obturator internus","Nerve to quadratus femoris","Superior gluteal nerve"],a:0,e:"Obturator externus is innervated by the obturator nerve."},
+  {q:"Which of the following is a lateral rotator of the thigh?",o:["Gluteus medius","Gluteus minimus","Quadratus femoris","Adductor longus"],a:2,e:"Quadratus femoris is one of the lateral rotators (with piriformis, obturator externus/internus, gemelli)."},
+  {q:"Sartorius is innervated by which nerve?",o:["Obturator nerve","Femoral nerve","Sciatic nerve","Superior gluteal nerve"],a:1,e:"Sartorius is innervated by the femoral nerve."},
+  {q:"Pectineus is commonly innervated by:",o:["Femoral nerve only","Obturator nerve only","Both femoral and obturator nerves","Sciatic nerve"],a:2,e:"Pectineus is commonly innervated by both femoral and obturator nerves."},
+  {q:"Rectus femoris is innervated by which nerve?",o:["Femoral nerve","Obturator nerve","Sciatic nerve","Superior gluteal nerve"],a:0,e:"Rectus femoris is innervated by the femoral nerve."},
+  {q:"Gluteus maximus is innervated by which nerve?",o:["Superior gluteal nerve","Inferior gluteal nerve","Sciatic nerve","Obturator nerve"],a:1,e:"Gluteus maximus is innervated by the inferior gluteal nerve."},
+
+  // 41–60  Sciatic Nerve & Femoral Triangle
+  {q:"The sciatic nerve is derived from which anterior rami?",o:["L1–L3","L2–L4","L4, L5, S1, S2, S3","S1–S4"],a:2,e:"Sciatic nerve derives from anterior rami of L4, L5, S1, S2, and S3."},
+  {q:"The sciatic nerve follows a curved course through which quadrant of the gluteal region?",o:["Upper medial","Upper lateral","Lower medial","Lower lateral"],a:2,e:"The sciatic nerve courses through the lower medial quadrant of the gluteal region."},
+  {q:"The safest site for intramuscular injection in the buttock is which quadrant?",o:["Upper medial","Upper lateral","Lower medial","Lower lateral"],a:1,e:"The upper lateral quadrant is furthest from the sciatic nerve's course."},
+  {q:"The femoral triangle is bordered medially by:",o:["Inguinal ligament","Medial border of adductor longus","Medial border of sartorius","Pectineus"],a:1,e:"Medial border = adductor longus; lateral border = sartorius; superior = inguinal ligament."},
+  {q:"The floor of the femoral triangle, from medial to lateral, consists of:",o:["Adductor longus, pectineus, psoas, iliacus","Iliacus, psoas, pectineus, adductor longus","Sartorius, pectineus, psoas, iliacus","Adductor longus, sartorius, psoas, iliacus"],a:0,e:"Floor (medial → lateral) = adductor longus, pectineus, psoas, iliacus."},
+  {q:"In the femoral triangle, the femoral vein lies in which relation to the femoral artery?",o:["Lateral","Medial","Anterior","Posterior"],a:1,e:"Femoral vein lies medial to the femoral artery in the femoral triangle."},
+  {q:"The femoral nerve lies in which relation to the femoral artery in the femoral triangle?",o:["Medial","Lateral","Posterior","Anterior"],a:1,e:"The femoral nerve lies lateral to the femoral sheath and artery."},
+  {q:"The femoral sheath extends how far distal to the inguinal ligament in adults?",o:["1–2 cm","3–4 cm","5–6 cm","7–8 cm"],a:1,e:"The femoral sheath extends 3 to 4 cm distal to the inguinal ligament."},
+  {q:"The superior end of the femoral canal is called the:",o:["Femoral ring","Femoral septum","Saphenous opening","Fossa ovalis"],a:0,e:"The superior end of the femoral canal is the femoral ring, occupied by the femoral septum."},
+  {q:"The loose connective tissue occupying the femoral ring is called the:",o:["Femoral canal","Femoral septum","Inguinal ligament","Saphenous opening"],a:1,e:"The femoral septum occupies the femoral ring; a femoral hernia is a weakness in it."},
+  {q:"The deep inguinal lymph nodes lie aligned along which structure?",o:["Lateral side of the femoral artery","Medial side of the terminal segment of the femoral vein","Anterior to the femoral nerve","Along the inguinal ligament"],a:1,e:"Deep inguinal nodes are aligned along the medial side of the terminal femoral vein."},
+  {q:"The deep inguinal nodes drain lymph into which group?",o:["External iliac nodes","Internal iliac nodes","Para-aortic nodes","Superficial inguinal nodes"],a:0,e:"Efferent lymphatics from deep inguinal nodes drain into the external iliac nodes."},
+  {q:"The vertical group of superficial inguinal nodes drains all of the following EXCEPT:",o:["Superficial tissues of the anteromedial leg","Superficial tissues of the thigh","Superficial tissues of the posterolateral leg","Superficial tissues of the medial foot"],a:2,e:"The vertical group drains all superficial lower limb tissues EXCEPT posterolateral leg and lateral foot (which drain to popliteal nodes)."},
+  {q:"The horizontal group of superficial inguinal nodes drains all of the following EXCEPT:",o:["Urethra","Lower half of the anal canal","Testes","External genitalia (excluding testes)"],a:2,e:"The testes drain to para-aortic nodes, not superficial inguinal nodes."},
+  {q:"The great saphenous vein ends by passing through which structure?",o:["Femoral ring","Saphenous opening","Obturator foramen","Adductor hiatus"],a:1,e:"The great saphenous vein passes through the saphenous opening in the fascia lata to join the femoral vein."},
+  {q:"The superficial inguinal nodes (vertical group) drain primarily into:",o:["Internal iliac nodes","External iliac nodes","Para-aortic nodes","Popliteal nodes"],a:1,e:"Efferents from the vertical group drain primarily into the external iliac nodes."},
+  {q:"The femoral artery is best palpated in which part of the femoral triangle?",o:["Distal 1 cm","Proximal 2- to 3-cm segment","Midpoint only","At the adductor hiatus"],a:1,e:"Palpation of the femoral pulse is best along the proximal 2- to 3-cm segment."},
+  {q:"The femoral nerve enters the femoral triangle at a point midway between:",o:["ASIS and pubic tubercle","ASIS and symphysis pubis","Pubic tubercle and ischial tuberosity","Greater trochanter and ASIS"],a:0,e:"Femoral nerve enters midway between ASIS and pubic tubercle; the femoral artery enters midway between ASIS and symphysis pubis."},
+  {q:"The femoral artery enters the femoral triangle at a point midway between:",o:["ASIS and pubic tubercle","ASIS and symphysis pubis","Pubic tubercle and ischial tuberosity","Greater trochanter and ASIS"],a:1,e:"Femoral artery enters midway between ASIS and symphysis pubis."},
+  {q:"Which structure lies immediately deep to the midpoint of the inguinal ligament?",o:["Femoral vein","Femoral nerve","Femoral artery","Deep inguinal nodes"],a:1,e:"The femoral nerve enters immediately deep to the midpoint of the inguinal ligament (midway between ASIS and pubic tubercle)."},
+
+  // 61–75  AP Pelvis Radiograph
+  {q:"Kohler's teardrop represents which structure?",o:["The medial wall of the acetabulum","The fovea capitis","The ischial spine","The superior pubic ramus"],a:0,e:"Kohler's teardrop is the AP image of the acetabulum's medial wall."},
+  {q:"Shenton's line is drawn from the superior margin of the obturator foramen to:",o:["The superior margin of the femoral neck","The inferior margin of the femoral neck","The greater trochanter","The ischial tuberosity"],a:1,e:"Shenton's line runs from the superior margin of the obturator foramen to the inferior margin of the femoral neck."},
+  {q:"The medial joint space of the hip is approximately how wide compared with the superior and axial joint spaces?",o:["Half as wide","Equal in width","Twice as wide","Three times as wide"],a:2,e:"The medial joint space is approximately twice as wide as the superior and axial joint spaces."},
+  {q:"The psoas line represents a fat layer between the hip joint capsule and:",o:["Gluteus minimus tendon","Iliopsoas tendon","Obturator internus","Piriformis"],a:1,e:"Psoas line = fat layer between hip joint capsule and iliopsoas tendon of insertion onto the lesser trochanter."},
+  {q:"The obturator line represents a fat layer medial to which muscle?",o:["Iliopsoas","Gluteus minimus","Obturator internus","Piriformis"],a:2,e:"Obturator line = fat layer medial to obturator internus."},
+  {q:"The gluteal line represents a fat layer between the hip joint capsule and:",o:["Gluteus maximus tendon","Gluteus minimus tendon","Iliopsoas tendon","Obturator internus"],a:1,e:"Gluteal line = fat layer between hip joint capsule and gluteus minimus tendon onto the greater trochanter."},
+  {q:"Which of the following is NOT a criterion for absence of pelvic rotation on AP radiograph?",o:["Symphysis pubis aligned with the midline of the sacrum","Paired obturator foramina nearly identical in outline","Kohler's teardrops nearly identical in outline","Femoral heads at the same level as the greater trochanters"],a:3,e:"The three rotation criteria are symphysis alignment, identical obturator foramina, and identical Kohler's teardrops."},
+  {q:"The superior joint space of the hip is bounded by the superior margin of the femoral head and:",o:["The acetabular fossa","The roof of the acetabulum","Kohler's teardrop","The ischial spine"],a:1,e:"Superior joint space = between superior margin of femoral head and roof of acetabulum."},
+  {q:"The axial joint space of the hip extends along the axis of the:",o:["Femoral shaft","Femoral neck","Acetabular roof","Pubic ramus"],a:1,e:"The axial joint space extends along the axis of the femoral neck."},
+  {q:"The medial joint space of the hip is bounded medially by:",o:["The roof of the acetabulum","Kohler's teardrop","The ischial tuberosity","The obturator foramen"],a:1,e:"Medial joint space = between medial margin of femoral head and Kohler's teardrop."},
+  {q:"In a normal AP pelvis radiograph, the lesser trochanter is seen in profile when the lower limb is:",o:["Internally rotated 10°–15°","Neutrally or laterally rotated","Abducted 45°","Flexed 90°"],a:1,e:"Neutral or lateral rotation profiles the lesser trochanter and foreshortens the neck."},
+  {q:"The AP pelvis radiograph should demonstrate which of the following vertebral levels?",o:["T12 and L1","L2 and L3","L4 and L5","S1 and S2"],a:2,e:"The bodies and spinous/transverse processes of L4 and L5 should be demonstrated."},
+  {q:"The teardrop-shaped radiopaque outline superolateral to the obturator foramen is called:",o:["Shenton's line","Kohler's teardrop","Psoas line","Gluteal line"],a:1,e:"Kohler's teardrop = medial wall of the acetabulum."},
+  {q:"Which fat line is lateral to the femoral neck?",o:["Psoas line","Obturator line","Gluteal line","Shenton's line"],a:2,e:"The gluteal line is lateral to the femoral neck."},
+  {q:"The fovea capitis should be demonstrated on which part of the proximal femur?",o:["Greater trochanter","Head","Lesser trochanter","Intertrochanteric crest"],a:1,e:"The fovea capitis is on the head of the femur."},
+
+  // 76–100  Hip & Pelvis Pathology
+  {q:"Posterior hip dislocation presents clinically with a limb that is:",o:["Shortened, abducted, and externally rotated","Shortened, adducted, and internally rotated","Lengthened, abducted, and internally rotated","Lengthened, adducted, and externally rotated"],a:1,e:"Posterior dislocation = shortened, adducted, internally rotated limb; sciatic nerve commonly compressed."},
+  {q:"Anterior hip dislocation presents clinically with a limb that is:",o:["Shortened, adducted, and internally rotated","Abducted and externally rotated","Adducted and internally rotated","Shortened and internally rotated"],a:1,e:"Anterior dislocation = abducted and externally rotated limb; may be cyanotic due to femoral vein compression."},
+  {q:"Central dislocation of the hip is always associated with:",o:["Acetabular fracture","Femoral neck fracture","Sciatic nerve injury","Sacroiliac dislocation"],a:0,e:"Central dislocation is always associated with acetabular fracture."},
+  {q:"Posterior hip dislocation radiographically shows the femoral head displaced:",o:["Inferiorly","Superiorly","Medially","Laterally"],a:1,e:"Posterior dislocation shows superior displacement of the femoral head."},
+  {q:"Anterior hip dislocation radiographically shows the femoral head displaced:",o:["Superiorly","Inferiorly","Posteriorly","Laterally"],a:1,e:"Anterior dislocation shows inferior displacement of the femoral head."},
+  {q:"Both anterior and posterior hip dislocations produce:",o:["A continuous Shenton's line","A discontinuity in Shenton's line","Kohler's teardrop enlargement","Widening of the symphysis pubis"],a:1,e:"Both dislocations disrupt Shenton's line."},
+  {q:"Fractures of the bony pelvis generally occur:",o:["Singly","In pairs","Only in the elderly","Only in children"],a:1,e:"Because the pelvis is a ring, breaks generally occur in pairs (two fractures or fracture + dislocation)."},
+  {q:"The most commonly fractured parts of the bony pelvis are:",o:["Iliac wings","Superior and inferior pubic rami","Ischial tuberosities","Acetabular roofs"],a:1,e:"The superior and inferior pubic rami are the most commonly fractured parts."},
+  {q:"External rotation of the foot is limited to 45° following which type of femoral neck fracture?",o:["Extracapsular","Intracapsular","Subtrochanteric","Intertrochanteric"],a:1,e:"Intracapsular fractures limit external rotation to 45° due to the hip joint capsule; extracapsular fractures can allow up to 90°."},
+  {q:"External rotation of the foot can be as great as 90° following which type of femoral neck fracture?",o:["Intracapsular","Extracapsular","Subcapital","Transcervical"],a:1,e:"Extracapsular fractures allow up to 90° external rotation."},
+  {q:"Avascular necrosis of the femoral head following femoral neck fracture is due to rupture of:",o:["The obturator artery","Circumflex femoral arterial branches","The artery of the ligamentum teres","The medial circumflex only"],a:1,e:"Rupture of circumflex femoral arterial branches to the head causes avascular necrosis."},
+  {q:"Slipped capital femoral epiphysis is what type of Salter-Harris fracture?",o:["Type I","Type II","Type III","Type IV"],a:0,e:"SCFE is a Salter-Harris Type I fracture through the growth plate."},
+  {q:"Which of the following is a radiographic sign of slipped capital femoral epiphysis?",o:["Medial edge of the growth plate abuts the lower rim of the acetabular cavity at an abnormally low point","The growth plate space is narrowed","A line along the superior femoral neck projects below the capital epiphysis","Shenton's line is continuous"],a:0,e:"SCFE signs include low abutment of the medial growth plate, widened growth plate, and a line along the superior femoral neck projecting above the capital epiphysis."},
+  {q:"Legg-Perthes disease is:",o:["Idiopathic avascular necrosis of the femoral head","A fracture of the femoral neck","A dislocation of the hip","An inflammatory arthritis"],a:0,e:"Legg-Perthes disease = idiopathic avascular necrosis of the femoral head."},
+  {q:"Legg-Perthes disease occurs most commonly in:",o:["Elderly women","Young Caucasian children, more often boys","Young adults, more often women","Neonates"],a:1,e:"Legg-Perthes occurs almost exclusively in young Caucasian children, more common in boys."},
+  {q:"In the degenerative phase of Legg-Perthes disease, radiographs show:",o:["Normal femoral head","Sclerosis and fragmentation of the epiphyseal ossification center","Complete reossification","Acetabular protrusion"],a:1,e:"Degenerative phase shows sclerosis and fragmentation; impaction produces coxa plana."},
+  {q:"A flattened femoral head following Legg-Perthes disease is called:",o:["Coxa valga","Coxa vara","Coxa plana","Coxa magna"],a:2,e:"Impaction of fragments produces a flattened femoral head called coxa plana."},
+  {q:"In the regenerative phase of Legg-Perthes disease, radiographs show:",o:["Normal femoral head and neck","Femoral head ill-fitted to the acetabular cavity and a truncated, widened femoral neck","Complete disappearance of the femoral head","Acetabular fracture"],a:1,e:"Regenerative phase = ill-fitting femoral head and truncated, widened femoral neck."},
+  {q:"The most sensitive indicator of hip joint effusion in an AP radiograph is:",o:["Lateral displacement of the gluteal line","Inferolateral displacement of the femoral head from the acetabular cavity","Widening of the symphysis pubis","Elevation of the lesser trochanter"],a:1,e:"Inferolateral displacement of the femoral head is the most sensitive indicator."},
+  {q:"In a child, a reliable indicator of hip joint effusion is:",o:["Lateral displacement of the gluteal line","Medial displacement of the psoas line or obturator line","Superior displacement of the greater trochanter","Widening of Kohler's teardrop"],a:1,e:"Medial displacement of psoas or obturator line is reliable in children; gluteal line displacement is unreliable."},
+  {q:"Hip joint effusion in adults is reliably indicated by:",o:["Lateral displacement of the gluteal line","Displacement of fat lines about the hip joint","Inferolateral displacement of the femoral head","Medial displacement of the psoas line"],a:2,e:"Fat line displacements are unreliable in adults; inferolateral femoral head displacement is the most sensitive indicator."},
+  {q:"Primary osteoarthritis of the hip joint radiographically shows:",o:["Diffuse joint space narrowing with medial femoral head displacement","Superior joint space narrowing with superolateral femoral head displacement","Periarticular osteopenia and erosions","Acetabular protrusion"],a:1,e:"OA shows superior joint space narrowing with superolateral femoral head displacement, subchondral sclerosis, osteophytes, and cysts."},
+  {q:"Rheumatoid arthritis of the hip joint radiographically shows:",o:["Superior joint space narrowing with superolateral femoral head displacement","Diffuse joint space narrowing with medial femoral head displacement and possible acetabular protrusion","Osteophytes and subchondral sclerosis","Normal joint spaces"],a:1,e:"RA shows diffuse (superior, axial, medial) joint space narrowing with medial femoral head displacement, periarticular osteopenia, erosions, and possible acetabular protrusion."},
+  {q:"Osteoarthritis or acute suppurative arthritis of the hip joint commonly causes referred pain to:",o:["The ankle","The knee","The shoulder","The lower back"],a:1,e:"Hip joint arthritides commonly cause referred pain to the knee."},
+  {q:"Subchondral cysts in osteoarthritis of the hip result from:",o:["Seepage of synovial fluid through minute fractures in the cortical bone","Infection","Tumor invasion","Avascular necrosis"],a:0,e:"Subchondral cysts result from seepage of synovial fluid through minute fractures in the cortical bone of the femoral head or acetabular floor."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('lower_limb_s1_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/' + state.data.length;
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('lower_limb_s1_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of the gluteal region, thigh, femoral triangle, pelvis radiography and hip pathology! Superb work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review femoral triangle boundaries, Shenton’s line, hip dislocation patterns and Legg-Perthes to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on muscle innervations, femoral canal/ring, radiographic fat lines and the differences between OA and RA of the hip. Practice will raise your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this topic has many detailed points. Go through the explanations carefully, revise the key landmarks and pathology signs, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 12, 18, 40, 60, 75, 100];
+  var sectionNames = [
+    "A: Gluteal Region & Thigh — Bones",
+    "B: Gluteal Region & Thigh — Joints",
+    "C: Gluteal Region & Thigh — Muscles",
+    "D: Sciatic Nerve & Femoral Triangle",
+    "E: AP Pelvis Radiograph",
+    "F: Hip & Pelvis Pathology"
+  ];
+
+  for (var s = 0; s < sectionNames.length; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('lower_limb_s1_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('lower_limb_s1_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('lower_limb_s1_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
