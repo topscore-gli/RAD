@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lower Limb – Complete Radiographic Anatomy</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --background:#1e1e2f;--shadow-in:#171723;--shadow-out:#25253b;
+      --text-primary:#f0f0ff;--text-secondary:#c0c0e0;
+      --accent:#1db954;--accent-secondary:#ff6b6b;--accent-tertiary:#4ecdc4;
+      --card-bg:#2a2a3f
+    }
+    body.light{
+      --background:#e0e0e0;--shadow-in:#bebebe;--shadow-out:#ffffff;
+      --text-primary:#1a1a1a;--text-secondary:#444;--card-bg:#f8f8f8
+    }
+    body{background:var(--background);color:var(--text-primary);display:flex;justify-content:center;align-items:center;min-height:100vh;overflow-x:hidden}
+    .container{width:100%;max-width:420px;height:750px;overflow-y:auto;background:var(--background);border-radius:20px;box-shadow:10px 10px 20px var(--shadow-in),-10px -10px 20px var(--shadow-out);padding-top:70px;padding-bottom:90px;position:relative}
+    .neumorphic{background:var(--background);box-shadow:5px 5px 10px var(--shadow-in),-5px -5px 10px var(--shadow-out);border-radius:15px}
+    .neumorphic-btn{background:var(--background);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;box-shadow:3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);cursor:pointer;color:var(--text-primary);font-size:18px;transition:all .3s ease}
+    .neumorphic-btn:active{box-shadow:inset 3px 3px 6px var(--shadow-in),inset -3px -3px 6px var(--shadow-out);transform:scale(.95)}
+    .top-bar{position:fixed;top:0;width:100%;max-width:420px;background:var(--background);padding:15px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 5px 10px var(--shadow-in);z-index:20}
+    .top-bar .header{font-size:15px;font-weight:900;color:var(--accent)}
+    .top-bar .right-icons{display:flex;gap:10px}
+    .progress-container{position:fixed;top:70px;left:0;width:100%;max-width:420px;height:4px;background:var(--shadow-in);z-index:15}
+    .progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+    .content{padding:20px 16px;line-height:1.65}
+    .main-header{text-align:center;margin-bottom:24px;padding:20px;border-radius:20px;background:rgba(29,185,84,.1)}
+    .main-header h1{font-size:18px;margin-bottom:6px;color:var(--accent);font-weight:900}
+    .main-header p{font-size:13px;color:var(--text-secondary)}
+    .section-card{background:var(--card-bg);padding:22px 18px;border-radius:18px;box-shadow:inset 4px 4px 10px var(--shadow-in),inset -4px -4px 10px var(--shadow-out);margin-bottom:22px;border-left:4px solid var(--accent)}
+    .section-card h2{font-size:16px;margin-bottom:14px;color:var(--accent);font-weight:900}
+    .section-card h3{font-size:15px;margin:18px 0 10px;color:var(--accent-tertiary);font-weight:800;padding-left:10px;border-left:3px solid var(--accent-tertiary)}
+    .section-card h4{font-size:14px;margin:14px 0 8px;color:var(--accent-secondary);font-weight:800}
+    .section-card p,.section-card li{font-size:13.5px;margin-bottom:6px}
+    .section-card ul,.section-card ol{padding-left:18px;margin:8px 0}
+    .highlight{background:rgba(78,205,196,.12);padding:12px 14px;border-radius:10px;margin:12px 0;border-left:3px solid var(--accent-tertiary)}
+    .memory{background:rgba(255,107,107,.12);padding:12px 14px;border-radius:10px;margin:12px 0;border-left:4px solid var(--accent-secondary)}
+    .memory strong{color:var(--accent-secondary);display:block;margin-bottom:4px}
+    .table-container{width:100%;overflow-x:auto;margin:12px 0;border-radius:12px}
+    .summary-table{width:100%;min-width:300px;border-collapse:separate;border-spacing:0;font-size:12px}
+    .summary-table th{background:var(--accent);color:#000;padding:9px 8px;text-align:left;font-weight:900}
+    .summary-table td{padding:8px;border-bottom:1px solid var(--shadow-in);background:var(--card-bg);vertical-align:top}
+    .summary-table tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+    .exam-btn{display:block;width:100%;padding:15px;margin:10px 0 8px;background:linear-gradient(135deg,#1db954,#17a347);color:#000;font-size:15px;font-weight:900;border:none;border-radius:14px;cursor:pointer;box-shadow:4px 4px 10px var(--shadow-in),-4px -4px 10px var(--shadow-out)}
+    .exam-btn.secondary{background:linear-gradient(135deg,#4ecdc4,#3db8b0)}
+    .exam-btn:active{transform:scale(0.97)}
+    .nav-bar{position:fixed;bottom:0;width:100%;max-width:420px;background:var(--background);padding:10px;display:flex;justify-content:space-around;box-shadow:0 -5px 10px var(--shadow-in);z-index:20}
+    .nav-bar .nav-item.center button{width:50px;height:50px;font-size:24px;background:var(--accent);box-shadow:0 0 15px var(--accent),3px 3px 6px var(--shadow-in),-3px -3px 6px var(--shadow-out);color:#000}
+  </style>
+</head>
+<body class="dark">
+  <div class="container" id="scroll-container">
+    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+    <div class="top-bar neumorphic">
+      <button class="neumorphic-btn" onclick="history.back()">←</button>
+      <div class="header">Lower Limb</div>
+      <div class="right-icons">
+        <button class="neumorphic-btn" id="theme-toggle">🌙</button>
+        <button class="neumorphic-btn" onclick="alert('📌 Saved for revision!')">🚀</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="main-header">
+        <h1>🦴 Lower Limb – Complete Guide</h1>
+        <p>Merged & Deduplicated Reference<br>Gluteal • Thigh • Hip • Knee • Ankle • Foot</p>
+      </div>
+
+      <button class="exam-btn" onclick="window.location.href='352note2q.html'">📝 Paper 1 – Start Exam</button>
+      <button class="exam-btn secondary" onclick="window.location.href='352note2q1.html'">📝 Paper 2 – Start Exam</button>
+
+      <!-- ===================== I. GLUTEAL REGION AND THIGH ===================== -->
+      <div class="section-card">
+        <h2>I. GLUTEAL REGION AND THIGH</h2>
+
+        <h3>A. Bones</h3>
+
+        <h4>1. Innominate Bone</h4>
+        <ul>
+          <li>At birth, the innominate bone consists of three bones — ilium, ischium, and pubis — united by cartilage. The iliac crest, acetabulum, ischiopubic ramus, and ischial tuberosity are all cartilaginous at birth.</li>
+          <li>The anterior superior iliac spine (ASIS) and most of the iliac crest are palpable on the lateral aspect of the hip region.</li>
+          <li>The most superior point of the iliac crest lies at the level of the spinous process of the 4th lumbar vertebra. This relationship identifies the L3–L4 and L4–L5 interspinous process spaces for needle entry in lumbar puncture or lumbar epidural anesthesia.</li>
+          <li>Contusions of muscles attached to the iliac crest and its anterior end are colloquially called hip pointers.</li>
+          <li>The ischial tuberosity is palpable in the gluteal region; the pair are the parts upon which a person rests when seated. Tenderness on palpation is a cardinal sign of ischial bursitis.</li>
+          <li>The pubic tubercle is palpable near the medial end of the inguinal (groin) region. The neck of a direct inguinal hernia lies superolateral to the pubic tubercle; the neck of a femoral hernia lies inferolateral to the pubic tubercle.</li>
+        </ul>
+
+        <h4>2. Proximal End of the Femur</h4>
+        <ul>
+          <li>The proximal femur (head to immediate subtrochanteric region) is clinically called the hip.</li>
+          <li>Three secondary ossification centers:
+            <ul>
+              <li>Head — appears during the first 6 months after birth.</li>
+              <li>Greater trochanter — appears at 4 years.</li>
+              <li>Lesser trochanter — appears at 12–14 years.</li>
+            </ul>
+          </li>
+          <li>Skin overlying the greater trochanters is susceptible to ulceration in bedridden patients.</li>
+          <li>The lesser trochanter is seen in profile only when the lower limb is neutrally or laterally rotated; on internal rotation of 10°–15°, the lesser trochanter is not in profile and the femoral neck is seen at near-maximum length (compensating for anteversion).</li>
+          <li>Angle of anteversion decreases from 30°–50° at birth to 10°–15° in adulthood.</li>
+          <li>Neck–shaft angle decreases from an average 146° at birth to an average 127° by adulthood.</li>
+        </ul>
+
+        <h3>B. Joints</h3>
+
+        <h4>1. Symphysis Pubis</h4>
+        <ul>
+          <li>A secondary cartilaginous joint uniting the pubic bodies of the paired innominate bones.</li>
+          <li>Together with the pubic bodies and superior pubic rami, it forms an osseocartilaginous arch in the anteroinferior pelvic girdle that serves as:
+            <ul>
+              <li>A tie beam resisting the tendency of upper body weight to thrust the innominate bones apart laterally.</li>
+              <li>A compression strut resisting the tendency of the lower limbs to thrust the innominate bones medially against one another.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4>2. Sacroiliac Joint</h4>
+        <ul>
+          <li>Articulates the iliac wing of the innominate bone with the sacrum.</li>
+          <li>Stabilized by the sacroiliac, sacrotuberous, and sacrospinous ligaments, which counter the weight of the upper body rotating the sacrum anteriorly.</li>
+          <li>Together with the pelvic girdle, these form an osseoligamentous arch in the posterosuperior part that transmits body weight to the lower limbs.</li>
+        </ul>
+
+        <h4>3. Hip Joint</h4>
+        <ul>
+          <li>Formed by articulation of the head of the femur with the acetabular fossa and the acetabular labrum.</li>
+          <li>Provides for flexion, extension, adduction, abduction, medial and lateral rotation of the thigh.</li>
+        </ul>
+
+        <h3>C. Muscles of the Thigh</h3>
+
+        <h4>1. Flexors of the Thigh</h4>
+        <ul>
+          <li>Iliacus and psoas major share a common tendon inserting onto the lesser trochanter; together called iliopsoas — the most powerful flexor of the thigh and chief flexor of the trunk relative to the thigh when rising from recumbent to seated.
+            <ul>
+              <li>Iliacus — innervated by the femoral nerve.</li>
+              <li>Psoas major — innervated by branches of the anterior rami of L1–L3.</li>
+            </ul>
+          </li>
+          <li>Sartorius — active flexor of the thigh when walking; femoral nerve.</li>
+          <li>Pectineus — active flexor of the thigh when walking; commonly both femoral and obturator nerves.</li>
+          <li>Rectus femoris (quadriceps femoris) — flexor of the thigh; femoral nerve.</li>
+        </ul>
+
+        <h4>2. Extensors of the Thigh</h4>
+        <ul>
+          <li>Gluteus maximus — chief extensor of the trunk relative to the thigh when rising from seated; also active in extending the thigh when climbing stairs or running. Inferior gluteal nerve.</li>
+          <li>Hamstrings — semitendinosus, semimembranosus, and the long head of biceps femoris — chief extensors of the thigh when walking. All innervated by the tibial portion of the sciatic nerve.</li>
+          <li>Hamstring portion of adductor magnus — extensor of the thigh; tibial portion of the sciatic nerve.</li>
+        </ul>
+
+        <h4>3. Abductors and Medial Rotators of the Thigh</h4>
+        <ul>
+          <li>Gluteus medius and gluteus minimus — chief abductors and medial rotators. Their principal contribution to walking gait is exerted by acting from their insertions onto their origins when one lower limb is the sole weight-bearing limb; their contraction supports and steadies the upper body over the contralateral, non-weight-bearing limb. Superior gluteal nerve.</li>
+        </ul>
+
+        <h4>4. Adductors of the Thigh</h4>
+        <ul>
+          <li>Adductor longus, adductor brevis, and the adductor portion of adductor magnus — chief adductors. They contribute to the walking gait by serving as:
+            <ul>
+              <li>Antagonists of the abductor actions of gluteus medius and minimus when one lower limb is the sole weight-bearing limb.</li>
+              <li>Synergists of the actions of the flexors and extensors of both the thigh and leg.</li>
+            </ul>
+          </li>
+          <li>All innervated by the obturator nerve.</li>
+          <li>The reflex test of the adductor portion of adductor magnus is a phasic stretch reflex test of neuronal pathways at the L2, L3, and L4 spinal cord segment levels.</li>
+        </ul>
+
+        <h4>5. Lateral Rotators of the Thigh</h4>
+        <ul>
+          <li>Piriformis, obturator externus, obturator internus, superior gemellus, inferior gemellus, and quadratus femoris.
+            <ul>
+              <li>Piriformis — fibers from S1 and S2.</li>
+              <li>Obturator externus — obturator nerve.</li>
+              <li>Obturator internus and superior gemellus — nerve to obturator internus.</li>
+              <li>Inferior gemellus and quadratus femoris — nerve to quadratus femoris.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>D. Sciatic Nerve</h3>
+        <ul>
+          <li>Derived from the anterior rami of L4, L5, S1, S2, and S3.</li>
+          <li>Follows a curved inferolateral course through the lower medial quadrant of the gluteal region, from the greater sciatic foramen to the midpoint between the ischial tuberosity and the greater trochanter of the femur.</li>
+          <li>The upper lateral quadrant is the safest site for intramuscular injection because it is furthest removed from the sciatic nerve’s course.</li>
+        </ul>
+
+        <h3>E. Femoral Triangle</h3>
+
+        <h4>1. Boundaries</h4>
+        <ul>
+          <li>Superiorly: inguinal ligament.</li>
+          <li>Medially: medial border of adductor longus.</li>
+          <li>Laterally: medial border of sartorius.</li>
+          <li>Floor (medial to lateral): adductor longus, pectineus, psoas, and iliacus.</li>
+        </ul>
+
+        <h4>2. Nerves, Blood Vessels, and Lymphatics</h4>
+        <ul>
+          <li>The femoral nerve and femoral artery enter the femoral triangle by passing deep to the inguinal ligament; the femoral vein and efferent lymphatics from the deep group of inguinal lymph nodes exit by passing deep to the inguinal ligament.</li>
+          <li>Femoral nerve (anterior rami of L2, L3, L4) — extends onto the floor at a point midway between the anterior superior iliac spine and the pubic tubercle (immediately deep to the midpoint of the inguinal ligament).</li>
+          <li>Femoral artery — extends deep to the inguinal ligament onto the floor at a point midway between the anterior superior iliac spine and the symphysis pubis. Palpation of the femoral pulse and obstructive compression are best performed along the proximal 2- to 3-cm segment in the femoral triangle.</li>
+          <li>Femoral vein — lies directly medial to the femoral artery as it exits the thigh (note: the artery lies lateral to the vein).</li>
+          <li>Deep inguinal lymph nodes — aligned along the medial side of the terminal segment of the femoral vein.
+            <ul>
+              <li>Receive lymph from the popliteal nodes, deep tissues of the thigh, and some superficial inguinal nodes.</li>
+              <li>Efferent lymphatics drain into the external iliac nodes.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4>3. Femoral Sheath and Canal</h4>
+        <ul>
+          <li>The femoral sheath envelops the proximal segment of the femoral artery, the terminal segment of the femoral vein, and the deep inguinal nodes. In adults, it extends 3 to 4 cm distal to the inguinal ligament.</li>
+          <li>Femoral canal — potential space within the femoral sheath; bears the deep inguinal nodes and transmits their afferent and efferent lymphatics.</li>
+          <li>Femoral ring — superior end of the femoral canal; occupied by loose connective tissue called the femoral septum. A femoral hernia is a weakness or opening in the femoral septum through which tissue or organ may protrude.</li>
+        </ul>
+
+        <h4>4. Superficial Inguinal Nodes and Great Saphenous Vein</h4>
+        <ul>
+          <li>The terminal segment of the great saphenous vein and the vertical and horizontal groups of superficial inguinal lymph nodes lie within the superficial fascia overlying the femoral triangle.</li>
+          <li>Great saphenous vein — ends by passing through the saphenous opening in the fascia lata and uniting with the femoral vein.</li>
+          <li>Vertical group of superficial inguinal nodes — aligned along the terminal segment of the great saphenous vein.
+            <ul>
+              <li>Receives lymph from all superficial tissues of the lower limb except those of the posterolateral aspect of the leg and the lateral side of the foot.</li>
+              <li>Efferent lymphatics drain primarily into the external iliac nodes.</li>
+            </ul>
+          </li>
+          <li>Horizontal group of superficial inguinal nodes — aligned parallel and inferior to the inguinal ligament.
+            <ul>
+              <li>Receives lymph from the urethra, lower half of the anal canal, external genitalia (includes the vagina below the hymen in the female but not the testes in the male), anterolateral abdominal wall up to the umbilicus, and superficial tissues of the buttock.</li>
+              <li>Efferent lymphatics drain primarily into the external iliac nodes.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ===================== II. AP RADIOGRAPH OF THE PELVIS ===================== -->
+      <div class="section-card">
+        <h2>II. AP RADIOGRAPH OF THE PELVIS</h2>
+
+        <h3>A. Bones and Femur</h3>
+        <h4>1. Innominate Bone</h4>
+        <ul>
+          <li>Iliac crest and anterior superior iliac spine of the iliac wing.</li>
+          <li>Ischial tuberosity and ischial spine.</li>
+          <li>Superior ramus, body, and inferior ramus of the pubis.</li>
+          <li>Obturator foramen.</li>
+          <li>Roof, anterior and posterior rims, and medial wall of the acetabulum. The teardrop-shaped radiopaque outline immediately superolateral to the obturator foramen is Kohler’s teardrop; it represents the AP image of the acetabulum’s medial wall.</li>
+        </ul>
+
+        <h4>2. Proximal End of the Femur</h4>
+        <ul>
+          <li>Head with fovea capitis.</li>
+          <li>Neck, greater trochanter, intertrochanteric crest, and surgical neck should be demonstrated.</li>
+          <li>The lesser trochanter is seen in profile when the lower limb is neutrally or laterally rotated; the femoral neck appears foreshortened because of normal anteversion. On internal rotation of 10°–15°, the lesser trochanter is not in profile and the neck is seen at near-maximum length.</li>
+          <li>Shenton’s line — a smoothly curved line drawn from the superior margin of the obturator foramen onto the inferior margin of the neck of the femur.</li>
+        </ul>
+
+        <h3>B. Vertebrae</h3>
+        <ul>
+          <li>Bodies and spinous and transverse processes of the 4th and 5th lumbar vertebrae, upper lateral parts of the sacrum, and coccyx.</li>
+        </ul>
+
+        <h3>C. Joints</h3>
+        <ul>
+          <li>The hip joints, symphysis pubis, and paired sacroiliac joints should be well demonstrated.</li>
+          <li>Width of the hip joint should be assessed at three locations:
+            <ul>
+              <li>Superior joint space — between the superior margin of the femoral head and the roof of the acetabulum; bears the apposed articular cartilages of the femoral head and the lunate surface of the acetabulum.</li>
+              <li>Axial joint space — between the femoral head and acetabulum, along the axis of the femoral neck; bears the apposed articular cartilages of the femoral head and the lunate surface of the acetabulum.</li>
+              <li>Medial joint space — between the medial margin of the femoral head and Kohler’s teardrop; bears the articular cartilage of the femoral head and the fat and ligamentum teres of the acetabular fossa. The medial joint space is approximately twice as wide as the superior and axial joint spaces.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>D. Radiolucent Lines</h3>
+        <ul>
+          <li>Psoas line — medial to the femoral neck; a fat layer between the hip joint’s fibrous capsule and iliopsoas’s tendon of insertion onto the lesser trochanter.</li>
+          <li>Obturator line — medial to the acetabulum; a fat layer medial to obturator internus.</li>
+          <li>Gluteal line — lateral to the femoral neck; a fat layer between the hip joint’s fibrous capsule and gluteus minimus’s tendon of insertion onto the greater trochanter.</li>
+        </ul>
+
+        <h3>E. Assessing for Rotation</h3>
+        <ul>
+          <li>The symphysis pubis should be aligned with the midline of the sacrum.</li>
+          <li>The paired obturator foramina should be nearly identical in outline.</li>
+          <li>The Kohler’s teardrops should be nearly identical in outline.</li>
+        </ul>
+      </div>
+
+      <!-- ===================== III. TRAUMATIC INJURIES, GROWTH ABNORMALITIES & DISEASES ===================== -->
+      <div class="section-card">
+        <h2>III. TRAUMATIC INJURIES, GROWTH ABNORMALITIES, AND DISEASES OF THE HIP AND PELVIS</h2>
+
+        <h3>A. Hip Joint Dislocations</h3>
+        <h4>1. Posterior Dislocation (Majority)</h4>
+        <ul>
+          <li>Clinical: shortened, adducted, and internally rotated limb. The sciatic nerve commonly is compressed by the dislocated femoral head.</li>
+          <li>Radiographic: AP radiograph shows the femoral head displaced superiorly from its normal alignment with the acetabular cavity.</li>
+        </ul>
+        <h4>2. Anterior Dislocation</h4>
+        <ul>
+          <li>Clinical: abducted and externally rotated limb. The limb may be cyanotic because of compression of the femoral vein by the dislocated femoral head.</li>
+          <li>Radiographic: AP radiograph shows the femoral head displaced inferiorly from its normal alignment with the acetabular cavity.</li>
+        </ul>
+        <h4>3. Both Anterior and Posterior</h4>
+        <ul>
+          <li>Produce a discontinuity in Shenton’s line.</li>
+        </ul>
+        <h4>4. Central Dislocation</h4>
+        <ul>
+          <li>Always occurs in association with acetabular fracture.</li>
+        </ul>
+
+        <h3>B. Fractures of the Bony Pelvis</h3>
+        <ul>
+          <li>Since the bony pelvis is a united ring, breaks generally occur in pairs — either a pair of fractures or a fracture accompanied by a joint dislocation.</li>
+          <li>The superior and inferior pubic rami are the most commonly fractured parts; dislocation of the symphysis pubis is more common than dislocation of the sacroiliac joints.</li>
+          <li>Clinical: high morbidity and mortality due to hemorrhagic shock from great vessel damage and pelvic organ damage (bladder and urethra must always be assumed damaged until proven otherwise).</li>
+          <li>Radiographic: fractures about or near the acetabulum may produce discontinuities in Shenton’s line or changes in its curvature.</li>
+        </ul>
+
+        <h3>C. Femoral Neck Fractures</h3>
+        <ul>
+          <li>Clinical:
+            <ul>
+              <li>Especially common among the elderly, mainly due to osteoporosis (greater incidence in elderly women than men). In youth, due to severe physical trauma or pathologic bone disorders.</li>
+              <li>Most fractures in the elderly are subcapital fractures (immediately distal to the femoral head). Attendant rupture of the circumflex femoral arterial branches to the head accounts for the common posttraumatic complication of avascular necrosis of the femoral head.</li>
+              <li>External rotation of the foot is limited to 45° following intracapsular fractures (because the fibrous capsule of the hip joint limits external rotation to 45°). External foot rotation can be as great as 90° following displacement of extracapsular fractures.</li>
+            </ul>
+          </li>
+          <li>Radiographic:
+            <ul>
+              <li>Acute, nondisplaced stress and impacted fractures may show only an alteration of the trabecular pattern or a zone of increased radiopacity due to impaction.</li>
+              <li>The integrity of the cortical bone in the femoral neck should be examined in all suspected hip fractures.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>D. Slipped Capital Femoral Epiphysis</h3>
+        <ul>
+          <li>Pathogenesis:
+            <ul>
+              <li>The epiphyseal growth plate for the femoral head changes orientation during early adolescence, placing the plane of the growth plate in greater alignment with weight-bearing forces, subjecting it to greater disruptive shear forces.</li>
+              <li>Increased mechanical stress combined with hormonal imbalance renders young adolescents vulnerable to a displaced Salter-Harris Type I fracture of the epiphyseal plate for the head of the femur.</li>
+            </ul>
+          </li>
+          <li>Clinical: pain in the groin, thigh, or knee and an antalgic gait.</li>
+          <li>Radiographic signs (AP radiograph):
+            <ul>
+              <li>1. The medial edge of the growth plate abuts the lower rim of the acetabular cavity at an abnormally low point.</li>
+              <li>2. The radiolucent space representing the growth plate is abnormally widened.</li>
+              <li>3. A line drawn along the superior margin of the neck of the femur projects proximally above the level of the capital epiphysis.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>E. Legg-Perthes Disease</h3>
+        <ul>
+          <li>Description/pathogenesis:
+            <ul>
+              <li>Idiopathic avascular necrosis of the head of the femur.</li>
+              <li>During childhood, branches of the medial and lateral circumflex femoral arteries increasingly replace the artery of the ligament to the head of the femur as the principal blood supply; this increases vulnerability of the femoral head to avascular necrosis from mechanical or infectious insults.</li>
+            </ul>
+          </li>
+          <li>Clinical:
+            <ul>
+              <li>Almost exclusively in young Caucasian children; boys > girls.</li>
+              <li>Insidious onset; mild hip or knee pain (referred pain); slightly externally rotated thigh.</li>
+              <li>Unilateral in most patients; when bilateral, almost never in the same stage on both sides.</li>
+              <li>Three phases — initial, degenerative, regenerative — spanning a 5- to 6-year period.</li>
+            </ul>
+          </li>
+          <li>Radiographic:
+            <ul>
+              <li>Early initial phase: radiographs generally normal. Late initial phase:
+                <ul>
+                  <li>Increased widths of the superior, axial, and medial joint spaces.</li>
+                  <li>Subchondral radiolucency in the femoral head (represents a subchondral fracture).</li>
+                </ul>
+              </li>
+              <li>Degenerative phase: sclerosis and fragmentation of the epiphyseal ossification center; impaction of fragments produces a flattened femoral head called coxa plana.</li>
+              <li>Regenerative phase: femoral head ill-fitted to the acetabular cavity and a truncated and widened femoral neck.</li>
+              <li>The degenerative and regenerative phases generally overlap considerably.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>F. Hip Joint Effusions</h3>
+        <ul>
+          <li>Etiology: intracapsular fractures, transient synovitis, septic arthritis, osteomyelitis, Legg-Perthes disease in children.</li>
+          <li>Clinical: most comfortable seated with the painful thigh slightly abducted and externally rotated at the hip joint (minimizes tension in the synovial membrane by maximizing encapsulation of the femoral head by the acetabular cavity and labrum).</li>
+          <li>Radiographic:
+            <ul>
+              <li>1. Most sensitive indicator in an AP radiograph: inferolateral displacement of the femoral head from the acetabular cavity.</li>
+              <li>2. In a child: medial displacement of the psoas line or the obturator line is reliable and sensitive. Lateral displacement of the gluteal line is not reliable because it is artificially generated by slight pelvic rotation or slight thigh abduction/external rotation.</li>
+              <li>3. Displacements of fat lines about the hip joint are unreliable indicators in adults.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>G. Primary Osteoarthritis of the Hip Joint</h3>
+        <ul>
+          <li>Clinical:
+            <ul>
+              <li>Certain arthritides of the hip joint (osteoarthritis, acute suppurative arthritis) commonly elicit referred pain to the knee.</li>
+              <li>Extent of radiographic changes does not always correspond with severity of pain and loss of function.</li>
+            </ul>
+          </li>
+          <li>Radiographic:
+            <ul>
+              <li>1. Superior joint space narrowing due to focal degeneration and thinning of articular cartilage; commonly associated with a minor but distinct superolateral displacement of the femoral head within the acetabular cavity.</li>
+              <li>2. Subchondral osteosclerosis of the femoral head and acetabular cavity.</li>
+              <li>3. Osteophytes mainly along the rim of the acetabular cavity and the margin of union between the femoral head and neck.</li>
+              <li>4. Subchondral cysts in the cancellous interior of the femoral head or innominate bone about the acetabulum, resulting from seepage of synovial fluid through minute fractures in the cortical bone.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>H. Rheumatoid Arthritis of the Hip Joint</h3>
+        <ul>
+          <li>Clinical: flexion contractures at the hip joint may accompany progression.</li>
+          <li>Radiographic:
+            <ul>
+              <li>1. Superior, axial, and medial joint spaces all narrow due to diffuse degeneration and thinning of articular cartilage; commonly associated with medial displacement of the femoral head. The acetabulum may become so thin medially that the medial margin of the femoral head protrudes medial to the pelvic margin of the innominate bone (acetabular protrusion).</li>
+              <li>2. Periarticular osteopenia due to osteoporosis.</li>
+              <li>3. Peripheral subchondral erosions.</li>
+              <li>4. Radiolucent cysts communicating with the joint’s synovial cavity may appear in the cancellous interior of the femoral head or innominate bone about the acetabulum.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ===================== IV. KNEE ===================== -->
+      <div class="section-card">
+        <h2>IV. KNEE</h2>
+
+        <h3>A. Bones</h3>
+        <h4>1. Distal Femur</h4>
+        <ul>
+          <li>Longitudinal growth of the femoral shaft occurs more actively at the distal end.</li>
+          <li>Bears a single secondary center of ossification:
+            <ul>
+              <li>The only secondary center among the long bones of the extremities that always appears before birth — specifically by 36 to 37 weeks of gestation.</li>
+              <li>Its presence in the lower limbs of an abandoned and deceased newborn forensically establishes that the child was viable at birth.</li>
+            </ul>
+          </li>
+        </ul>
+        <h4>2. Patella</h4>
+        <ul>
+          <li>The largest sesamoid bone of the body. Ossification begins at the age of 3 years.</li>
+        </ul>
+        <h4>3. Proximal Tibia and Fibula</h4>
+        <ul>
+          <li>Each has a single secondary center of ossification at the proximal end.
+            <ul>
+              <li>Proximal tibial center appears at birth.</li>
+              <li>Proximal fibular center appears at 3 to 4 years.</li>
+            </ul>
+          </li>
+          <li>The epiphysis at the proximal end of the fibula is the first epiphysis of the fibula to fuse with its metaphysis during late adolescence; the epiphysis at the proximal end of the tibia is the last epiphysis of the tibia to fuse.</li>
+        </ul>
+
+        <h3>B. Joints</h3>
+        <h4>1. Knee Joint</h4>
+        <ul>
+          <li>Provides for flexion, extension, medial rotation, and lateral rotation of the leg.</li>
+          <li>Three articulations:
+            <ul>
+              <li>Medial femoral condyle with the medial tibial condyle and medial meniscus.</li>
+              <li>Lateral femoral condyle with the lateral tibial condyle and lateral meniscus.</li>
+              <li>Patellar surface of the femur with the posterior surface of the patella.</li>
+            </ul>
+          </li>
+          <li>Five major ligaments:
+            <ul>
+              <li>Anterior cruciate ligament — limits anterior displacement of the tibia during extension.</li>
+              <li>Posterior cruciate ligament — limits posterior displacement of the tibia during flexion.</li>
+              <li>Medial and lateral collateral ligaments — together limit side-to-side movements.</li>
+              <li>Oblique popliteal ligament — strengthens the posterior part of the knee joint’s fibrous capsule.</li>
+            </ul>
+          </li>
+          <li>Bursae communicating with the synovial cavity:
+            <ul>
+              <li>Suprapatellar bursa — between quadriceps femoris tendon and anterior surface of distal femur; most anterosuperior recess of the joint’s synovial cavity.</li>
+              <li>Popliteus bursa — lateral aspect; between popliteus and lateral femoral condyle.</li>
+              <li>Gastrocnemius bursa — medial aspect; between medial head of gastrocnemius and joint capsule.</li>
+              <li>Semimembranosus bursa — medial aspect; between semimembranosus tendon and medial head of gastrocnemius.</li>
+            </ul>
+          </li>
+          <li>Bursae NOT communicating with the synovial cavity:
+            <ul>
+              <li>Prepatellar bursa — subcutaneous, overlies quadriceps femoris tendon where it envelops the patella.</li>
+              <li>Superficial infrapatellar bursa — subcutaneous, overlies the ligamentum patellae.</li>
+              <li>Deep infrapatellar bursa — between ligamentum patellae and anterior surface of proximal tibia.</li>
+            </ul>
+          </li>
+        </ul>
+        <h4>2. Proximal Tibiofibular Joint</h4>
+        <ul>
+          <li>Articulates the head of the fibula with the lateral tibial condyle. The proximal and distal tibiofibular joints provide for only a small range of movement.</li>
+        </ul>
+      </div>
+
+      <!-- ===================== ANKLE & FOOT ===================== -->
+      <div class="section-card">
+        <h2>ANKLE AND FOOT</h2>
+
+        <h3>Joints</h3>
+        <ul>
+          <li><strong>Distal tibiofibular joint</strong> — unites the distal end of the fibula with the fibular notch of the tibia.</li>
+          <li><strong>Ankle joint</strong> — articulates the talus with the medial and lateral malleoli (distal ends of the tibia and fibula). Provides for dorsiflexion and plantar flexion of the foot.</li>
+          <li><strong>Joints of Foot Inversion and Eversion</strong>
+            <ul>
+              <li>Anatomic joints:
+                <ul>
+                  <li>Anatomic subtalar joint — articulates the posterior ends of the talus and calcaneus.</li>
+                  <li>Talocalcaneonavicular joint — consists of the talocalcaneal articulation at the sustentaculum tali and the articulation of the anterior end of the talus with the posterior surface of the navicular.</li>
+                  <li>Calcaneocuboid joint — articulates the anterior surface of the calcaneus with the posterior surface of the cuboid.</li>
+                </ul>
+              </li>
+              <li>Functional joints:
+                <ul>
+                  <li>Functional subtalar joint — consists of the anatomic subtalar joint and the talocalcaneal articulation at the sustentaculum tali.</li>
+                  <li>Transverse tarsal (Chopart’s) joint — consists of the calcaneocuboid joint and the articulation of the anterior end of the talus with the posterior surface of the navicular.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><strong>Metatarsophalangeal and Interphalangeal Joints</strong>
+            <ul>
+              <li>Each metatarsophalangeal joint provides for abduction, adduction, flexion, and extension of the proximal phalanx.</li>
+              <li>Each interphalangeal joint provides for only flexion and extension of the more distal phalanx.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>Muscles That Move the Foot</h3>
+        <h4>1. Four Muscles Passing ANTERIOR to the Ankle Joint (Extensors/Dorsiflexors) — Deep Peroneal Nerve</h4>
+        <ul>
+          <li>These represent all the dorsiflexors of the foot.
+            <ul>
+              <li>Tibialis anterior — chief dorsiflexor; second most powerful invertor of the foot.</li>
+              <li>Extensor hallucis longus — extends the phalanges of the big toe; minor invertor.</li>
+              <li>Extensor digitorum longus — extends the phalanges of the four most lateral toes.</li>
+              <li>Peroneus tertius — minor invertor of the foot.</li>
+            </ul>
+          </li>
+          <li>Loss of nerve supply to these muscles causes footdrop.</li>
+        </ul>
+
+        <h4>2. Two Muscles Passing POSTERIOR to the Lateral Malleolus (Evertors) — Superficial Peroneal Nerve</h4>
+        <ul>
+          <li>Peroneus longus — chief evertor of the foot; can also plantar flex the foot.</li>
+          <li>Peroneus brevis — second most powerful evertor; can also plantar flex the foot.</li>
+        </ul>
+
+        <h4>3. Three Muscles Contributing to the Tendo Calcaneus (Achilles Tendon) — Plantar Flexors — Tibial Nerve</h4>
+        <ul>
+          <li>Gastrocnemius — most powerful plantar flexor; can also flex the leg at the knee joint.</li>
+          <li>Soleus — second most powerful plantar flexor.</li>
+          <li>Plantaris — relatively weak plantar flexor; its tendon is often sacrificed in reconstructive repair of tendons of functionally important muscles.</li>
+          <li>The Achilles tendon reflex test assesses neuronal pathways at S1 and S2.</li>
+        </ul>
+
+        <h4>4. Three Muscles Passing POSTERIOR to the Medial Malleolus — Tibial Nerve</h4>
+        <ul>
+          <li>Tibialis posterior — chief invertor of the foot; can also plantar flex the foot.</li>
+          <li>Flexor hallucis longus — flexes the phalanges of the big toe and plantar flexes the foot.</li>
+          <li>Flexor digitorum longus — flexes the phalanges of the four most lateral toes and plantar flexes the foot.</li>
+        </ul>
+
+        <h4>5. Intrinsic Muscles of the Foot</h4>
+        <ul>
+          <li>Three short muscles of the big toe:
+            <ul>
+              <li>Abductor hallucis — abducts and flexes the big toe at its metatarsophalangeal joint.</li>
+              <li>Flexor hallucis brevis — flexes the big toe at its metatarsophalangeal joint.</li>
+              <li>Adductor hallucis — adducts and flexes the big toe at its metatarsophalangeal joint.</li>
+            </ul>
+          </li>
+          <li>Extensor digitorum brevis — serves all but the little toe; extends the proximal phalanx of the big toe and the phalanges of the second, third, and fourth toes.</li>
+          <li>Flexor digitorum brevis — flexes the proximal and middle phalanges of the four most lateral toes.</li>
+          <li>Quadratus plantae — assists flexor digitorum longus in flexing the phalanges of the four most lateral toes.</li>
+          <li>Lumbricals — prevent the four most lateral toes from buckling under the foot when they are flexed during the stance phase of walking.</li>
+          <li>Plantar and dorsal interossei — prime adductors and abductors of the toes:
+            <ul>
+              <li>Adductors: first plantar interosseous → third toe; second plantar interosseous → fourth toe; third plantar interosseous → fifth toe.</li>
+              <li>Abductors: first dorsal interosseous → second toe; second dorsal interosseous → second toe; third dorsal interosseous → third toe; fourth dorsal interosseous → fourth toe.</li>
+            </ul>
+          </li>
+          <li>Two short muscles of the little toe:
+            <ul>
+              <li>Abductor digiti minimi — abducts and flexes the little toe.</li>
+              <li>Flexor digiti minimi brevis — flexes the little toe at its metatarsophalangeal joint.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>Nerves</h3>
+        <ul>
+          <li>Tibial nerve — passes posterior to the medial malleolus and deep to the flexor retinaculum; divides in the sole into the medial and lateral plantar nerves, which together innervate all intrinsic muscles of the foot except extensor digitorum brevis and most of the skin of the sole.</li>
+          <li>Deep peroneal nerve — passes anterior to the ankle joint and deep to the extensor retinacula; innervates extensor digitorum brevis and the skin on the adjacent sides of the big and second toes.</li>
+          <li>Superficial peroneal nerve — cutaneous branches supply most of the dorsum of the foot.</li>
+        </ul>
+
+        <h3>Blood Vessels and Lymphatics</h3>
+        <ul>
+          <li>Plantar arterial arch — derives from the posterior tibial artery and dorsalis pedis.
+            <ul>
+              <li>Posterior tibial artery — palpable posteroinferiorly to the medial malleolus; divides into medial and lateral plantar arteries; the plantar arterial arch is a direct continuation of the lateral plantar artery.</li>
+              <li>Anterior tibial artery — ends anterior to the ankle joint as the origin of the dorsalis pedis; the dorsalis pedis pulse is palpable on the dorsum of the foot immediately lateral to the tendon of extensor hallucis longus. The deep plantar artery (a branch of dorsalis pedis) joins the lateral plantar artery to form the plantar arterial arch.</li>
+            </ul>
+          </li>
+          <li>Venous and lymphatic drainage:
+            <ul>
+              <li>Medial side of the foot — great saphenous vein and accompanying lymphatics; the vein ascends by passing anterior to the medial malleolus.</li>
+              <li>Lateral side of the foot — small saphenous vein and accompanying lymphatics; the vein ascends by passing posterior to the lateral malleolus.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Radiographs of Ankle & Foot -->
+      <div class="section-card">
+        <h2>IX. RADIOGRAPHS OF THE ANKLE AND FOOT</h2>
+
+        <h3>A. Mortise Radiograph</h3>
+        <ul>
+          <li>An AP projection of the ankle with mildly internally rotated foot.</li>
+          <li>Called tenon-and-mortise because it best displays the tenon-and-mortise configuration of the ankle joint:
+            <ul>
+              <li>Talus = tenon.</li>
+              <li>Medial malleolus, tibial plafond, and lateral malleolus = mortise.</li>
+              <li>The inferiorly directed articular surface at the distal end of the tibia is called the tibial plafond (ceiling of the ankle joint).</li>
+            </ul>
+          </li>
+          <li>The radiolucent joint spaces separating the body of the talus from the lateral malleolus, tibial plafond, and medial malleolus are uniform in width in a normal ankle.</li>
+          <li>The floor of the fibular notch of the tibia presents as a vertical radiopaque line at the distal end of the tibia and is colinear with the lateral margin of the body of the talus.</li>
+          <li>The posterior malleolus overlaps the superior margin of the body of the talus and appears as a blunt, stout process projecting inferiorly from the posterior margin of the distal end of the tibia.</li>
+        </ul>
+
+        <h3>B. Lateral Radiograph of the Ankle and Foot</h3>
+        <h4>1. Ankle</h4>
+        <ul>
+          <li>The tibial plafond casts a concave profile opposite the convex profile of the superior articular surface of the body of the talus. The intervening joint space has a uniform width between its anterior and posterior limits.</li>
+          <li>The medial and lateral malleoli overlap the joint space and are superimposed upon the body of the talus; the medial malleolus is shorter than the lateral malleolus. The posterior malleolus is in profile (unobstructed).</li>
+          <li>Fat-density areas bracket the anterior and posterior limits of the joint space; these represent fat pads directly abutting the anterior and posterior parts of the ankle joint’s fibrous capsule.</li>
+        </ul>
+        <h4>2. Foot</h4>
+        <ul>
+          <li>Major features of the calcaneus are displayed: articular surface for the anatomic subtalar joint, sustentaculum tali, anterior horn, articular surface for the calcaneocuboid joint, posterior tuberosity.</li>
+          <li>Boehler’s angle — measures the angular relationship between segments of the calcaneus. The most superior point of the calcaneus’s articular surface for the anatomic subtalar joint marks the vertex. One line is drawn from the posterosuperior edge of the calcaneus through the vertex; a second line from the vertex to the anterior horn of the calcaneus. Boehler’s angle is the anterior angle between the two lines; normal range is <strong>20° to 40°</strong>.</li>
+          <li>Fat layers anterior and posterior to the tendo calcaneus (Achilles tendon) permit delineation of the tendon down to its attachment to the posterior surface of the calcaneus.</li>
+          <li>Shows much of the joint spaces in Chopart’s joint and Lisfranc’s joint:
+            <ul>
+              <li>Chopart’s joint — eponym for the transverse tarsal joint, consisting of the calcaneocuboid joint and the talonavicular articulation in the talocalcaneonavicular joint.</li>
+              <li>Lisfranc’s joint — eponym for the five synovial joints that collectively articulate the cuneiforms and cuboid with the bases of the five metatarsals.</li>
+            </ul>
+          </li>
+          <li>Shows the pair of sesamoid bones that underlie the head of the first metatarsal.</li>
+        </ul>
+
+        <h3>C. Oblique Radiograph of the Foot</h3>
+        <ul>
+          <li>Shows part of the joint space of the talocalcaneal articulation at the sustentaculum tali.</li>
+          <li>Shows most of the joint spaces in Chopart’s joint and Lisfranc’s joint.</li>
+          <li>Provides, for the most part, unobstructed views of the metatarsophalangeal and interphalangeal joints of the toes, the metatarsals and the phalanges of the toes.</li>
+          <li>The perspective superimposes the heads of the first and second metatarsals on the pair of sesamoid bones that underlie the head of the first metatarsal.</li>
+        </ul>
+
+        <h3>D. AP Radiograph of the Foot</h3>
+        <ul>
+          <li>Shows some of the joint spaces in Chopart’s and Lisfranc’s joints.</li>
+          <li>Provides, for the most part, unobstructed views of the metatarsophalangeal and interphalangeal joints of the toes, the metatarsals and the phalanges of the toes.</li>
+          <li>The perspective superimposes the head of the first metatarsal on the underlying pair of sesamoid bones.</li>
+        </ul>
+      </div>
+
+      <!-- Traumatic Injuries of Ankle & Foot -->
+      <div class="section-card">
+        <h2>X. TRAUMATIC INJURIES OF THE ANKLE AND FOOT</h2>
+
+        <h3>A. Fractures About the Ankle Joint</h3>
+        <h4>1. The Osseoligamentous Ring</h4>
+        <ul>
+          <li>The ankle region is a united ring of bones and ligaments that encircles the talus. The ring consists of:
+            <ul>
+              <li>a. Ligaments of the distal tibiofibular joint: anterior tibiofibular, posterior tibiofibular, inferior transverse, and interosseous ligaments.</li>
+              <li>b. The tibial plafond and medial malleolus at the distal end of the tibia.</li>
+              <li>c. The medial collateral ligament of the ankle joint (i.e., the deltoid ligament).</li>
+              <li>d. The calcaneus.</li>
+              <li>e. The lateral collateral ligament of the ankle joint: anterior talofibular, calcaneofibular, and posterior talofibular ligaments.</li>
+              <li>f. The lateral malleolus.</li>
+            </ul>
+          </li>
+          <li>Breaks within the ring generally occur in pairs — most commonly a fracture of either the medial or lateral malleolus plus a ruptured ligament.</li>
+          <li>Medial or lateral displacement of the talus is pathognomonic of a pair of breaks within the ring; documented in a mortise radiograph by a nonlinear relationship between the lateral margin of the body of the talus and the floor of the fibular notch of the tibia.</li>
+          <li>Unimalleolar fracture — fracture of either the medial or lateral malleolus.</li>
+          <li>Bimalleolar fracture — both malleoli fractured.</li>
+          <li>Trimalleolar fracture — medial, lateral, and posterior malleoli all fractured.</li>
+        </ul>
+
+        <h4>2. Types of Fractures</h4>
+        <ul>
+          <li>Forces producing a break in the medial aspect of the ring more commonly produce avulsion of the medial malleolus rather than rupture of the deltoid ligament, because the deltoid ligament can bear greater tensile forces than the medial malleolus can.</li>
+          <li>Forces producing a break in the lateral aspect more commonly produce a rupture of one of the component ligaments of the lateral collateral ligament rather than a fracture of the lateral malleolus.</li>
+          <li>Forces that fracture the distal end of the fibula at a site above the level of the ligaments of the distal tibiofibular joint almost always produce a complete rupture of these ligaments and also of the interosseous membrane up to the level of the fracture site.</li>
+        </ul>
+
+        <h3>B. Fractures of the Calcaneus</h3>
+        <ul>
+          <li>Clinical: a fall from a significant height is a common cause. Compression fractures of the calcaneus from such a fall are commonly accompanied by one or more compression fractures of thoracic or lumbar vertebral bodies.</li>
+          <li>Radiographic: a marked decrease of Boehler’s angle is indicative of a compression fracture of the calcaneal bone mass underlying the anatomic subtalar joint.</li>
+        </ul>
+
+        <h3>C. Avulsion Fractures of the Base of the Fifth Metatarsal (Jones’ Fractures)</h3>
+        <ul>
+          <li>Clinical: occur as a result of forceful inversion of the foot concurrent with contraction of peroneus brevis. The fracture line almost always extends transversely or obliquely through the base of the fifth metatarsal.</li>
+          <li>Radiographic: children and adolescents may bear a secondary center of ossification at the base of the fifth metatarsal. The radiolucent space representative of the apophyseal plate extends longitudinally through the base of the fifth metatarsal. A normal apophyseal plate is distinguished from a Jones’ fracture by the difference in orientation through the base of the fifth metatarsal.</li>
+        </ul>
+
+        <h3>D. Ankle Joint Effusions</h3>
+        <ul>
+          <li>Clinical:
+            <ul>
+              <li>A person suffering from a painful ankle effusion is most comfortable when the foot is slightly dorsiflexed and inverted.</li>
+              <li>Soft tissue swelling both medial and lateral to the Achilles tendon is generally indicative of intracapsular ankle joint effusion. Soft tissue swelling only medial or only lateral to the Achilles tendon is indicative of extracapsular edema.</li>
+            </ul>
+          </li>
+          <li>Radiographic:
+            <ul>
+              <li>A lateral radiograph of the ankle provides the most sensitive indicators because the anterior and posterior parts of the joint capsule are the parts most readily displaced by an effusion.</li>
+              <li>A fluid-filled bulge of the anterior part of the capsule displaces the anterior fat pad, so that a water-density area replaces the usual fat-density area at the anterior limit of the joint space.</li>
+              <li>The posterior tibiofibular ligament of the distal tibiofibular joint limits fluid-filled bulges of the capsule’s posterior part to the regions above and below the ligament, creating a doublet of water-density areas in place of the fat-density area at the posterior limit of the joint space.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Summary Tables -->
+      <div class="section-card">
+        <h2>XI. SUMMARY TABLES</h2>
+
+        <h3>A. Nerves of the Lower Limb</h3>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Nerve</th><th>Origin</th><th>Muscles / Structures</th></tr>
+            <tr><td>Femoral</td><td>L2–L4</td><td>Iliacus, sartorius, rectus femoris, quadriceps, pectineus</td></tr>
+            <tr><td>Obturator</td><td>L2–L4</td><td>Adductors, obturator externus, gracilis, pectineus</td></tr>
+            <tr><td>Inferior gluteal</td><td>L5, S1, S2</td><td>Gluteus maximus</td></tr>
+            <tr><td>Superior gluteal</td><td>L4, L5, S1</td><td>Gluteus medius, gluteus minimus</td></tr>
+            <tr><td>Sciatic</td><td>L4–S3</td><td>Divides into tibial + common peroneal</td></tr>
+            <tr><td>Tibial portion</td><td>—</td><td>Hamstrings, hamstring portion of adductor magnus</td></tr>
+            <tr><td>Common peroneal</td><td>—</td><td>Short head of biceps femoris; damage → footdrop</td></tr>
+            <tr><td>Tibial nerve</td><td>—</td><td>Gastrocnemius, soleus, plantaris, popliteus, tibialis posterior, FHL, FDL</td></tr>
+            <tr><td>Deep peroneal</td><td>—</td><td>Tibialis anterior, EHL, EDL, peroneus tertius, EDB</td></tr>
+            <tr><td>Superficial peroneal</td><td>—</td><td>Peroneus longus & brevis; most of dorsum of foot</td></tr>
+          </table>
+        </div>
+
+        <h3>B. Arteries of the Lower Limb</h3>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Artery</th><th>Origin / Notes</th></tr>
+            <tr><td>Femoral</td><td>External iliac via inguinal ligament; palpable in proximal 2–3 cm of femoral triangle</td></tr>
+            <tr><td>Circumflex femoral</td><td>Supply femoral head; rupture → AVN in subcapital fractures</td></tr>
+            <tr><td>Popliteal</td><td>Continuation of femoral; palpable in popliteal fossa with leg flexed \~45°</td></tr>
+            <tr><td>Posterior tibial</td><td>Palpable posteroinferior to medial malleolus; continues as plantar arch</td></tr>
+            <tr><td>Anterior tibial → Dorsalis pedis</td><td>Dorsalis pedis palpable lateral to EHL tendon</td></tr>
+          </table>
+        </div>
+
+        <h3>C. Key Ligaments</h3>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Ligament</th><th>Function</th></tr>
+            <tr><td>ACL</td><td>Limits anterior displacement of tibia during extension</td></tr>
+            <tr><td>PCL</td><td>Limits posterior displacement of tibia during flexion</td></tr>
+            <tr><td>Collateral ligaments</td><td>Limit side-to-side movements</td></tr>
+            <tr><td>Deltoid (medial collateral)</td><td>Can bear greater tensile forces than the medial malleolus</td></tr>
+            <tr><td>Lateral collateral of ankle</td><td>Anterior talofibular, calcaneofibular, posterior talofibular</td></tr>
+          </table>
+        </div>
+
+        <h3>D. Bursae of the Knee</h3>
+        <div class="table-container">
+          <table class="summary-table">
+            <tr><th>Bursa</th><th>Communicates?</th><th>Location</th></tr>
+            <tr><td>Suprapatellar</td><td>Yes</td><td>Between quadriceps tendon & anterior distal femur</td></tr>
+            <tr><td>Popliteus</td><td>Yes</td><td>Lateral; between popliteus & lateral femoral condyle</td></tr>
+            <tr><td>Gastrocnemius</td><td>Yes</td><td>Medial; between medial head of gastrocnemius & capsule</td></tr>
+            <tr><td>Semimembranosus</td><td>Yes</td><td>Medial; between semimembranosus & medial head of gastrocnemius</td></tr>
+            <tr><td>Prepatellar</td><td>No</td><td>Subcutaneous over patella</td></tr>
+            <tr><td>Superficial infrapatellar</td><td>No</td><td>Subcutaneous over ligamentum patellae</td></tr>
+            <tr><td>Deep infrapatellar</td><td>No</td><td>Between ligamentum patellae & proximal tibia</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Flagged Discrepancies -->
+      <div class="section-card">
+        <h2>XII. FLAGGED DISCREPANCIES BETWEEN SOURCES</h2>
+        <ul>
+          <li><strong>Peroneus longus/brevis action</strong>: Source 1 called them “chief invertor”; standard anatomy = evertors and plantar flexors. Source 1’s “invertor” is a typo for “evertor”.</li>
+          <li><strong>Osgood-Schlatter bilaterality</strong>: “Frequently bilateral” is correct; “always bilateral” is an overstatement.</li>
+          <li><strong>Hip joint components</strong>: Source 2 correctly includes the acetabular labrum.</li>
+          <li>Neck–shaft angle, anteversion angle, lesser trochanter projection, Shenton’s line, fat lines, femoral triangle details, and many other points are fully retained from the more detailed source.</li>
+        </ul>
+      </div>
+
+      <button class="exam-btn" onclick="window.location.href='352note2q.html'">📝 Paper 1 – Start Exam</button>
+      <button class="exam-btn secondary" onclick="window.location.href='352note2q1.html'">📝 Paper 2 – Start Exam</button>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item"><button class="neumorphic-btn">💬</button></div>
+    <div class="nav-item center"><button class="neumorphic-btn">⭐</button></div>
+    <div class="nav-item"><button class="neumorphic-btn">📚</button></div>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const container = document.getElementById('scroll-container');
+    const progressBar = document.getElementById('progress-bar');
+
+    function setTheme(theme) {
+      body.classList.remove('light','dark');
+      body.classList.add(theme);
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('theme', theme);
+    }
+    setTheme(localStorage.getItem('theme') || 'dark');
+    themeToggle.addEventListener('click', () => {
+      setTheme(body.classList.contains('light') ? 'dark' : 'light');
+    });
+
+    container.addEventListener('scroll', () => {
+      const st = container.scrollTop;
+      const sh = container.scrollHeight - container.clientHeight;
+      progressBar.style.width = (st / sh * 100) + '%';
+    });
+  </script>
+</body>
+</html>
