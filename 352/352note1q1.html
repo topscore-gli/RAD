@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upper Limb MCQs – Hand & Wrist (1–100)</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:14px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="history.back()">←</button>
+      <h1>Upper Limb – Hand & Wrist</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 40:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 2400, PASS: 60 };
+
+const SECTIONS = {
+  0:  "A: Hand & Wrist — Joints & Muscles",
+  15: "B: Hand & Wrist — Nerves",
+  30: "C: Hand & Wrist — Vessels & Lymphatics",
+  38: "D: Hand & Wrist — Radiographs",
+  50: "E: Hand & Wrist — Trauma & Arthritis",
+  75: "F: Material 2 — New/Expanded Points"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  // 1–15  Hand & Wrist — Joints & Muscles
+  {q:"The wrist (radiocarpal) joint articulates the distal radius and the triangular disk with which carpals?",o:["Scaphoid, lunate, and triquetrum","Lunate, triquetrum, and pisiform","Scaphoid, trapezium, and trapezoid","Capitate, hamate, and lunate"],a:0,e:"The wrist joint articulates the scaphoid, lunate, and triquetrum with the distal radius and the triangular disk."},
+  {q:"Which joint provides for pronation and supination of the forearm?",o:["Wrist joint","Proximal and distal radioulnar joints","Metacarpophalangeal joints","Interphalangeal joints"],a:1,e:"The proximal and distal radioulnar joints provide for pronation and supination."},
+  {q:"The interphalangeal joints provide for which movements?",o:["Flexion, extension, and abduction","Only flexion and extension","Only abduction and adduction","Circumduction only"],a:1,e:"Each interphalangeal joint provides for only flexion and extension."},
+  {q:"Which muscle is a fixator of the hand at the wrist and is innervated by the ulnar nerve?",o:["Palmaris longus","Flexor carpi radialis","Flexor carpi ulnaris","Extensor carpi radialis longus"],a:2,e:"Flexor carpi ulnaris flexes and adducts the hand and is innervated by the ulnar nerve."},
+  {q:"Palmaris longus is innervated by the:",o:["Ulnar nerve","Median nerve","Radial nerve","Anterior interosseous nerve"],a:1,e:"Palmaris longus flexes the hand at the wrist and is innervated by the median nerve."},
+  {q:"Extensor carpi radialis brevis is innervated by the:",o:["Radial nerve proper","Deep branch of the radial nerve","Median nerve","Posterior interosseous nerve only"],a:1,e:"Extensor carpi radialis brevis is innervated by the deep branch of the radial nerve, while extensor carpi radialis longus is supplied by the radial nerve proper."},
+  {q:"Flexor pollicis longus is innervated by the:",o:["Ulnar nerve","Anterior interosseous branch of the median nerve","Deep branch of the radial nerve","Superficial branch of the radial nerve"],a:1,e:"Flexor pollicis longus is innervated by the anterior interosseous branch of the median nerve."},
+  {q:"The medial half of flexor digitorum profundus is innervated by the:",o:["Median nerve","Ulnar nerve","Radial nerve","Musculocutaneous nerve"],a:1,e:"The ulnar nerve supplies the medial half of flexor digitorum profundus; the anterior interosseous branch of the median nerve supplies the lateral half."},
+  {q:"Which muscle extends the fingers at the metacarpophalangeal and interphalangeal joints?",o:["Flexor digitorum superficialis","Extensor digitorum","Extensor indicis","Abductor pollicis longus"],a:1,e:"Extensor digitorum extends the fingers at both MCP and IP joints."},
+  {q:"Abductor pollicis longus is innervated by the:",o:["Median nerve","Deep branch of the radial nerve","Ulnar nerve","Anterior interosseous nerve"],a:1,e:"Abductor pollicis longus is innervated by the deep branch of the radial nerve."},
+  {q:"The lumbricals primarily serve to:",o:["Abduct the fingers","Counteract extensive forces across the metacarpophalangeal joints","Flex the distal phalanges","Adduct the thumb"],a:1,e:"The lumbricals counteract the extensive forces exerted across the MCP joints by the extensors."},
+  {q:"The first palmar interosseous:",o:["Abducts the index finger","Adducts the thumb","Abducts the middle finger","Adducts the little finger"],a:1,e:"The first palmar interosseous adducts the thumb."},
+  {q:"The third dorsal interosseous:",o:["Adducts the ring finger","Abducts the middle finger","Abducts the index finger","Adducts the thumb"],a:1,e:"The third dorsal interosseous abducts the middle finger."},
+  {q:"Which muscle deepens the hollow of the palmar surface by flexing and rotating the fifth metacarpal?",o:["Abductor digiti minimi","Flexor digiti minimi","Opponens digiti minimi","Palmaris brevis"],a:2,e:"Opponens digiti minimi flexes and rotates the fifth metacarpal, deepening the palmar hollow."},
+  {q:"Palmaris brevis:",o:["Flexes the little finger","Wrinkles the skin over the hypothenar eminence, enhancing grip","Abducts the thumb","Extends the fingers"],a:1,e:"Palmaris brevis wrinkles the hypothenar skin and enhances grip."},
+
+  // 16–30  Hand & Wrist — Nerves
+  {q:"The median nerve provides cutaneous innervation to:",o:["The medial third of the palm","The lateral two-thirds of the palm and palmar surfaces of the lateral three and one-half digits","The entire dorsum of the hand","The medial half of the dorsum of the hand"],a:1,e:"The median nerve supplies the lateral two-thirds of the palm and the palmar surfaces of the lateral three and one-half digits."},
+  {q:"A quick test of median nerve motor supply in the hand is to:",o:["Ask the patient to clench paper between middle and ring fingers","Ask the patient to make an O with thumb and index finger and resist separation","Test pinprick on the little finger","Test pinprick on the dorsal web space"],a:1,e:"Making an O tests opponens pollicis, a median nerve function."},
+  {q:"The deep branch of the ulnar nerve innervates all of the following EXCEPT:",o:["Adductor pollicis","Third and fourth lumbricals","Opponens pollicis","Palmar and dorsal interossei"],a:2,e:"Opponens pollicis is innervated by the median nerve."},
+  {q:"The superficial branch of the ulnar nerve innervates:",o:["Palmaris brevis","First lumbrical","Opponens pollicis","Abductor pollicis brevis"],a:0,e:"The superficial branch of the ulnar nerve innervates palmaris brevis."},
+  {q:"A quick test of ulnar nerve motor supply in the hand is to:",o:["Ask the patient to make an O with thumb and index finger","Ask the patient to clench paper between middle and ring fingers","Test pinprick on the index finger tip","Test pinprick on the dorsal web space"],a:1,e:"Clenching paper between the middle and ring fingers tests the third palmar and third dorsal interossei (ulnar nerve)."},
+  {q:"The superficial branch of the radial nerve provides cutaneous innervation to:",o:["The medial third of the palm","Roughly the lateral half of the dorsum of the hand","The palmar surfaces of the lateral three and one-half digits","The entire palm"],a:1,e:"The superficial radial nerve supplies roughly the lateral half of the dorsum of the hand."},
+  {q:"A quick test of superficial radial nerve sensory supply is pinprick over the:",o:["Palmar tip of the index finger","Palmar tip of the little finger","Dorsal skin web between thumb and index finger","Medial third of the palm"],a:2,e:"The dorsal web space between thumb and index finger is the superficial radial nerve territory."},
+  {q:"Which nerve passes through the carpal tunnel?",o:["Ulnar nerve","Median nerve","Superficial radial nerve","Posterior interosseous nerve"],a:1,e:"The median nerve passes through the carpal tunnel with the flexor tendons."},
+  {q:"Which nerve lies immediately medial to the ulnar artery at the wrist?",o:["Median nerve","Ulnar nerve","Radial nerve","Anterior interosseous nerve"],a:1,e:"The ulnar nerve lies medial to the ulnar artery as it passes superficial to the flexor retinaculum."},
+  {q:"The ulnar nerve provides cutaneous innervation to:",o:["The lateral two-thirds of the palm","The medial third of the palm, palmar surfaces of medial one and one-half digits, and medial half of the dorsum of the hand","The entire dorsum of the hand","The dorsal web space only"],a:1,e:"This is the ulnar nerve sensory territory."},
+  {q:"The median nerve innervates which intrinsic muscles of the hand?",o:["All interossei","Three thenar muscles and first and second lumbricals","Adductor pollicis and hypothenar muscles","Third and fourth lumbricals"],a:1,e:"The median nerve supplies the thenar muscles (abductor pollicis brevis, flexor pollicis brevis, opponens pollicis) and first and second lumbricals."},
+  {q:"Loss of ulnar nerve motor supply to the intrinsic muscles results in:",o:["Inability to oppose the thumb","Inability to abduct or adduct the fingers","Wrist drop","Loss of elbow flexion"],a:1,e:"Loss of palmar and dorsal interossei and abductor digiti minimi function prevents finger abduction and adduction."},
+  {q:"A lesion of the median nerve at the wrist would most likely affect:",o:["Abduction of the little finger","Opposition of the thumb","Adduction of the thumb","Extension of the fingers"],a:1,e:"Opponens pollicis is a median nerve-innervated muscle."},
+  {q:"The anterior interosseous nerve supplies:",o:["Flexor pollicis longus, lateral half of flexor digitorum profundus, and pronator quadratus","All thenar muscles","The first and second lumbricals","The hypothenar muscles"],a:0,e:"The anterior interosseous branch supplies flexor pollicis longus, the lateral half of flexor digitorum profundus, and pronator quadratus."},
+  {q:"The radial nerve (superficial branch) is at risk in a cut over which part of the wrist?",o:["Anterior medial wrist","Dorsolateral wrist","Carpal tunnel","Anatomic snuffbox floor"],a:1,e:"The superficial radial nerve runs in the superficial fascia of the dorsolateral wrist."},
+
+  // 31–38  Hand & Wrist — Vessels & Lymphatics
+  {q:"The ulnar artery can be palpated about how far proximal to the distal wrist crease?",o:["1 cm","2–3 cm","5 cm","7 cm"],a:0,e:"The ulnar artery is palpated about 1 cm proximal to the distal wrist crease on the anteromedial forearm."},
+  {q:"The radial artery can be palpated about how far proximal to the distal wrist crease?",o:["1 cm","2–3 cm","5 cm","7 cm"],a:1,e:"The radial artery is palpated 2–3 cm proximal to the distal wrist crease on the anterolateral forearm."},
+  {q:"The superficial palmar arch is a direct continuation of the:",o:["Radial artery","Ulnar artery","Brachial artery","Anterior interosseous artery"],a:1,e:"The superficial palmar arch continues from the ulnar artery."},
+  {q:"The deep palmar arch is a direct continuation of the:",o:["Radial artery","Ulnar artery","Brachial artery","Posterior interosseous artery"],a:0,e:"The deep palmar arch continues from the radial artery."},
+  {q:"The Allen test assesses:",o:["Median nerve function","Whether both ulnar and radial arteries contribute blood supply to the hand","Ulnar nerve sensation","Carpal tunnel syndrome"],a:1,e:"The Allen test checks the contribution of both arteries to the palmar arches."},
+  {q:"In the Allen test, return of color within how many seconds indicates the artery is a chief source of blood supply?",o:["1–2 seconds","2–4 seconds","5–8 seconds","10 seconds"],a:1,e:"Return of color within 2–4 seconds indicates adequate supply."},
+  {q:"The medial side of the hand is primarily drained by the:",o:["Cephalic vein","Basilic vein","Median cubital vein","Radial vein"],a:1,e:"The basilic vein and its lymphatics drain the medial side of the hand."},
+  {q:"Injury and infection of the palmar surface commonly produce edema of the dorsum of the hand because:",o:["The palmar skin is thin","Much venous and lymph flow is transferred from palmar to dorsal side","The dorsal skin is more vascular","The palmar fascia is absent"],a:1,e:"Venous and lymph flow shifts from palmar to dorsal, so palmar infection causes dorsal edema."},
+
+  // 39–50  Hand & Wrist — Radiographs
+  {q:"On a PA hand radiograph, the normal medial (ulnar) angulation of the distal radial articular surface ranges from:",o:["0°–5°","7°–18°","20°–25°","30°–40°"],a:1,e:"The normal ulnar angulation is 7°–18°."},
+  {q:"On a PA hand radiograph, the lunate casts which shape?",o:["Circular","Triangular","Quadrangular","Semilunar"],a:2,e:"The lunate casts a quadrangular shadow; the four proximal carpals together form a semilunar array."},
+  {q:"The pisiform image overlies which carpal?",o:["Lunate","Triquetrum","Scaphoid","Hamate"],a:1,e:"The pisiform overlies the triquetrum."},
+  {q:"The hook of the hamate appears as an ovoid radiopacity overlying the:",o:["Proximal part of the hamate","Distal part of the hamate","Triquetrum","Capitate"],a:1,e:"The hook of the hamate overlies the distal part of the hamate."},
+  {q:"The central axis of the third metacarpal extends proximally along all of the following EXCEPT:",o:["The central axis of the capitate","Between the scaphoid and lunate","The central axis of the radius","The central axis of the ulna"],a:3,e:"The axis passes through the capitate, between scaphoid and lunate, and along the radius—not the ulna."},
+  {q:"The medial sesamoid bone at the first MCP joint lies embedded in the tendon of:",o:["Flexor pollicis brevis and abductor pollicis brevis","Adductor pollicis and first palmar interosseous","Extensor pollicis longus","Opponens pollicis"],a:1,e:"The medial sesamoid lies in the adductor pollicis and first palmar interosseous tendon."},
+  {q:"On a lateral wrist radiograph, the normal volar (anterior) angulation of the distal radial articular surface is:",o:["5°–10°","15°–23°","25°–30°","30°–40°"],a:1,e:"The normal volar angulation is 15°–23°."},
+  {q:"On a lateral wrist radiograph, the more proximal of the two convex outlines overlapping the distal radius represents the:",o:["Scaphoid","Lunate","Capitate","Triquetrum"],a:1,e:"The more proximal outline is the proximal surface of the lunate."},
+  {q:"On a lateral wrist radiograph, the more distal convex outline represents the:",o:["Lunate","Scaphoid","Capitate","Pisiform"],a:1,e:"The more distal convex outline is the proximal surface of the scaphoid."},
+  {q:"The tuberosity of the scaphoid projects anterior to the:",o:["Lunate","Head of the capitate","Triquetrum","Distal radius"],a:1,e:"The scaphoid tuberosity projects anterior to the head of the capitate."},
+  {q:"On a lateral wrist radiograph, the central axis of the third metacarpal extends proximally through the center of the:",o:["Scaphoid","Lunate","Triquetrum","Hamate"],a:1,e:"The axis passes through the capitate, the center of the lunate, and along the radius."},
+  {q:"The distal radioulnar joint on a PA radiograph appears as:",o:["A radiopaque line","A radiolucent space between the ulnar head and the ulnar notch of the radius","A bony projection","A fat pad"],a:1,e:"It appears as a radiolucent space between the ulnar head and the ulnar notch of the radius."},
+
+  // 51–75  Hand & Wrist — Trauma & Arthritis
+  {q:"A lunate dislocated anteriorly or posteriorly transforms its PA outline from quadrangular to:",o:["Circular","Triangular","Elliptic","Semilunar"],a:1,e:"Anterior rotation of the lunate converts its PA outline to a triangular shadow."},
+  {q:"Anterior dislocation of the lunate may injure which nerve?",o:["Ulnar nerve","Median nerve","Radial nerve","Posterior interosseous nerve"],a:1,e:"The lunate is thrust into the carpal tunnel, potentially injuring the median nerve."},
+  {q:"In a posterior perilunate dislocation, the lateral radiograph shows the central axis of the capitate:",o:["Anterior to the radius","Posterior to the central axis of the radius","Colinear with the radius","Through the scaphoid"],a:1,e:"The capitate axis lies posterior to the radius axis in posterior perilunate dislocation."},
+  {q:"A tear of the scapholunate ligament leads to:",o:["Colles' fracture","Rotational dislocation of the scaphoid with widened scapholunate space","Lunate dislocation","Smith's fracture"],a:1,e:"Scapholunate ligament tear causes rotational scaphoid dislocation and increased scapholunate distance."},
+  {q:"A Galeazzi fracture-dislocation involves:",o:["Distal third radial shaft fracture with distal radioulnar joint dislocation","Proximal ulnar shaft fracture with radial head dislocation","Radial head fracture with capitulum fracture","Scaphoid fracture with lunate dislocation"],a:0,e:"Galeazzi = distal radial shaft fracture + distal radioulnar joint dislocation."},
+  {q:"A Monteggia fracture-dislocation involves:",o:["Distal radius fracture with DRUJ dislocation","Proximal third ulnar shaft fracture with radial head dislocation","Scaphoid fracture","Colles' fracture"],a:1,e:"Monteggia = proximal ulnar shaft fracture + radial head dislocation."},
+  {q:"A torus fracture in a child is characterized by:",o:["Complete cortical break on both sides","Buckling outward of cortical bone","Growth plate compression","Epiphyseal separation"],a:1,e:"Torus (buckle) fracture results from cortical buckling."},
+  {q:"A greenstick fracture shows:",o:["Complete cortical discontinuity on both sides","Discontinuity on one side and bent cortex on the other","Only growth plate involvement","Only epiphyseal involvement"],a:1,e:"Greenstick fractures are incomplete with one-sided cortical break and opposite-side bending."},
+  {q:"A Colles' fracture is characterized by:",o:["Anterior displacement and rotation of the distal fragment","Posterior displacement and rotation of the distal fragment","Radial head dislocation","Scaphoid waist fracture"],a:1,e:"Colles' fracture has posterior displacement and rotation of the distal radial fragment."},
+  {q:"More than 50% of Colles' fractures are accompanied by:",o:["Scaphoid fracture","Ulnar styloid process fracture","Lunate dislocation","Radial head fracture"],a:1,e:"More than 50% of Colles' fractures include an ulnar styloid fracture."},
+  {q:"A Smith's fracture is characterized by:",o:["Posterior displacement of the distal fragment","Anterior displacement and rotation of the distal fragment","Radial head dislocation","Ulnar shaft fracture"],a:1,e:"Smith's (reversed Colles') fracture has anterior displacement and rotation."},
+  {q:"Reduction of distal radius fractures requires restoration of anterior angulation to ensure:",o:["Adequate grip function","Sufficient adduction","Elbow flexion","Wrist extension"],a:0,e:"Restoring anterior angulation preserves grip function."},
+  {q:"Reduction of distal radius fractures requires restoration of medial angulation to ensure:",o:["Adequate grip function","Sufficient adduction of the hand at the wrist","Elbow extension","Forearm supination"],a:1,e:"Restoring medial angulation ensures sufficient wrist adduction."},
+  {q:"The scaphoid is the most frequently fractured carpal bone; what percentage of fractures occur in its waist?",o:["40%","60%","80%","95%"],a:2,e:"About 80% of scaphoid fractures occur at the waist."},
+  {q:"A fractured scaphoid is suggested by pain in the anatomic snuffbox with:",o:["Only deep palpation","Two or all three of: deep palpation, axial thumb compression, supination against resistance","Only wrist extension","Only finger flexion"],a:1,e:"Pain with two or all three of these maneuvers suggests scaphoid fracture."},
+  {q:"A scaphoid fracture becomes more apparent radiographically after:",o:["1–2 days","3–4 days","7–10 days","3 weeks"],a:2,e:"Bone resorption at 7–10 days makes the fracture line more radiolucent."},
+  {q:"Which view best demonstrates a scaphoid fracture?",o:["PA wrist with ulnar deviation (adduction)","AP elbow","Lateral wrist in extension","Oblique elbow"],a:0,e:"Ulnar deviation reduces carpal overlap over the scaphoid."},
+  {q:"Avascular necrosis of the proximal scaphoid fragment occurs because:",o:["The proximal fragment has no blood supply at all","Most nutrient foramina are on the distal half of the bone","The scaphoid is extra-articular","The scaphoid has no periosteum"],a:1,e:"Nutrient foramina are located on the distal half, so proximal fragments risk avascular necrosis."},
+  {q:"Primary osteoarthritis of the hand most commonly affects:",o:["Metacarpophalangeal joints","Distal and proximal interphalangeal joints and the carpometacarpal joint of the thumb","Wrist joint only","All joints equally"],a:1,e:"Primary OA affects DIP, PIP, and the thumb CMC joint."},
+  {q:"Heberden's nodes are osteophytes of the:",o:["Proximal interphalangeal joints","Distal interphalangeal joints","Metacarpophalangeal joints","Carpometacarpal joint"],a:1,e:"Heberden's nodes are DIP joint osteophytes; Bouchard's nodes are PIP joint osteophytes."},
+  {q:"Bouchard's nodes are osteophytes of the:",o:["Distal interphalangeal joints","Proximal interphalangeal joints","Metacarpophalangeal joints","Wrist joint"],a:1,e:"Bouchard's nodes affect the PIP joints."},
+  {q:"Rheumatoid arthritis of the hand most commonly affects:",o:["Distal interphalangeal joints","Proximal interphalangeal and metacarpophalangeal joints and wrist joints","Carpometacarpal joint of the thumb","Interphalangeal joint of the thumb only"],a:1,e:"RA affects PIP, MCP, and wrist joints."},
+  {q:"A swan-neck deformity consists of:",o:["DIP flexion and PIP hyperextension","DIP hyperextension and PIP flexion","MCP flexion and IP extension","Ulnar deviation only"],a:0,e:"Swan-neck = DIP flexion + PIP hyperextension."},
+  {q:"A boutonniere deformity consists of:",o:["DIP flexion and PIP hyperextension","DIP hyperextension and PIP flexion","MCP hyperextension","Radial deviation"],a:1,e:"Boutonniere = DIP hyperextension + PIP flexion."},
+  {q:"Osteoporosis is indicated on a PA hand radiograph when the sum of medial and lateral cortical thicknesses of the second metacarpal at the diaphyseal midpoint is less than:",o:["2 mm","3 mm","4 mm","6 mm"],a:2,e:"A combined cortical thickness less than 4 mm indicates bone loss."},
+
+  // 76–100  Material 2 — New/Expanded Points
+  {q:"The basic projections for a shoulder x-ray are:",o:["AP (15°) erect/supine and axial","PA and lateral only","Oblique and axial only","AP and tunnel only"],a:0,e:"Basic shoulder projections are AP (15°) erect/supine and axial; two views are used for suspected dislocation."},
+  {q:"The coracoclavicular ligament comprises which two ligaments?",o:["Conoid and trapezoid","Deltoid and conoid","Trapezoid and coracoacromial","Acromioclavicular and coracoacromial"],a:0,e:"The coracoclavicular ligament consists of the conoid and trapezoid ligaments."},
+  {q:"Shoulder dislocation can be classified into all of the following EXCEPT:",o:["Anterior","Posterior","Inferior","Medial"],a:3,e:"Dislocations are classified as anterior, posterior, inferior, and superior—not medial."},
+  {q:"Osteoarthritis of the glenohumeral joint is:",o:["The most common joint affected by OA","One of the less common joints affected by OA","Never seen","Only seen after fracture"],a:1,e:"The glenohumeral joint is one of the less commonly affected joints."},
+  {q:"Advanced osteoarthritis of the shoulder may show:",o:["Subchondral cyst formation and remodeling of articular surfaces","Periarticular osteopenia","Only joint space widening","No radiographic changes"],a:0,e:"Advanced OA shows subchondral cysts and remodeling/deformity."},
+  {q:"The elbow muscles can be grouped into all of the following EXCEPT:",o:["Flexors","Extensors","Pronators","Abductors"],a:3,e:"Elbow muscles are grouped into flexors, extensors, pronators, and supinators."},
+  {q:"The pronator muscles of the forearm are innervated by the:",o:["Radial nerve","Median nerve","Ulnar nerve","Musculocutaneous nerve"],a:1,e:"Pronator teres and pronator quadratus are median nerve-innervated."},
+  {q:"The carrying angle defined as the angle the forearm and hand makes with the body is normally:",o:["0°–5°","5°–15°","20°–30°","30°–45°"],a:1,e:"The clinical carrying angle is normally 5°–15°."},
+  {q:"An angle greater than the normal carrying angle range is called:",o:["Gunstock deformity","Excessive carrying angle (cubitus valgus)","Cubitus varus","Normal variant"],a:1,e:"An increased angle is an excessive carrying angle (cubitus valgus)."},
+  {q:"An angle less than the normal carrying angle range is called:",o:["Cubitus valgus","Gunstock deformity (cubitus varus)","Excessive carrying angle","Normal variant"],a:1,e:"A decreased carrying angle is gunstock deformity (cubitus varus)."},
+  {q:"The anterior humeral line is significant in the surgical reduction of:",o:["Radial head fractures","Supracondylar fractures in pediatric patients","Olecranon fractures","Clavicle fractures"],a:1,e:"It guides reduction of pediatric supracondylar fractures."},
+  {q:"On a PA hand radiograph, the distal radioulnar joint appears as:",o:["A radiopaque band","A radiolucent space between the ulnar head and the ulnar notch of the radius","A sesamoid bone","A fat pad"],a:1,e:"It is a radiolucent space between the ulnar head and ulnar notch."},
+  {q:"The palmar interossei:",o:["Abduct the fingers","Adduct the fingers","Extend the fingers","Flex the thumb"],a:1,e:"Palmar (anterior) interossei adduct the fingers."},
+  {q:"The dorsal interossei:",o:["Adduct the fingers","Abduct the fingers","Flex the fingers","Oppose the thumb"],a:1,e:"Dorsal interossei abduct the fingers."},
+  {q:"The digitiminimi muscles:",o:["Extend the index finger","Flex and rotate the little finger","Abduct the thumb","Adduct the ring finger"],a:1,e:"The digitiminimi group flexes and rotates the little finger."},
+  {q:"The clavicle is the most frequent fractured bone of the shoulder girdle and transmits:",o:["Only weight","All forces from the arm to the trunk","Only rotational forces","No forces"],a:1,e:"The clavicle transmits all forces from the arm to the trunk."},
+  {q:"Avulsion fracture of which structure occurs often in the shoulder region?",o:["Lesser tuberosity","Greater tuberosity","Coracoid process","Glenoid rim"],a:1,e:"Avulsion fracture of the greater tuberosity occurs often."},
+  {q:"On a PA hand radiograph, which sesamoid lies in the tendon of flexor pollicis brevis and abductor pollicis brevis?",o:["Medial sesamoid","Lateral sesamoid","Both sesamoids","Neither sesamoid"],a:1,e:"The lateral sesamoid lies in the flexor pollicis brevis and abductor pollicis brevis tendon."},
+  {q:"The shoulder joint dislocation most commonly seen is:",o:["Posterior","Anterior","Inferior","Superior"],a:1,e:"Anterior dislocation is the most common occurrence."},
+  {q:"A Hill-Sachs defect is located in which part of the humeral head?",o:["Anteromedial","Posterolateral","Superior","Inferior"],a:1,e:"The hatchet (Hill-Sachs) defect is in the posterolateral aspect of the humeral head."},
+  {q:"The radial head fracture in adults generally extends:",o:["Horizontally through the neck","Vertically through the radial head to include its superior articular surface","Through the capitulum only","Through the olecranon"],a:1,e:"Adult radial head fractures typically extend vertically through the head including the articular surface."},
+  {q:"In children, the most common type of radial head and neck fracture is:",o:["Salter-Harris Type I","Salter-Harris Type II","Salter-Harris Type III","Salter-Harris Type IV"],a:1,e:"Salter-Harris Type II is the most common radial head/neck fracture in children."},
+  {q:"The biceps brachii tendon reflex tests the integrity of neuronal pathways at:",o:["C3–C4","C5–C6","C7–C8","T1"],a:1,e:"The biceps reflex tests C5–C6 pathways."},
+  {q:"The brachioradialis stabilizes the forearm in the:",o:["Fully supinated position","Fully pronated position","Midprone position","Extended position only"],a:2,e:"Brachioradialis stabilizes the forearm in the midprone position."},
+  {q:"The ulnar nerve exits the arm by passing directly behind the:",o:["Lateral epicondyle","Medial epicondyle","Olecranon fossa","Capitulum"],a:1,e:"The ulnar nerve passes behind the medial epicondyle, placing it at risk with medial epicondyle fractures."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('upper_limb_hw_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/' + state.data.length;
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('upper_limb_hw_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of Hand & Wrist anatomy, nerves, vessels, radiographs and trauma! Superb work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review carpal trauma patterns, nerve distribution tests and radiographic landmarks to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on interosseous actions, scaphoid fracture features, Colles vs Smith fractures and the Allen test. Practice will raise your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this topic has many detailed points. Go through the explanations carefully, revise the key nerve tests and radiographic signs, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 15, 30, 38, 50, 75, 100];
+  var sectionNames = [
+    "A: Hand & Wrist — Joints & Muscles",
+    "B: Hand & Wrist — Nerves",
+    "C: Hand & Wrist — Vessels & Lymphatics",
+    "D: Hand & Wrist — Radiographs",
+    "E: Hand & Wrist — Trauma & Arthritis",
+    "F: Material 2 — New/Expanded Points"
+  ];
+
+  for (var s = 0; s < sectionNames.length; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('upper_limb_hw_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('upper_limb_hw_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('upper_limb_hw_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
