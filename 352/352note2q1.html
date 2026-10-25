@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lower Limb MCQs – Set 2 (Knee 1–100)</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:14px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="history.back()">←</button>
+      <h1>Lower Limb – Set 2 (Knee)</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 40:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 2400, PASS: 60 };
+
+const SECTIONS = {
+  0:  "A: Knee — Bones & Ossification",
+  12: "B: Knee — Joints, Ligaments & Bursae",
+  30: "C: Knee — Muscles, Nerves, Vessels",
+  50: "D: Knee Radiographs",
+  68: "E: Knee MRI",
+  80: "F: Knee Pathology"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  // 1–12 Bones & Ossification
+  {q:"Which secondary ossification center of the long bones of the extremities is the only one that always appears before birth?",o:["Proximal humerus","Distal femur","Proximal tibia","Distal radius"],a:1,e:"The distal femoral secondary ossification center is the only one among extremity long bones that consistently appears before birth — by 36 to 37 weeks of gestation."},
+  {q:"The distal femoral ossification center is forensically useful because its presence establishes that a deceased newborn was:",o:["Premature","Viable at birth","Full-term","Post-term"],a:1,e:"Because the center is always present by 36–37 weeks, its presence in a deceased newborn establishes viability at birth."},
+  {q:"The patella is best described as:",o:["A carpal bone","The largest sesamoid bone of the body","A tarsal bone","A secondary cartilaginous joint"],a:1,e:"The patella is the largest sesamoid bone of the body."},
+  {q:"Ossification of the patella begins at what age?",o:["At birth","3 years","8 years","12 years"],a:1,e:"Patellar ossification begins at the age of 3 years."},
+  {q:"The secondary ossification center of the proximal tibia appears at:",o:["Birth","3–4 years","8–9 years","12–14 years"],a:0,e:"The proximal tibial center appears at birth; the proximal fibular center appears at 3–4 years."},
+  {q:"The secondary ossification center of the proximal fibula appears at:",o:["Birth","3–4 years","8–9 years","12–14 years"],a:1,e:"The proximal fibular center appears at 3–4 years of age."},
+  {q:"Which epiphysis is the first of the fibula to fuse with its metaphysis during late adolescence?",o:["Distal fibular epiphysis","Proximal fibular epiphysis","Both fuse simultaneously","Neither fuses"],a:1,e:"The proximal fibular epiphysis is the first fibular epiphysis to fuse."},
+  {q:"Which epiphysis is the last of the tibia to fuse with its metaphysis?",o:["Distal tibial epiphysis","Proximal tibial epiphysis","Both fuse simultaneously","Neither fuses"],a:1,e:"The proximal tibial epiphysis is the last tibial epiphysis to fuse."},
+  {q:"Longitudinal growth of the femoral shaft during childhood and adolescence occurs more actively at which end?",o:["Proximal end","Distal end","Both equally","Neither"],a:1,e:"Longitudinal growth occurs more actively at the distal end of the femur."},
+  {q:"The patella articulates with which surface of the femur?",o:["Posterior surface of the medial condyle","Patellar surface of the femur","Intercondylar notch","Lateral epicondyle"],a:1,e:"The patella articulates with the patellar surface of the femur."},
+  {q:"The tibial plateaus are the articular surfaces of which structures?",o:["The patella","The medial and lateral tibial condyles","The fibular head","The femoral epicondyles"],a:1,e:"The articular surfaces of the medial and lateral tibial condyles are called the medial and lateral tibial plateaus."},
+  {q:"The tibial intercondylar eminence bears which pointed structures?",o:["Medial and lateral intercondylar tubercles","Medial and lateral epicondyles","Adductor tubercles","Fabellae"],a:0,e:"The intercondylar eminence bears pointed medial and lateral intercondylar tubercles."},
+
+  // 13–30 Joints, Ligaments & Bursae
+  {q:"The knee joint provides for all of the following movements EXCEPT:",o:["Flexion","Extension","Medial rotation","Pronation"],a:3,e:"The knee provides flexion, extension, medial rotation, and lateral rotation — not pronation (a forearm movement)."},
+  {q:"The knee joint consists of how many articulations?",o:["Two","Three","Four","Five"],a:1,e:"Three articulations: medial femorotibial (with medial meniscus), lateral femorotibial (with lateral meniscus), and patellofemoral."},
+  {q:"The anterior cruciate ligament limits:",o:["Posterior displacement of the tibia during flexion","Anterior displacement of the tibia during extension","Side-to-side movement of the leg","Hyperextension of the patella"],a:1,e:"The ACL limits anterior displacement of the tibia within the knee joint during extension."},
+  {q:"The posterior cruciate ligament limits:",o:["Anterior displacement of the tibia during extension","Posterior displacement of the tibia during flexion","Side-to-side movement of the leg","Rotation of the patella"],a:1,e:"The PCL limits posterior displacement of the tibia during flexion."},
+  {q:"The medial and lateral collateral ligaments together limit:",o:["Anterior displacement of the tibia","Posterior displacement of the tibia","Side-to-side movements of the leg","Flexion of the knee"],a:2,e:"The collateral ligaments limit side-to-side movements at the knee."},
+  {q:"The oblique popliteal ligament strengthens which part of the knee joint capsule?",o:["Anterior","Lateral","Posterior","Medial"],a:2,e:"The oblique popliteal ligament strengthens the posterior part of the knee joint's fibrous capsule."},
+  {q:"Which of the following bursae communicates with the knee joint's synovial cavity?",o:["Prepattellar bursa","Superficial infrapatellar bursa","Suprapatellar bursa","Deep infrapatellar bursa"],a:2,e:"The suprapatellar bursa is one of four bursae that communicate with the joint cavity (with popliteus, gastrocnemius, and semimembranosus bursae)."},
+  {q:"Which of the following bursae does NOT communicate with the knee joint's synovial cavity?",o:["Suprapatellar bursa","Popliteus bursa","Gastrocnemius bursa","Deep infrapatellar bursa"],a:3,e:"The deep infrapatellar bursa does not communicate with the joint cavity."},
+  {q:"The suprapatellar bursa lies between the quadriceps femoris tendon and:",o:["The posterior surface of the patella","The anterior surface of the distal femur","The tibial tuberosity","The lateral femoral condyle"],a:1,e:"The suprapatellar bursa lies between the quadriceps femoris tendon and the anterior surface of the distal femur."},
+  {q:"The popliteus bursa is associated with which aspect of the knee joint?",o:["Medial","Lateral","Anterior","Posterior"],a:1,e:"The popliteus bursa is associated with the lateral aspect, between popliteus and the lateral femoral condyle."},
+  {q:"The gastrocnemius bursa is associated with which aspect of the knee joint?",o:["Medial","Lateral","Anterior","Posterior"],a:0,e:"The gastrocnemius bursa is on the medial aspect, between the medial head of gastrocnemius and the joint capsule."},
+  {q:"The semimembranosus bursa lies between the semimembranosus tendon and:",o:["The lateral femoral condyle","The medial head of gastrocnemius","The tibial tuberosity","The patella"],a:1,e:"The semimembranosus bursa lies between the semimembranosus tendon and the medial head of gastrocnemius."},
+  {q:"The prepattellar bursa is best described as:",o:["A deep bursa communicating with the joint","A subcutaneous bursa overlying the quadriceps femoris tendon where it envelops the patella","A bursa between the ligamentum patellae and the tibia","A bursa posterior to the femoral condyles"],a:1,e:"The prepattellar bursa is a subcutaneous bursa overlying the quadriceps femoris tendon where it envelops the patella."},
+  {q:"The superficial infrapatellar bursa overlies which structure?",o:["Quadriceps femoris tendon","Ligamentum patellae","Patella","Tibial tuberosity"],a:1,e:"The superficial infrapatellar bursa is subcutaneous and overlies the ligamentum patellae."},
+  {q:"The deep infrapatellar bursa lies between the ligamentum patellae and:",o:["The patella","The anterior surface of the proximal end of the tibia","The medial femoral condyle","The lateral femoral condyle"],a:1,e:"The deep infrapatellar bursa lies between the ligamentum patellae and the anterior surface of the proximal tibia."},
+  {q:"The proximal tibiofibular joint provides for:",o:["A wide range of movement","Only a small range of movement","No movement","Only rotation"],a:1,e:"The proximal and distal tibiofibular joints provide for only a small range of movement."},
+  {q:"The proximal tibiofibular joint articulates the head of the fibula with:",o:["The medial tibial condyle","The lateral tibial condyle","The tibial tuberosity","The intercondylar eminence"],a:1,e:"The proximal tibiofibular joint articulates the head of the fibula with the lateral tibial condyle."},
+  {q:"The suprapatellar bursa forms which part of the knee joint's synovial cavity?",o:["Most posteroinferior recess","Most anterosuperior recess","Lateral recess","Medial recess"],a:1,e:"The suprapatellar bursa forms the most anterosuperior recess of the knee joint's synovial cavity."},
+
+  // 31–50 Muscles, Nerves, Vessels
+  {q:"The quadriceps femoris consists of all of the following EXCEPT:",o:["Rectus femoris","Vastus medialis","Vastus intermedius","Sartorius"],a:3,e:"The quadriceps femoris = rectus femoris, vastus medialis, vastus intermedius, and vastus lateralis. Sartorius is not part of it."},
+  {q:"The quadriceps femoris muscles are innervated by which nerve?",o:["Obturator nerve","Femoral nerve","Sciatic nerve","Superior gluteal nerve"],a:1,e:"All four quadriceps femoris muscles are innervated by the femoral nerve."},
+  {q:"The quadriceps femoris tendon reflex test assesses neuronal pathways at which spinal levels?",o:["L1–L2","L2–L4","L5–S1","S1–S2"],a:1,e:"The quadriceps reflex tests L2, L3, and L4 pathways."},
+  {q:"Which muscle is the sole lateral rotator of the leg?",o:["Semitendinosus","Biceps femoris","Popliteus","Sartorius"],a:1,e:"Biceps femoris is the sole lateral rotator of the leg."},
+  {q:"If the leg is fully extended, which muscle initiates leg flexion to unlock the knee joint?",o:["Biceps femoris","Popliteus","Semimembranosus","Gastrocnemius"],a:1,e:"Popliteus initiates leg flexion to unlock the knee joint when the leg is fully extended."},
+  {q:"Popliteus is innervated by which nerve?",o:["Femoral nerve","Obturator nerve","Tibial nerve","Common peroneal nerve"],a:2,e:"Popliteus is innervated by the tibial nerve."},
+  {q:"Which of the following is a medial rotator of the leg?",o:["Biceps femoris","Popliteus","Vastus lateralis","Rectus femoris"],a:1,e:"Medial rotators of the leg = popliteus, semitendinosus, semimembranosus, sartorius, and gracilis."},
+  {q:"Gastrocnemius is innervated by which nerve?",o:["Femoral nerve","Obturator nerve","Tibial nerve","Common peroneal nerve"],a:2,e:"Gastrocnemius is innervated by the tibial nerve."},
+  {q:"Gracilis is innervated by which nerve?",o:["Femoral nerve","Obturator nerve","Tibial nerve","Common peroneal nerve"],a:1,e:"Gracilis is innervated by the obturator nerve."},
+  {q:"Sartorius is innervated by which nerve?",o:["Femoral nerve","Obturator nerve","Tibial nerve","Common peroneal nerve"],a:0,e:"Sartorius is innervated by the femoral nerve."},
+  {q:"The tibial and common peroneal nerves emerge in the popliteal fossa upon extending distally beyond the diverging insertions of which muscles?",o:["Semitendinosus and biceps femoris","Gastrocnemius and soleus","Sartorius and gracilis","Vastus medialis and lateralis"],a:0,e:"They emerge beyond the diverging insertions of semitendinosus and biceps femoris."},
+  {q:"In the popliteal fossa, the tibial and common peroneal nerves lie in which relation to the popliteal vessels?",o:["Deep","Superficial","Lateral","Medial"],a:1,e:"Both nerves extend through the popliteal fossa superficial to the popliteal vessels."},
+  {q:"The tibial nerve exits the popliteal fossa by passing deep to:",o:["The converging heads of gastrocnemius","The head and neck of the fibula","The soleus","The adductor magnus"],a:0,e:"The tibial nerve exits deep to the converging heads of gastrocnemius."},
+  {q:"The common peroneal nerve exits the popliteal fossa by curving around:",o:["The medial malleolus","The head and neck of the fibula","The tibial tuberosity","The femoral condyles"],a:1,e:"The common peroneal nerve curves inferolaterally around the head and neck of the fibula."},
+  {q:"Irreversible damage to the common peroneal nerve produces:",o:["Footdrop","Clubfoot","Flat foot","Hammer toe"],a:0,e:"Common peroneal nerve damage produces footdrop, with the forefoot striking the ground before the heel."},
+  {q:"Footdrop results from loss of dorsiflexor actions of all of the following EXCEPT:",o:["Tibialis anterior","Extensor hallucis longus","Extensor digitorum longus","Gastrocnemius"],a:3,e:"Gastrocnemius is a plantar flexor, not a dorsiflexor."},
+  {q:"The pulsations of the popliteal artery can be felt with the leg partially flexed to about:",o:["15°","30°","45°","90°"],a:2,e:"The popliteal pulse is best felt with the leg partially flexed to about 45°."},
+  {q:"The small saphenous vein generally ends in the popliteal fossa by uniting with:",o:["The great saphenous vein","The popliteal vein","The femoral vein","The short saphenous vein"],a:1,e:"The small saphenous vein ends in the popliteal fossa by uniting with the popliteal vein."},
+  {q:"The popliteal nodes receive lymph from all of the following EXCEPT:",o:["Deep tissues of the foot and leg","Superficial tissues of the posterolateral leg","Superficial tissues of the lateral aspect of the foot","Superficial tissues of the medial aspect of the big toe"],a:3,e:"The medial big toe drains to the vertical group of superficial inguinal nodes, not popliteal nodes."},
+  {q:"The short head of biceps femoris is innervated by which portion of the sciatic nerve?",o:["Tibial portion","Common peroneal portion","Obturator nerve","Femoral nerve"],a:1,e:"The short head of biceps femoris is innervated by the common peroneal portion of the sciatic nerve."},
+
+  // 51–68 Knee Radiographs
+  {q:"On an AP knee radiograph, the adductor tubercle casts what shape?",o:["Circular radiolucency","Faintly radiopaque triangular image","Quadrilateral radiopacity","Linear radiolucency"],a:1,e:"The adductor tubercle casts a faintly radiopaque triangular image where the medial supracondylar ridge meets the medial femoral condyle."},
+  {q:"The center of the patellar shadow lies approximately at the level of which structure when the leg is fully extended?",o:["Lateral femoral epicondyle","Adductor tubercle","Tibial tuberosity","Intercondylar notch"],a:1,e:"On an AP radiograph with the leg fully extended, the center of the patellar shadow lies approximately at the level of the adductor tubercle."},
+  {q:"On an AP knee radiograph, the medial and lateral walls of the intercondylar notch project as:",o:["Faint vertical radiopaque lines","Horizontal radiolucent bands","Circular radiopacities","Triangular radiolucencies"],a:0,e:"The medial and lateral walls of the intercondylar notch project as faint vertical radiopaque lines."},
+  {q:"The tunnel radiograph differs from the AP radiograph in that the tunnel view:",o:["Shows the patella en face","Does not show the patella en face","Shows the anteroinferior femoral condyles","Shows the tibial plateaus in profile only"],a:1,e:"The tunnel radiograph does not show the patella en face; it shows the posterosuperior femoral condyles and intercondylar notch."},
+  {q:"The tunnel radiograph more clearly demonstrates which notch?",o:["The intercondylar notch","The notch on the lateral surface of the lateral femoral condyle for popliteus","The greater sciatic notch","The fibular notch"],a:1,e:"The tunnel view more clearly demonstrates the notch on the lateral surface of the lateral femoral condyle from which popliteus originates."},
+  {q:"On a lateral knee radiograph, the medial femoral condyle is described as:",o:["Flatter than the lateral condyle","More rounded than the lateral condyle","Identical to the lateral condyle","Not visible"],a:1,e:"The medial condyle is more rounded than the lateral condyle on lateral radiograph."},
+  {q:"The suprapatellar fat pad lies posterior to which structure on a lateral knee radiograph?",o:["Ligamentum patellae","Quadriceps femoris tendon","Patella","Tibial tuberosity"],a:1,e:"The suprapatellar fat pad lies posterior to the quadriceps femoris tendon."},
+  {q:"The infrapatellar (Hoffa's) fat pad lies posterior to which structure on a lateral knee radiograph?",o:["Quadriceps femoris tendon","Ligamentum patellae","Patella","Femoral condyles"],a:1,e:"Hoffa's fat pad lies posterior to the ligamentum patellae."},
+  {q:"The fabella is present in what percentage of individuals?",o:["1%–5%","10%–20%","30%–40%","50%–60%"],a:1,e:"The fabella is present in about 10% to 20% of individuals."},
+  {q:"The fabella is embedded in which structure?",o:["Medial head of gastrocnemius","Lateral head of gastrocnemius","Popliteus tendon","Semimembranosus tendon"],a:1,e:"The fabella is embedded in the lateral head of gastrocnemius."},
+  {q:"When present, the fabella casts what shape of radiopaque shadow?",o:["Circular","Sesame seed-shaped","Triangular","Quadrilateral"],a:1,e:"The fabella casts a sesame seed-shaped radiopaque shadow directly behind the femoral condyles."},
+  {q:"On an axial radiograph of the patella, the lateral limb of the V-shaped articular surface is:",o:["Shorter than the medial limb","Longer than the medial limb","Equal to the medial limb","Absent"],a:1,e:"The lateral limb of the patella's V-shaped articular surface is longer than the medial limb."},
+  {q:"On an axial patellar radiograph, the lateral limbs of the patellar and femoral articular surfaces are:",o:["Divergent","Parallel","Perpendicular","Oblique"],a:1,e:"The lateral limbs are parallel; the medial limbs diverge as they extend medially."},
+  {q:"The radiolucent space between the femoral and tibial condyles on an AP knee radiograph represents:",o:["The joint capsule","Apposed articular cartilages with the intervening meniscus","The cruciate ligaments only","The infrapatellar fat pad"],a:1,e:"The space represents the apposition of the articular cartilages of the condyles with each other and with the partially intervening meniscus."},
+  {q:"The radiolucent space bounded by the femoral intercondylar notch above and the tibial intercondylar tubercles below bears which structures?",o:["The menisci","The extracapsular anterior and posterior cruciate ligaments","The patellar tendon","The collateral ligaments"],a:1,e:"This space bears the extracapsular anterior and posterior cruciate ligaments."},
+  {q:"On an AP knee radiograph, the tibial tuberosity is best seen as:",o:["A faintly radiopaque triangular image","A bony prominence anterior and distal to the tibial plateaus on lateral view","A circular radiolucency","A vertical radiopaque line"],a:1,e:"The tibial tuberosity is the bony prominence anterior and distal to the tibial plateaus (best appreciated on lateral view)."},
+  {q:"On a lateral knee radiograph, the quadriceps femoris tendon appears as:",o:["A fat-density band","A water-density band","A radiopaque line","A radiolucent circle"],a:1,e:"The quadriceps femoris tendon appears as a water-density band extending from the lower anterior thigh to the superior border of the patella."},
+  {q:"On a lateral knee radiograph, the ligamentum patellae appears as:",o:["A fat-density band","A water-density band","A radiopaque line","A radiolucent circle"],a:1,e:"The ligamentum patellae presents as a water-density band extending from the patella to the tibial tuberosity."},
+
+  // 69–80 Knee MRI
+  {q:"On a T1-weighted MRI, compact (cortical) bone generates what type of signal?",o:["High-intensity","Intermediate-density","Very weak (low-intensity)","No signal at all"],a:2,e:"Compact bone generates a very weak signal, appearing dark."},
+  {q:"On a T1-weighted MRI, fat generates what type of signal?",o:["High-intensity","Intermediate-density","Low-intensity","No signal"],a:0,e:"Fat generates a high-intensity signal, appearing bright."},
+  {q:"On a T1-weighted MRI, ligaments generate what type of signal?",o:["High-intensity","Intermediate-density","Low-intensity","No signal"],a:2,e:"Ligaments generate a low-intensity signal, appearing dark."},
+  {q:"On a T1-weighted MRI, hyaline articular cartilage generates what type of signal?",o:["High-intensity","Intermediate-density","Low-intensity","No signal"],a:1,e:"Hyaline cartilage generates an intermediate-density signal."},
+  {q:"On a T1-weighted MRI, the menisci (fibrous cartilage) generate what type of signal?",o:["High-intensity","Intermediate-density","Low-intensity","No signal"],a:2,e:"The menisci are fibrous cartilage and generate a low-intensity signal."},
+  {q:"The patella's subcortical brightness on T1-weighted MRI is a measure of:",o:["The water content of its cancellous interior","The fat content of its cancellous interior","The cortical bone thickness","The cartilage thickness"],a:1,e:"The subcortical brightness reflects the fat content of the patella's cancellous interior."},
+  {q:"In a coronal section 18 mm posterior to the patellar section, the remnant of the epiphyseal growth plate at the distal femur appears as:",o:["A high-intensity band","A tenuous band of low intensity","An intermediate-density band","A radiopaque line"],a:1,e:"The growth plate remnant appears as a tenuous band of low intensity."},
+  {q:"In a coronal section 36 mm posterior to the patellar section, the medial meniscus appears as:",o:["A high-intensity band","A small triangular region of low intensity","A circular intermediate-density region","An irregular high-intensity area"],a:1,e:"The menisci appear as small triangular regions of low intensity."},
+  {q:"In a coronal section 45 mm posterior to the patellar section, the posterior cruciate ligament appears as:",o:["A short, thick, low-intensity band extending inferolaterally from the lateral surface of the medial femoral condyle","A thin high-intensity line","A circular intermediate-density region","A radiopaque band"],a:0,e:"The PCL appears as a short, thick, low-intensity band extending inferolaterally from the medial femoral condyle."},
+  {q:"In a sagittal section 31.5 mm medial to the fibular head section, the anterior cruciate ligament extends:",o:["Anterosuperiorly from the posterior tibial intercondylar surface","Posterosuperiorly from the anterior tibial intercondylar surface","Laterally from the medial femoral condyle","Inferiorly from the patella"],a:1,e:"The ACL extends posterosuperiorly from the anterior area of the tibial intercondylar surface."},
+  {q:"In a sagittal section 31.5 mm medial to the fibular head section, the posterior cruciate ligament extends:",o:["Posterosuperiorly from the anterior tibial intercondylar surface","Anterosuperiorly from the posterior tibial intercondylar surface","Laterally from the medial femoral condyle","Inferiorly from the patella"],a:1,e:"The PCL extends anterosuperiorly from the posterior area of the tibial intercondylar surface."},
+  {q:"The posterior horns of the medial and lateral menisci appear on coronal MRI as:",o:["Thin high-intensity lines","Thick, low-intensity bands sandwiched between the femoral condyle and tibial plateau cartilage","Circular intermediate-density regions","Irregular radiopaque areas"],a:1,e:"The posterior horns appear as thick, low-intensity bands sandwiched between the femoral condyle and tibial plateau cartilage."},
+
+  // 81–100 Knee Pathology
+  {q:"Recurrent lateral patellar subluxation is predisposed by all of the following EXCEPT:",o:["Weakened vastus medialis","Congenitally underdeveloped lateral femoral condyle","Patella alta","Weakened vastus lateralis"],a:3,e:"Vastus lateralis pulls the patella laterally; weakening of vastus medialis (the medial counter-pull) predisposes to subluxation. Weakened vastus lateralis would not predispose."},
+  {q:"Patella alta is defined as the length of the ligamentum patellae being how many times greater than the superoinferior dimension of the patella?",o:["0.5 or more","0.8 or more","1.2 or more","2.0 or more"],a:2,e:"Patella alta = ligamentum patellae length ≥1.2 times the superoinferior dimension of the patella."},
+  {q:"Recurrent lateral patellar subluxation is best assessed by which radiograph?",o:["AP knee radiograph","Lateral knee radiograph","Axial radiograph of the patella","Tunnel radiograph"],a:2,e:"Axial radiograph of the patella best assesses lateral subluxation."},
+  {q:"Tibial plateau fractures are colloquially called:",o:["Bumper or fender fractures","March fractures","Jones fractures","Colles' fractures"],a:0,e:"Tibial plateau fractures are called bumper or fender fractures because they are commonly sustained when an individual is struck in the knee by an automobile."},
+  {q:"A cross-table lateral radiograph of a knee with an intracapsular fracture shows what characteristic finding?",o:["A straight fat-fluid-density interface in the anterosuperior compartment","A radiolucent line through the patella","A widened joint space","A radiopaque mass in the posterior compartment"],a:0,e:"Intracapsular fractures release fat and blood into the joint, producing a straight fat-fluid-density interface in the anterosuperior compartment."},
+  {q:"Patellar fractures can occur from all of the following EXCEPT:",o:["Direct blow to the patella","Indirect tension from sudden active quadriceps contraction","A fall on an outstretched hand","Displaced fragments are more likely with the indirect mechanism"],a:2,e:"Patellar fractures occur from direct blows or indirect quadriceps tension — not from a fall on an outstretched hand (which typically causes distal radius fractures)."},
+  {q:"Which of the following distinguishes a multipartite patella from a patellar fracture?",o:["Accessory masses of a multipartite patella are completely outlined by cortical bone","Accessory masses of a multipartite patella are radiolucent","Fracture fragments are completely outlined by cortical bone","A multipartite patella is always symptomatic"],a:0,e:"Accessory masses of a multipartite patella are completely outlined by cortical bone; fracture fragments are not."},
+  {q:"The accessory bone tissue masses of a multipartite patella almost invariably border which margin of the patella?",o:["Inferomedial","Superolateral","Inferolateral","Superomedial"],a:1,e:"Accessory masses of a multipartite patella almost invariably border the superolateral margin."},
+  {q:"The presence of fat in a knee joint effusion is pathognomonic of:",o:["Rheumatoid arthritis","Osteoarthritis","A patellar fracture or an intracapsular fracture of the femur or tibia at the knee","A meniscal tear"],a:2,e:"Fat in a knee effusion is pathognomonic of a patellar fracture or an intracapsular fracture of the femur or tibia at the knee."},
+  {q:"Fat within an effused knee is best documented by which radiograph?",o:["AP knee radiograph","Cross-table lateral radiograph with the patient supine","Axial patellar radiograph","Tunnel radiograph"],a:1,e:"A cross-table lateral radiograph with the patient supine best demonstrates the fat-fluid-density interface."},
+  {q:"Sinding Larsen-Johansson disease occurs at which end of the ligamentum patellae?",o:["Distal end (tibial tuberosity)","Proximal end (patella)","Midportion","Both ends simultaneously"],a:1,e:"Sinding Larsen-Johansson disease occurs at the proximal end (patella); Osgood-Schlatter disease occurs at the distal end (tibial tuberosity)."},
+  {q:"Osgood-Schlatter disease occurs at which end of the ligamentum patellae?",o:["Proximal end (patella)","Distal end (tibial tuberosity)","Midportion","Both ends simultaneously"],a:1,e:"Osgood-Schlatter disease occurs at the distal end (tibial tuberosity)."},
+  {q:"Osgood-Schlatter disease occurs more often in which group?",o:["Elderly women","Adolescent boys","Adolescent girls","Neonates"],a:1,e:"Osgood-Schlatter disease occurs more often in boys than girls and is frequently bilateral."},
+  {q:"Osteochondritis dissecans in the knee most commonly occurs in which location?",o:["The lateral aspect of the medial femoral condyle","The medial aspect of the lateral femoral condyle","The patella","The tibial plateau"],a:0,e:"Most osteochondritis dissecans lesions in the knee occur in the lateral aspect of the medial femoral condyle."},
+  {q:"The lesion of osteochondritis dissecans presents on radiograph as:",o:["A radiopaque mass","A curved radiolucent band with a sclerotic margin","A linear radiolucency only","A diffuse sclerosis"],a:1,e:"The lesion presents as a curved radiolucent band with a sclerotic margin."},
+  {q:"Acute hematogenous osteomyelitis most commonly affects which sites in children and adolescents?",o:["Epiphyses of the distal femur and proximal tibia","Metaphyses of the distal femur and proximal tibia","Diaphyses of the femur and tibia","The patella"],a:1,e:"The metaphyses of the distal femur and proximal tibia are the most common sites."},
+  {q:"The initial radiographic signs of acute hematogenous osteomyelitis occur within:",o:["6 hours","24 to 48 hours","7 to 10 days","3 weeks"],a:1,e:"Initial signs (edema, loss of fascial plane definition) occur within 24 to 48 hours."},
+  {q:"If untreated, lytic lesions of acute hematogenous osteomyelitis occur within:",o:["24 to 48 hours","7 to 10 days","3 to 4 weeks","6 months"],a:1,e:"Lytic lesions occur within 7 to 10 days, followed by endosteal sclerosis from new periosteal bone formation."},
+  {q:"Primary osteoarthritis of the knee most commonly affects which articulations?",o:["Lateral femorotibial only","Medial femorotibial and patellofemoral","Superior tibiofibular","Proximal tibiofibular"],a:1,e:"The medial femorotibial and patellofemoral articulations are more commonly affected than the lateral femorotibial articulation."},
+  {q:"Marked degeneration of the medial femorotibial articulation can produce which knee deformity?",o:["Valgus deformity","Varus deformity","Recurvatum","Genu valgum"],a:1,e:"Marked medial femorotibial degeneration can produce a varus deformity (distal bone points toward the midline). Valgus = distal bone points away from the midline."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('lower_limb_s2_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+
+  document.getElementById('pbar').style.width = (done / state.data.length * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + state.data.length;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Question ' + (state.q + 1) + '/' + state.data.length;
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('lower_limb_s2_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent understanding of knee bones, joints, ligaments, muscles, radiographs, MRI and pathology! Superb work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review cruciate/collateral ligaments, common peroneal nerve, MRI signal characteristics and Osgood-Schlatter vs Sinding-Larsen to strengthen any weak areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on bursae that communicate with the joint, footdrop, fabella, patella alta and osteochondritis dissecans. Practice will raise your score quickly!';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — this topic has many detailed points. Go through the explanations carefully, revise the key radiographic signs and nerve injuries, and try again. You can master it!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var sections = [0, 12, 30, 50, 68, 80, 100];
+  var sectionNames = [
+    "A: Knee — Bones & Ossification",
+    "B: Knee — Joints, Ligaments & Bursae",
+    "C: Knee — Muscles, Nerves, Vessels",
+    "D: Knee Radiographs",
+    "E: Knee MRI",
+    "F: Knee Pathology"
+  ];
+
+  for (var s = 0; s < sectionNames.length; s++) {
+    var start = sections[s];
+    var end = sections[s + 1];
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + sectionNames[s] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('lower_limb_s2_quiz_progress');
+  location.reload();
+}
+
+function exit() {
+  if (confirm('Exit quiz? Your progress is saved.')) {
+    saveProgress();
+    location.reload();
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('lower_limb_s2_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('lower_limb_s2_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
