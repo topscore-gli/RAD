@@ -3,97 +3,236 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Rad 244 – Medical Instruments Exam (49 Questions)</title>
+  <title>Rad 244 – Medical Instruments Exam</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
-    :root{
-      --bg:#1e1e2f;--card:#2a2a3f;--accent:#1db954;--text:#f0f0ff;--muted:#c0c0e0;
-      --danger:#ff6b6b;--shadow-in:#171723;--shadow-out:#25253b;
+    
+    :root {
+      --bg: #1e1e2f;
+      --card: #2a2a3f;
+      --text: #f0f0ff;
+      --muted: #c0c0e0;
+      --accent: #1db954;
+      --danger: #ff6b6b;
+      --shadow-in: #171723;
+      --shadow-out: #25253b;
     }
-    body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;justify-content:center;align-items:flex-start}
-    .app{width:100%;max-width:420px;min-height:100vh;background:var(--bg)}
-    .screen{display:none;padding:20px 16px;min-height:100vh}
-    .screen.active{display:block}
-
-    .instruction-box{
-      background:var(--card);border-radius:20px;padding:28px 20px;margin-top:30px;
-      box-shadow:inset 4px 4px 12px var(--shadow-in),inset -4px -4px 12px var(--shadow-out);text-align:center
+    
+    body.light {
+      --bg: #e8e8e8;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #555;
+      --accent: #0d9b4a;
+      --danger: #e63939;
+      --shadow-in: #c0c0c0;
+      --shadow-out: #ffffff;
     }
-    .instruction-box h1{font-size:22px;color:var(--accent);margin-bottom:12px;font-weight:900}
-    .warning{background:rgba(255,107,107,0.15);border-left:4px solid var(--danger);padding:14px;border-radius:12px;margin:18px 0;text-align:left;font-size:14px;line-height:1.55}
-    .start-btn{
-      display:block;width:100%;padding:18px;margin-top:20px;
-      background:linear-gradient(135deg,#1db954,#17a347);color:#000;
-      font-size:18px;font-weight:900;border:none;border-radius:16px;cursor:pointer
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      transition: background 0.3s, color 0.3s;
     }
-
-    .q-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-    .q-number{font-size:15px;font-weight:800;color:var(--accent)}
-    .timer{font-size:24px;font-weight:900;color:var(--danger);background:rgba(255,107,107,0.18);padding:6px 16px;border-radius:30px}
-    .timer.warning{animation:pulse .5s infinite}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-    .q-card{
-      background:var(--card);border-radius:18px;padding:18px;
-      box-shadow:inset 4px 4px 12px var(--shadow-in),inset -4px -4px 12px var(--shadow-out);
-      border-left:5px solid var(--accent)
+    
+    .app {
+      width: 100%;
+      max-width: 420px;
+      min-height: 100vh;
+      background: var(--bg);
+      position: relative;
     }
-    .q-card img{width:100%;height:180px;object-fit:cover;border-radius:14px;margin-bottom:14px;border:2px dashed var(--accent);background:#222}
-    .sub-q{font-size:14.5px;margin:12px 0 5px;font-weight:700}
-    .answer-space{background:rgba(255,255,255,0.05);border:1px dashed var(--muted);border-radius:10px;min-height:58px;padding:10px;margin-bottom:8px;font-size:13px;color:var(--muted)}
-
-    .ans-card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:14px;border-left:4px solid var(--accent)}
-    .ans-card h4{color:var(--accent);margin-bottom:8px;font-size:15px}
-    .ans-card ul{padding-left:18px;margin:6px 0}
-    .ans-card li{font-size:13px;margin-bottom:3px}
+    
+    .screen { display: none; padding: 20px 16px; min-height: 100vh; }
+    .screen.active { display: block; }
+    
+    /* Top bar for theme */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .theme-btn {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      border: none;
+      background: var(--card);
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 3px 3px 8px var(--shadow-in), -3px -3px 8px var(--shadow-out);
+    }
+    
+    .instruction-box {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 28px 20px;
+      box-shadow: inset 4px 4px 12px var(--shadow-in), inset -4px -4px 12px var(--shadow-out);
+      text-align: center;
+    }
+    .instruction-box h1 {
+      font-size: 22px;
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-weight: 900;
+    }
+    .warning {
+      background: rgba(255, 107, 107, 0.12);
+      border-left: 4px solid var(--danger);
+      padding: 14px;
+      border-radius: 12px;
+      margin: 18px 0;
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .start-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #1db954, #17a347);
+      color: #000;
+      font-size: 18px;
+      font-weight: 900;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+    
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .q-number { font-size: 15px; font-weight: 800; color: var(--accent); }
+    .timer {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--danger);
+      background: rgba(255, 107, 107, 0.15);
+      padding: 6px 16px;
+      border-radius: 30px;
+    }
+    .timer.warning { animation: pulse 0.5s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    
+    .q-card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: inset 4px 4px 12px var(--shadow-in), inset -4px -4px 12px var(--shadow-out);
+      border-left: 5px solid var(--accent);
+    }
+    .q-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      border: 2px dashed var(--accent);
+      background: #333;
+    }
+    .sub-q { font-size: 14.5px; margin: 12px 0 5px; font-weight: 700; }
+    .answer-space {
+      background: rgba(128,128,128,0.08);
+      border: 1px dashed var(--muted);
+      border-radius: 10px;
+      min-height: 58px;
+      padding: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    
+    .ans-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+      border-left: 4px solid var(--accent);
+    }
+    .ans-card h4 { color: var(--accent); margin-bottom: 8px; font-size: 15px; }
+    .ans-card ul { padding-left: 18px; margin: 6px 0; }
+    .ans-card li { font-size: 13px; margin-bottom: 3px; }
   </style>
 </head>
-<body>
+<body class="dark">
   <div class="app">
-    <!-- INSTRUCTION -->
+    <!-- ========== INSTRUCTION SCREEN ========== -->
     <div class="screen active" id="instruction-screen">
+      <div class="top-bar">
+        <div style="font-weight:800;color:var(--accent)">Rad 244 Exam</div>
+        <button class="theme-btn" id="theme-toggle">🌙</button>
+      </div>
+      
       <div class="instruction-box">
         <h1>RAD 244 EXAM</h1>
-        <p style="margin-bottom:8px"><strong>Medical Instruments & Equipment</strong></p>
-        <p style="font-size:14px;color:var(--muted)">49 Questions • 1 minute each</p>
+        <p style="margin-bottom:6px"><strong>Medical Instruments & Equipment</strong></p>
+        <p style="font-size:13px;color:var(--muted)">49 Questions • 1 minute each</p>
 
         <div class="warning">
           <strong>⚠ STRICT INSTRUCTIONS</strong><br><br>
-          • This is Rad 244 exam. Follow all instructions carefully.<br>
+          • This is Rad 244 exam. You must follow all instructions.<br>
           • <strong>No exam malpractice</strong>.<br>
-          • You have <strong>exactly 1 minute</strong> for each question.<br>
-          • When the timer reaches 0, the next question appears automatically.<br>
-          • Be fast. There is <strong>no Next or Previous button</strong>.<br>
+          • You have <strong>exactly 1 minute</strong> to answer each question.<br>
+          • When the 1 minute finishes, the next question will appear automatically.<br>
+          • Be as fast as possible.<br>
+          • There is <strong>no Next or Previous button</strong>.<br>
           • Write your answers clearly on paper.
         </div>
 
-        <button class="start-btn" onclick="startExam()">▶ START EXAM</button>
+        <button class="start-btn" id="start-btn">▶ START EXAM</button>
       </div>
     </div>
 
-    <!-- QUESTION -->
+    <!-- ========== QUESTION SCREEN ========== -->
     <div class="screen" id="question-screen">
-      <div class="q-header">
+      <div class="top-bar">
         <div class="q-number" id="q-number">Question 1 / 49</div>
-        <div class="timer" id="timer">60</div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="timer" id="timer">60</div>
+          <button class="theme-btn" id="theme-toggle-2">🌙</button>
+        </div>
       </div>
+      
       <div class="q-card">
         <img id="q-image" src="" alt="Equipment">
         <div class="sub-q">i) Identify this equipment</div>
         <div class="answer-space">Write the full name on your paper</div>
+        
         <div class="sub-q">ii) Write 3 Uses of this equipment</div>
         <div class="answer-space">1. _______________<br>2. _______________<br>3. _______________</div>
-        <div class="sub-q">iii) Write 3 Maintenance points of this equipment</div>
+        
+        <div class="sub-q">iii) Write 3 Maintenance points</div>
         <div class="answer-space">1. _______________<br>2. _______________<br>3. _______________</div>
       </div>
     </div>
 
-    <!-- ANSWER KEY -->
+    <!-- ========== ANSWER KEY ========== -->
     <div class="screen" id="answer-screen">
-      <h2 style="text-align:center;color:var(--accent);margin:16px 0 8px">✅ FULL ANSWER KEY</h2>
-      <p style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:20px">Grade yourself. Compare with the correct answers below.</p>
+      <div class="top-bar">
+        <div style="font-weight:800;color:var(--accent)">Answer Key</div>
+        <button class="theme-btn" id="theme-toggle-3">🌙</button>
+      </div>
+      
+      <h2 style="text-align:center;color:var(--accent);margin-bottom:8px">✅ FULL ANSWER KEY</h2>
+      <p style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:20px">
+        Grade yourself honestly using the answers below
+      </p>
       <div id="answer-list"></div>
-      <button class="start-btn" style="margin:30px 0" onclick="location.reload()">🔄 Retake Exam (New Shuffle)</button>
+      
+      <button class="start-btn" style="margin:30px 0" onclick="location.reload()">
+        🔄 Retake Exam (New Shuffle)
+      </button>
     </div>
   </div>
 
@@ -249,13 +388,35 @@
        maint:["Regular cleaning and sterilization","Check the teeth for sharpness or damage","Lubricate the hinge for smooth movement"]}
     ];
 
-    // ========== EXAM ENGINE ==========
+    // ========== THEME ==========
+    function setTheme(theme) {
+      document.body.classList.remove('light', 'dark');
+      document.body.classList.add(theme);
+      const icon = theme === 'light' ? '☀️' : '🌙';
+      document.querySelectorAll('.theme-btn').forEach(btn => btn.textContent = icon);
+      localStorage.setItem('rad244-theme', theme);
+    }
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('rad244-theme') || 'dark';
+    setTheme(savedTheme);
+    
+    // Theme buttons
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const newTheme = document.body.classList.contains('light') ? 'dark' : 'light';
+        setTheme(newTheme);
+      });
+    });
+
+    // ========== EXAM LOGIC ==========
     let questions = [];
     let current = 0;
-    let timer = null;
+    let timerInterval = null;
     let timeLeft = 60;
 
-    function shuffle(arr) {
+    function shuffle(array) {
+      const arr = [...array];
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -264,35 +425,46 @@
     }
 
     function startExam() {
-      questions = shuffle([...instruments]); // full shuffle every time
+      questions = shuffle(instruments);
       current = 0;
+      
       document.getElementById('instruction-screen').classList.remove('active');
       document.getElementById('question-screen').classList.add('active');
+      
       showQuestion();
     }
+
+    // Attach start button
+    document.getElementById('start-btn').addEventListener('click', startExam);
 
     function showQuestion() {
       if (current >= questions.length) {
         showAnswerKey();
         return;
       }
+
       const q = questions[current];
-      document.getElementById('q-number').textContent = `Question ${current+1} / 49`;
+      document.getElementById('q-number').textContent = `Question ${current + 1} / 49`;
       document.getElementById('q-image').src = q.img;
       document.getElementById('q-image').alt = q.name;
 
-      clearInterval(timer);
+      // Reset timer
+      clearInterval(timerInterval);
       timeLeft = 60;
-      const t = document.getElementById('timer');
-      t.textContent = timeLeft;
-      t.classList.remove('warning');
+      const timerEl = document.getElementById('timer');
+      timerEl.textContent = timeLeft;
+      timerEl.classList.remove('warning');
 
-      timer = setInterval(() => {
+      timerInterval = setInterval(() => {
         timeLeft--;
-        t.textContent = timeLeft;
-        if (timeLeft <= 10) t.classList.add('warning');
+        timerEl.textContent = timeLeft;
+        
+        if (timeLeft <= 10) {
+          timerEl.classList.add('warning');
+        }
+        
         if (timeLeft <= 0) {
-          clearInterval(timer);
+          clearInterval(timerInterval);
           current++;
           showQuestion();
         }
@@ -300,21 +472,24 @@
     }
 
     function showAnswerKey() {
-      clearInterval(timer);
+      clearInterval(timerInterval);
       document.getElementById('question-screen').classList.remove('active');
       document.getElementById('answer-screen').classList.add('active');
 
       const list = document.getElementById('answer-list');
       list.innerHTML = '';
-      questions.forEach((q, i) => {
-        list.innerHTML += `
-          <div class="ans-card">
-            <h4>Q${i+1}. ${q.name}</h4>
-            <p><strong>Uses:</strong></p>
-            <ul>\( {q.uses.map(u => `<li> \){u}</li>`).join('')}</ul>
-            <p><strong>Maintenance:</strong></p>
-            <ul>\( {q.maint.map(m => `<li> \){m}</li>`).join('')}</ul>
-          </div>`;
+
+      questions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'ans-card';
+        card.innerHTML = `
+          <h4>Q${index + 1}. ${q.name}</h4>
+          <p><strong>Uses:</strong></p>
+          <ul>\( {q.uses.map(u => `<li> \){u}</li>`).join('')}</ul>
+          <p><strong>Maintenance:</strong></p>
+          <ul>\( {q.maint.map(m => `<li> \){m}</li>`).join('')}</ul>
+        `;
+        list.appendChild(card);
       });
     }
   </script>
