@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Rad 244 – Medical Instruments Exam</title>
+  <title>Rad 244 Exam - Medical Instruments</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
     
     :root {
       --bg: #1e1e2f;
@@ -14,19 +14,17 @@
       --muted: #c0c0e0;
       --accent: #1db954;
       --danger: #ff6b6b;
-      --shadow-in: #171723;
-      --shadow-out: #25253b;
+      --shadow: #171723;
     }
     
     body.light {
-      --bg: #e8e8e8;
+      --bg: #f0f0f0;
       --card: #ffffff;
-      --text: #1a1a1a;
+      --text: #222;
       --muted: #555;
       --accent: #0d9b4a;
-      --danger: #e63939;
-      --shadow-in: #c0c0c0;
-      --shadow-out: #ffffff;
+      --danger: #d32f2f;
+      --shadow: #ccc;
     }
     
     body {
@@ -35,72 +33,73 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      transition: background 0.3s, color 0.3s;
+      transition: 0.3s;
     }
     
     .app {
       width: 100%;
       max-width: 420px;
       min-height: 100vh;
-      background: var(--bg);
-      position: relative;
+      padding: 16px;
     }
     
-    .screen { display: none; padding: 20px 16px; min-height: 100vh; }
+    .screen { display: none; }
     .screen.active { display: block; }
     
-    /* Top bar for theme */
-    .top-bar {
+    .top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
+    
     .theme-btn {
-      width: 42px; height: 42px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       border: none;
       background: var(--card);
-      color: var(--text);
       font-size: 20px;
       cursor: pointer;
-      box-shadow: 3px 3px 8px var(--shadow-in), -3px -3px 8px var(--shadow-out);
+      box-shadow: 3px 3px 8px var(--shadow);
     }
     
-    .instruction-box {
+    .box {
       background: var(--card);
       border-radius: 20px;
       padding: 28px 20px;
-      box-shadow: inset 4px 4px 12px var(--shadow-in), inset -4px -4px 12px var(--shadow-out);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
       text-align: center;
     }
-    .instruction-box h1 {
-      font-size: 22px;
+    
+    .box h1 {
       color: var(--accent);
-      margin-bottom: 10px;
-      font-weight: 900;
+      font-size: 24px;
+      margin-bottom: 8px;
     }
+    
     .warning {
       background: rgba(255, 107, 107, 0.12);
-      border-left: 4px solid var(--danger);
-      padding: 14px;
+      border-left: 5px solid var(--danger);
+      padding: 16px;
       border-radius: 12px;
-      margin: 18px 0;
+      margin: 20px 0;
       text-align: left;
       font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.6;
     }
-    .start-btn {
+    
+    .btn {
       display: block;
       width: 100%;
       padding: 18px;
-      margin-top: 20px;
-      background: linear-gradient(135deg, #1db954, #17a347);
-      color: #000;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #1db954, #128c3a);
+      color: white;
       font-size: 18px;
-      font-weight: 900;
+      font-weight: 800;
       border: none;
-      border-radius: 16px;
+      border-radius: 14px;
       cursor: pointer;
     }
     
@@ -110,386 +109,302 @@
       align-items: center;
       margin-bottom: 16px;
     }
-    .q-number { font-size: 15px; font-weight: 800; color: var(--accent); }
+    
     .timer {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 900;
       color: var(--danger);
-      background: rgba(255, 107, 107, 0.15);
-      padding: 6px 16px;
+      background: rgba(255,107,107,0.15);
+      padding: 6px 18px;
       border-radius: 30px;
     }
-    .timer.warning { animation: pulse 0.5s infinite; }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
+    
+    .timer.warning {
+      animation: blink 0.5s infinite;
+    }
+    
+    @keyframes blink {
       50% { opacity: 0.4; }
     }
     
-    .q-card {
+    .card {
       background: var(--card);
       border-radius: 18px;
-      padding: 18px;
-      box-shadow: inset 4px 4px 12px var(--shadow-in), inset -4px -4px 12px var(--shadow-out);
-      border-left: 5px solid var(--accent);
+      padding: 20px;
+      border-left: 6px solid var(--accent);
     }
-    .q-card img {
+    
+    .card img {
       width: 100%;
       height: 180px;
       object-fit: cover;
       border-radius: 14px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       border: 2px dashed var(--accent);
-      background: #333;
-    }
-    .sub-q { font-size: 14.5px; margin: 12px 0 5px; font-weight: 700; }
-    .answer-space {
-      background: rgba(128,128,128,0.08);
-      border: 1px dashed var(--muted);
-      border-radius: 10px;
-      min-height: 58px;
-      padding: 10px;
-      margin-bottom: 8px;
-      font-size: 13px;
-      color: var(--muted);
+      background: #444;
     }
     
-    .ans-card {
+    .sub {
+      font-weight: 700;
+      margin: 14px 0 6px;
+      font-size: 15px;
+    }
+    
+    .space {
+      background: rgba(128,128,128,0.1);
+      border: 1px dashed var(--muted);
+      border-radius: 10px;
+      min-height: 60px;
+      padding: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    
+    .ans {
       background: var(--card);
       border-radius: 14px;
       padding: 16px;
       margin-bottom: 14px;
       border-left: 4px solid var(--accent);
     }
-    .ans-card h4 { color: var(--accent); margin-bottom: 8px; font-size: 15px; }
-    .ans-card ul { padding-left: 18px; margin: 6px 0; }
-    .ans-card li { font-size: 13px; margin-bottom: 3px; }
+    
+    .ans h4 {
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    
+    .ans ul {
+      padding-left: 18px;
+      margin: 6px 0;
+    }
+    
+    .ans li {
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
   </style>
 </head>
 <body class="dark">
   <div class="app">
-    <!-- ========== INSTRUCTION SCREEN ========== -->
-    <div class="screen active" id="instruction-screen">
-      <div class="top-bar">
-        <div style="font-weight:800;color:var(--accent)">Rad 244 Exam</div>
-        <button class="theme-btn" id="theme-toggle">🌙</button>
+    
+    <!-- INSTRUCTION SCREEN -->
+    <div class="screen active" id="screen-start">
+      <div class="top">
+        <strong style="color:var(--accent)">Rad 244 Exam</strong>
+        <button class="theme-btn" onclick="toggleTheme()">🌙</button>
       </div>
       
-      <div class="instruction-box">
+      <div class="box">
         <h1>RAD 244 EXAM</h1>
-        <p style="margin-bottom:6px"><strong>Medical Instruments & Equipment</strong></p>
-        <p style="font-size:13px;color:var(--muted)">49 Questions • 1 minute each</p>
-
+        <p>Medical Instruments & Equipment</p>
+        <p style="font-size:13px;color:var(--muted);margin-top:6px">49 Questions • 1 minute each</p>
+        
         <div class="warning">
           <strong>⚠ STRICT INSTRUCTIONS</strong><br><br>
-          • This is Rad 244 exam. You must follow all instructions.<br>
+          • This is Rad 244 exam. Follow all instructions.<br>
           • <strong>No exam malpractice</strong>.<br>
-          • You have <strong>exactly 1 minute</strong> to answer each question.<br>
-          • When the 1 minute finishes, the next question will appear automatically.<br>
-          • Be as fast as possible.<br>
-          • There is <strong>no Next or Previous button</strong>.<br>
-          • Write your answers clearly on paper.
+          • You have <strong>exactly 1 minute</strong> per question.<br>
+          • When the timer finishes, the next question appears automatically.<br>
+          • Be fast. There is <strong>no Next or Previous button</strong>.<br>
+          • Write your answers on paper.
         </div>
-
-        <button class="start-btn" id="start-btn">▶ START EXAM</button>
+        
+        <button class="btn" onclick="startExam()">▶ START EXAM</button>
       </div>
     </div>
-
-    <!-- ========== QUESTION SCREEN ========== -->
-    <div class="screen" id="question-screen">
-      <div class="top-bar">
-        <div class="q-number" id="q-number">Question 1 / 49</div>
+    
+    <!-- QUESTION SCREEN -->
+    <div class="screen" id="screen-question">
+      <div class="q-header">
+        <div id="q-num" style="font-weight:800;color:var(--accent)">Question 1 / 49</div>
         <div style="display:flex;gap:10px;align-items:center">
           <div class="timer" id="timer">60</div>
-          <button class="theme-btn" id="theme-toggle-2">🌙</button>
+          <button class="theme-btn" onclick="toggleTheme()">🌙</button>
         </div>
       </div>
       
-      <div class="q-card">
-        <img id="q-image" src="" alt="Equipment">
-        <div class="sub-q">i) Identify this equipment</div>
-        <div class="answer-space">Write the full name on your paper</div>
+      <div class="card">
+        <img id="q-img" src="" alt="Equipment">
         
-        <div class="sub-q">ii) Write 3 Uses of this equipment</div>
-        <div class="answer-space">1. _______________<br>2. _______________<br>3. _______________</div>
+        <div class="sub">i) Identify this equipment</div>
+        <div class="space">Write the name on your paper</div>
         
-        <div class="sub-q">iii) Write 3 Maintenance points</div>
-        <div class="answer-space">1. _______________<br>2. _______________<br>3. _______________</div>
+        <div class="sub">ii) Write 3 Uses</div>
+        <div class="space">1. _______________<br>2. _______________<br>3. _______________</div>
+        
+        <div class="sub">iii) Write 3 Maintenance points</div>
+        <div class="space">1. _______________<br>2. _______________<br>3. _______________</div>
       </div>
     </div>
-
-    <!-- ========== ANSWER KEY ========== -->
-    <div class="screen" id="answer-screen">
-      <div class="top-bar">
-        <div style="font-weight:800;color:var(--accent)">Answer Key</div>
-        <button class="theme-btn" id="theme-toggle-3">🌙</button>
+    
+    <!-- ANSWER KEY -->
+    <div class="screen" id="screen-answers">
+      <div class="top">
+        <strong style="color:var(--accent)">Answer Key</strong>
+        <button class="theme-btn" onclick="toggleTheme()">🌙</button>
       </div>
       
-      <h2 style="text-align:center;color:var(--accent);margin-bottom:8px">✅ FULL ANSWER KEY</h2>
-      <p style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:20px">
-        Grade yourself honestly using the answers below
-      </p>
-      <div id="answer-list"></div>
+      <h2 style="text-align:center;color:var(--accent);margin-bottom:6px">✅ FULL ANSWER KEY</h2>
+      <p style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:20px">Grade yourself using the answers below</p>
       
-      <button class="start-btn" style="margin:30px 0" onclick="location.reload()">
-        🔄 Retake Exam (New Shuffle)
-      </button>
+      <div id="answers"></div>
+      
+      <button class="btn" style="margin-top:30px" onclick="location.reload()">🔄 Retake Exam</button>
     </div>
+    
   </div>
 
   <script>
-    // ===================== ALL 49 INSTRUMENTS =====================
-    const instruments = [
-      {id:1, name:"Adhesive Bandage", img:"./img/1.png",
-       uses:["For covering small wounds","To minimize contact with other surfaces","To fasten the healing process"],
-       maint:["Ensure wound is clean before applying bandage","Change the bandage if it becomes wet or soiled","Store in a cool, dry place away from direct sunlight"]},
-      {id:2, name:"Air Cushion", img:"./img/2.png",
-       uses:["To reduce bed sores in bedridden patients","To distribute body weight evenly","To improve blood circulation in immobile patients"],
-       maint:["Check for leaks and damages regularly","Clean the surface with a mild disinfectant","Ensure the pump filter is clean and free of dust"]},
-      {id:3, name:"Anglepoise Lamp", img:"./img/3.png",
-       uses:["Can be angled as a source of light in procedures like HSG","For focused illumination during minor examinations","As a reading light for patients"],
-       maint:["Keep in a cool dry place","Wipe the shade and base with a damp cloth","Check the power cord for fraying or damage"]},
-      {id:4, name:"Autoclave", img:"./img/4.png",
-       uses:["For sterilization of surgical instruments","For chemical reactions requiring high temperature and pressure","To destroy microorganisms (bacteria, viruses, fungi, spores)"],
-       maint:["Instruments that can't withstand high temperature should not be put in","Regular calibration for optimal accuracy","Switch off when required temperature is reached"]},
-      {id:5, name:"Automatic Ventilator", img:"./img/5.png",
-       uses:["Automatically delivers oxygen to a patient","To assist or replace spontaneous breathing","To maintain adequate oxygenation and ventilation in critical care"],
-       maint:["Periodic checks for repairs","Replace breathing circuits and filters regularly","Clean and disinfect the external surfaces and sensors"]},
-      {id:6, name:"Bag-Valve-Mask (Big Valve Mask)", img:"./img/6.png",
-       uses:["To resuscitate a patient","To provide positive pressure ventilation","To deliver oxygen to a patient who is not breathing adequately"],
-       maint:["Store in a cool dry place","Clean and disinfect the mask and bag after each use","Check valves and reservoir bag for tears or leaks"]},
-      {id:7, name:"Cannula", img:"./img/7.png",
-       uses:["To drain fluid from the body","To administer medications","To provide oxygen"],
-       maint:["Regular sterilization","Replacement after use","Flush with saline to maintain patency if left in situ"]},
-      {id:8, name:"Cervical Osmotic Dilators", img:"./img/8.png",
-       uses:["Used in patients with cervical synechiae","To gradually dilate the cervix before procedures","To soften and prepare the cervix for induction"],
-       maint:["Dispose after use","Store in a sterile, dry package","Check expiry date before use"]},
-      {id:9, name:"Cilia Tweezers", img:"./img/9.png",
-       uses:["To pick hair and tiny objects during ophthalmologic procedures","For removing foreign bodies from the eye","For precise handling of delicate tissues"],
-       maint:["Regular cleaning and sterilization","Lubrication of the hinge mechanism for smooth movement","Inspect tips for misalignment or damage"]},
-      {id:10, name:"Ishihara Chart (Colour Blind Test)", img:"./img/10.png",
-       uses:["To test patient’s ability to identify and differentiate between colours","To screen for red-green color blindness","To assess visual acuity related to color perception"],
-       maint:["Store in a cool dry place to ensure longevity of the chart","Keep pages clean and free from fingerprints","Avoid exposure to direct sunlight to prevent fading"]},
-      {id:11, name:"Colostomy Bag", img:"./img/11.png",
-       uses:["To collect waste directly from the intestine","To protect the stoma and surrounding skin","To manage fecal output in patients with a stoma"],
-       maint:["Regular emptying and cleaning of the bag","Regular changing of the bag","Clean the stoma and surrounding skin gently with warm water"]},
-      {id:12, name:"Defibrillator", img:"./img/12.png",
-       uses:["To excite the muscles of the heart and create a heartbeat","To regulate abnormal heart rate","To terminate life-threatening cardiac arrhythmias (e.g. ventricular fibrillation)"],
-       maint:["Keep in a cool dry place","Regular functional checks and battery tests","Clean paddles after each use"]},
-      {id:13, name:"Dissecting Forceps", img:"./img/13.png",
-       uses:["For holding tissues during dissection","To grasp delicate structures","To assist in surgical procedures"],
-       maint:["Regular cleaning and sterilization","Check the tips for alignment","Lubricate the hinge if necessary"]},
-      {id:14, name:"Dressing Forceps", img:"./img/14.png",
-       uses:["For handling sterile dressings","To apply or remove dressings","To hold gauze during procedures"],
-       maint:["Sterilize after each use","Inspect for damage","Store in a sterile container"]},
-      {id:15, name:"Electrocardiograph (ECG Machine)", img:"./img/15.png",
-       uses:["To record the electrical activity of the heart","To diagnose cardiac arrhythmias","To monitor heart function"],
-       maint:["Clean electrodes after use","Check cables for damage","Calibrate regularly"]},
-      {id:16, name:"Endotracheal Tube", img:"./img/16.png",
-       uses:["To maintain a patent airway","To facilitate mechanical ventilation","To protect the airway during surgery"],
-       maint:["Dispose after single use","Check cuff integrity before use","Store in sterile packaging"]},
-      {id:17, name:"Forceps (General)", img:"./img/17.png",
-       uses:["To grasp and hold tissues","To hold instruments or materials","To assist in various surgical tasks"],
-       maint:["Clean and sterilize after use","Check locking mechanism","Lubricate joints"]},
-      {id:18, name:"Gauze / Swabs", img:"./img/18.png",
-       uses:["For cleaning wounds","To absorb blood and fluids","To protect wounds"],
-       maint:["Keep sterile until use","Dispose after use","Store in a dry place"]},
-      {id:19, name:"Glucometer", img:"./img/19.png",
-       uses:["To measure blood glucose level","To monitor diabetic patients","For rapid glucose testing"],
-       maint:["Calibrate regularly","Clean the device","Use correct test strips"]},
-      {id:20, name:"Hypodermic Syringe", img:"./img/20.png",
-       uses:["To inject medications","To aspirate fluids","To administer vaccines"],
-       maint:["Dispose after single use in sharps container","Never reuse","Check for cracks before use"]},
-      {id:21, name:"Infusion Set / IV Giving Set", img:"./img/21.png",
-       uses:["To administer intravenous fluids","To deliver medications intravenously","To maintain hydration"],
-       maint:["Dispose after use","Check for air bubbles","Ensure sterile connections"]},
-      {id:22, name:"Kidney Dish", img:"./img/22.png",
-       uses:["To receive used instruments","To hold soiled dressings","As a receiver during procedures"],
-       maint:["Clean and sterilize after use","Dry thoroughly","Store properly"]},
-      {id:23, name:"Laryngoscope", img:"./img/23.png",
-       uses:["To visualize the larynx","To assist intubation","For airway examination"],
-       maint:["Clean and sterilize blades","Check light source","Handle carefully"]},
-      {id:24, name:"Mayo Scissors", img:"./img/24.png",
-       uses:["For cutting tough tissues","To cut sutures","For general surgical cutting"],
-       maint:["Sharpen when necessary","Sterilize after use","Check pivot screw"]},
-      {id:25, name:"Nebulizer", img:"./img/25.png",
-       uses:["To deliver medication in mist form","For respiratory treatment","To relieve bronchospasm"],
-       maint:["Clean chamber after use","Replace filters regularly","Disinfect properly"]},
-      {id:26, name:"Needle Holder", img:"./img/26.png",
-       uses:["To hold suture needles","For suturing tissues","To control needle during surgery"],
-       maint:["Clean and sterilize","Check ratchet","Lubricate joint"]},
-      {id:27, name:"Otoscope", img:"./img/27.png",
-       uses:["To examine the ear canal and tympanic membrane","To diagnose ear conditions","For foreign body removal assistance"],
-       maint:["Clean speculum after use","Check light","Store safely"]},
-      {id:28, name:"Oxygen Cylinder / Mask", img:"./img/28.png",
-       uses:["To deliver supplemental oxygen","For patients with hypoxia","In emergency oxygen therapy"],
-       maint:["Check pressure regularly","Clean masks","Store upright and secured"]},
-      {id:29, name:"Pen Torch", img:"./img/29.png",
-       uses:["For pupil examination","To examine throat and mouth","As a general examination light"],
-       maint:["Replace batteries","Clean lens","Store properly"]},
-      {id:30, name:"Pulse Oximeter", img:"./img/30.png",
-       uses:["To measure oxygen saturation (SpO2)","To monitor pulse rate","For continuous patient monitoring"],
-       maint:["Clean sensor","Calibrate if required","Replace batteries"]},
-      {id:31, name:"Receiving Forceps", img:"./img/31.png",
-       uses:["To receive sterile instruments","To transfer sterile items","To maintain asepsis"],
-       maint:["Sterilize after use","Check tips","Store correctly"]},
-      {id:32, name:"Retractor", img:"./img/32.png",
-       uses:["To hold back tissues","To expose the surgical field","To improve visibility during surgery"],
-       maint:["Clean and sterilize","Inspect for damage","Lubricate if needed"]},
-      {id:33, name:"Scalp Vein Needle (Butterfly Needle)", img:"./img/33.png",
-       uses:["To cannulate small veins and capillaries","For intravenous infusions","For blood sampling from small veins"],
-       maint:["Regular cleaning and sterilization","Periodic inspection and replacement","Dispose safely in a sharps container after use"]},
-      {id:34, name:"Scalpel / Lancet", img:"./img/34.png",
-       uses:["For dissection and making incisions during surgery","For puncturing skin for blood sampling (lancet)","For precise cutting of tissue"],
-       maint:["Sterilization after each use","Periodic inspection and sharpening of blades","Dispose of used blades in a sharps container"]},
-      {id:35, name:"Snellen’s Chart", img:"./img/35.png",
-       uses:["Used to measure visual acuity","To screen for visual impairment","To determine the need for corrective lenses"],
-       maint:["Clean with a damp cloth","Periodically check for damages","Store in a cool, dry place away from direct sunlight"]},
-      {id:36, name:"Speculum (Vaginal)", img:"./img/36.png",
-       uses:["To examine body openings (e.g. during HSG)","To visualize the cervix and vaginal walls","To facilitate Pap smears and other gynecological procedures"],
-       maint:["Sterilize after each use","Check the locking mechanism for smooth operation","Lubricate the hinge with surgical lubricant"]},
-      {id:37, name:"Sphygmomanometer", img:"./img/37.png",
-       uses:["To measure blood pressure","To monitor hypertension or hypotension","To assess cardiovascular status"],
-       maint:["Store in a protective casing","Check the cuff for leaks or tears","Calibrate the gauge regularly"]},
-      {id:38, name:"Stethoscope", img:"./img/38.png",
-       uses:["For auscultation of internal sounds","To listen to heart sounds","To listen to lung sounds"],
-       maint:["The tubing should be regularly checked for air leaks","Clean the earpieces and chest piece with alcohol","Store in a cool, dry place to prevent tubing damage"]},
-      {id:39, name:"Stretcher", img:"./img/39.png",
-       uses:["To convey patient from one point to another in emergency cases","To transport patients to and from surgery","To move patients who cannot walk"],
-       maint:["Regular cleaning of the mattress to prevent spread of infections","Check wheels and brakes for proper function","Inspect side rails for stability"]},
-      {id:40, name:"Suction Machine and Catheter", img:"./img/40.png",
-       uses:["To suck unwanted fluids from a patient’s body during surgery","To remove fluids such as mucus, blood etc from a patient’s airways","To clear the airway and maintain patency"],
-       maint:["Clean and disinfect the collecting bottle after use","Replace the suction canister and filters regularly","Check tubing for kinks or blockages"]},
-      {id:41, name:"Surgical Clamp", img:"./img/41.png",
-       uses:["Used to occlude blood vessels during surgery","To hold tissue or organs in place","To clamp tubing or drains"],
-       maint:["Regular cleaning and sterilisation","Check the ratchet for proper locking","Lubricate the joint if stiff"]},
-      {id:42, name:"Surgical Scissors", img:"./img/42.png",
-       uses:["For cutting of tissues during surgery","To cut sutures or dressings","To dissect tissue planes"],
-       maint:["Regular cleaning and sterilisation","Sharpen blades periodically","Check the pivot screw for tightness"]},
-      {id:43, name:"Surgical Thread", img:"./img/43.png",
-       uses:["For making stitches in tissues or blood vessels","To close wounds","To ligate blood vessels"],
-       maint:["Store in a cool dry place","Check expiry date before use","Keep spool clean and free from contamination"]},
-      {id:44, name:"Thermometer", img:"./img/44.png",
-       uses:["To measure body temperature","To detect fever","To monitor temperature trends"],
-       maint:["Regular calibration","Periodic inspection for any damage","Clean the probe with alcohol after each use"]},
-      {id:45, name:"Tongue Spatula", img:"./img/45.png",
-       uses:["To depress the tongue to examine the mouth and throat","To hold the tongue aside during procedures","To check for oral lesions"],
-       maint:["Properly dispose the wooden ones","Sterilize metal spatulas after use","Store in a clean, dry place"]},
-      {id:46, name:"Trolley", img:"./img/46.png",
-       uses:["Upper shelf is used to contain sterilizable instruments like syringes","Lower shelf contains instruments that don’t require highly aseptic procedures","It is also used to dispense drugs"],
-       maint:["Regular cleaning","The trash bucket of the trolley should be disposed regularly","Check wheels for smooth movement"]},
-      {id:47, name:"Urinary Bag", img:"./img/47.png",
-       uses:["To collect urine when normal micturition is not possible","To monitor urine output","To keep the patient dry and comfortable"],
-       maint:["Empty and clean with alcohol after each use","The bag should be changed regularly","Keep the drainage port clean to prevent infection"]},
-      {id:48, name:"Uterine Cannula", img:"./img/48.png",
-       uses:["To prevent backflow of radiographic contrast medium during HSG","To inject contrast or saline into the uterus","To assess tubal patency"],
-       maint:["Regular cleaning and sterilization","Check the tip for damage","Store in a sterile container"]},
-      {id:49, name:"Vulpellum Forceps", img:"./img/49.png",
-       uses:["Used in radiographic examination of uterus and fallopian tube by gripping it firmly","To grasp and stabilize the cervix","To apply traction during gynecological procedures"],
-       maint:["Regular cleaning and sterilization","Check the teeth for sharpness or damage","Lubricate the hinge for smooth movement"]}
-    ];
-
     // ========== THEME ==========
-    function setTheme(theme) {
-      document.body.classList.remove('light', 'dark');
-      document.body.classList.add(theme);
-      const icon = theme === 'light' ? '☀️' : '🌙';
-      document.querySelectorAll('.theme-btn').forEach(btn => btn.textContent = icon);
-      localStorage.setItem('rad244-theme', theme);
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light');
+      document.body.classList.toggle('dark', !isLight);
+      const icon = isLight ? '☀️' : '🌙';
+      document.querySelectorAll('.theme-btn').forEach(b => b.textContent = icon);
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
     }
     
-    // Load saved theme
-    const savedTheme = localStorage.getItem('rad244-theme') || 'dark';
-    setTheme(savedTheme);
-    
-    // Theme buttons
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const newTheme = document.body.classList.contains('light') ? 'dark' : 'light';
-        setTheme(newTheme);
-      });
-    });
+    // Load theme
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light');
+      document.body.classList.remove('dark');
+      document.querySelectorAll('.theme-btn').forEach(b => b.textContent = '☀️');
+    }
 
-    // ========== EXAM LOGIC ==========
+    // ========== DATA (49 items) ==========
+    const data = [
+      {name:"Adhesive Bandage", img:"./img/1.png", uses:["Covering small wounds","Minimize contact with surfaces","Fasten healing process"], maint:["Clean wound before applying","Change if wet or soiled","Store in cool dry place"]},
+      {name:"Air Cushion", img:"./img/2.png", uses:["Reduce bed sores","Distribute body weight","Improve circulation"], maint:["Check for leaks","Clean with mild disinfectant","Keep pump filter clean"]},
+      {name:"Anglepoise Lamp", img:"./img/3.png", uses:["Light source for HSG","Focused illumination","Reading light for patients"], maint:["Keep in cool dry place","Wipe with damp cloth","Check power cord"]},
+      {name:"Autoclave", img:"./img/4.png", uses:["Sterilize surgical instruments","High temperature reactions","Destroy microorganisms"], maint:["Do not put heat-sensitive items","Calibrate regularly","Switch off when temperature reached"]},
+      {name:"Automatic Ventilator", img:"./img/5.png", uses:["Deliver oxygen automatically","Assist or replace breathing","Maintain oxygenation"], maint:["Periodic checks","Replace circuits & filters","Clean external surfaces"]},
+      {name:"Bag-Valve-Mask", img:"./img/6.png", uses:["Resuscitate patient","Positive pressure ventilation","Deliver oxygen"], maint:["Store cool & dry","Clean after each use","Check valves for leaks"]},
+      {name:"Cannula", img:"./img/7.png", uses:["Drain fluid","Administer medications","Provide oxygen"], maint:["Regular sterilization","Replace after use","Flush with saline"]},
+      {name:"Cervical Osmotic Dilators", img:"./img/8.png", uses:["Cervical synechiae","Gradually dilate cervix","Soften cervix for induction"], maint:["Dispose after use","Store sterile","Check expiry date"]},
+      {name:"Cilia Tweezers", img:"./img/9.png", uses:["Pick hair/tiny objects","Remove foreign bodies from eye","Handle delicate tissues"], maint:["Clean & sterilize","Lubricate hinge","Inspect tips"]},
+      {name:"Ishihara Chart", img:"./img/10.png", uses:["Test colour identification","Screen red-green colour blindness","Assess colour perception"], maint:["Store cool & dry","Keep pages clean","Avoid direct sunlight"]},
+      {name:"Colostomy Bag", img:"./img/11.png", uses:["Collect intestinal waste","Protect stoma","Manage fecal output"], maint:["Empty & clean regularly","Change bag regularly","Clean stoma gently"]},
+      {name:"Defibrillator", img:"./img/12.png", uses:["Create heartbeat","Regulate heart rate","Terminate arrhythmias"], maint:["Keep cool & dry","Check battery","Clean paddles"]},
+      {name:"Dissecting Forceps", img:"./img/13.png", uses:["Hold tissues","Grasp delicate structures","Assist surgery"], maint:["Clean & sterilize","Check tip alignment","Lubricate hinge"]},
+      {name:"Dressing Forceps", img:"./img/14.png", uses:["Handle sterile dressings","Apply/remove dressings","Hold gauze"], maint:["Sterilize after use","Inspect for damage","Store sterile"]},
+      {name:"ECG Machine", img:"./img/15.png", uses:["Record heart electrical activity","Diagnose arrhythmias","Monitor heart function"], maint:["Clean electrodes","Check cables","Calibrate regularly"]},
+      {name:"Endotracheal Tube", img:"./img/16.png", uses:["Maintain patent airway","Facilitate ventilation","Protect airway"], maint:["Single use only","Check cuff","Store sterile"]},
+      {name:"General Forceps", img:"./img/17.png", uses:["Grasp tissues","Hold materials","Surgical assistance"], maint:["Clean & sterilize","Check locking","Lubricate joints"]},
+      {name:"Gauze / Swabs", img:"./img/18.png", uses:["Clean wounds","Absorb blood","Protect wounds"], maint:["Keep sterile","Dispose after use","Store dry"]},
+      {name:"Glucometer", img:"./img/19.png", uses:["Measure blood glucose","Monitor diabetics","Rapid testing"], maint:["Calibrate regularly","Clean device","Use correct strips"]},
+      {name:"Hypodermic Syringe", img:"./img/20.png", uses:["Inject medications","Aspirate fluids","Administer vaccines"], maint:["Dispose in sharps","Never reuse","Check for cracks"]},
+      {name:"Infusion Set", img:"./img/21.png", uses:["Administer IV fluids","Deliver IV medications","Maintain hydration"], maint:["Dispose after use","Check for air","Ensure sterile"]},
+      {name:"Kidney Dish", img:"./img/22.png", uses:["Receive used instruments","Hold soiled dressings","Receiver during procedures"], maint:["Clean & sterilize","Dry thoroughly","Store properly"]},
+      {name:"Laryngoscope", img:"./img/23.png", uses:["Visualize larynx","Assist intubation","Airway examination"], maint:["Clean blades","Check light","Handle carefully"]},
+      {name:"Mayo Scissors", img:"./img/24.png", uses:["Cut tough tissues","Cut sutures","General surgical cutting"], maint:["Sharpen when needed","Sterilize after use","Check pivot"]},
+      {name:"Nebulizer", img:"./img/25.png", uses:["Deliver medication as mist","Respiratory treatment","Relieve bronchospasm"], maint:["Clean chamber","Replace filters","Disinfect"]},
+      {name:"Needle Holder", img:"./img/26.png", uses:["Hold suture needles","Suturing tissues","Control needle"], maint:["Clean & sterilize","Check ratchet","Lubricate joint"]},
+      {name:"Otoscope", img:"./img/27.png", uses:["Examine ear canal","Diagnose ear conditions","Foreign body assistance"], maint:["Clean speculum","Check light","Store safely"]},
+      {name:"Oxygen Cylinder/Mask", img:"./img/28.png", uses:["Deliver supplemental oxygen","Treat hypoxia","Emergency oxygen"], maint:["Check pressure","Clean masks","Store upright"]},
+      {name:"Pen Torch", img:"./img/29.png", uses:["Pupil examination","Examine throat/mouth","General examination light"], maint:["Replace batteries","Clean lens","Store properly"]},
+      {name:"Pulse Oximeter", img:"./img/30.png", uses:["Measure SpO2","Monitor pulse rate","Continuous monitoring"], maint:["Clean sensor","Calibrate if needed","Replace batteries"]},
+      {name:"Receiving Forceps", img:"./img/31.png", uses:["Receive sterile instruments","Transfer sterile items","Maintain asepsis"], maint:["Sterilize after use","Check tips","Store correctly"]},
+      {name:"Retractor", img:"./img/32.png", uses:["Hold back tissues","Expose surgical field","Improve visibility"], maint:["Clean & sterilize","Inspect for damage","Lubricate if needed"]},
+      {name:"Scalp Vein Needle (Butterfly)", img:"./img/33.png", uses:["Cannulate small veins","IV infusions","Blood sampling"], maint:["Clean & sterilize","Inspect & replace","Dispose in sharps"]},
+      {name:"Scalpel / Lancet", img:"./img/34.png", uses:["Make surgical incisions","Puncture skin for sampling","Precise tissue cutting"], maint:["Sterilize after use","Sharpen blades","Dispose in sharps"]},
+      {name:"Snellen’s Chart", img:"./img/35.png", uses:["Measure visual acuity","Screen visual impairment","Determine need for lenses"], maint:["Clean with damp cloth","Check for damage","Store away from sunlight"]},
+      {name:"Vaginal Speculum", img:"./img/36.png", uses:["Examine body openings (HSG)","Visualize cervix","Facilitate Pap smear"], maint:["Sterilize after use","Check locking mechanism","Lubricate hinge"]},
+      {name:"Sphygmomanometer", img:"./img/37.png", uses:["Measure blood pressure","Monitor hypertension","Assess cardiovascular status"], maint:["Store in protective case","Check cuff for leaks","Calibrate gauge"]},
+      {name:"Stethoscope", img:"./img/38.png", uses:["Auscultation of internal sounds","Listen to heart","Listen to lungs"], maint:["Check tubing for leaks","Clean earpieces & chest piece","Store cool & dry"]},
+      {name:"Stretcher", img:"./img/39.png", uses:["Transport patients in emergency","Take patients to surgery","Move non-walking patients"], maint:["Clean mattress regularly","Check wheels & brakes","Inspect side rails"]},
+      {name:"Suction Machine", img:"./img/40.png", uses:["Suck fluids during surgery","Remove mucus/blood from airway","Clear and maintain airway"], maint:["Clean collection bottle","Replace canister & filters","Check tubing"]},
+      {name:"Surgical Clamp", img:"./img/41.png", uses:["Occlude blood vessels","Hold tissue/organs","Clamp tubing"], maint:["Clean & sterilize","Check ratchet","Lubricate joint"]},
+      {name:"Surgical Scissors", img:"./img/42.png", uses:["Cut tissues","Cut sutures/dressings","Dissect tissue planes"], maint:["Clean & sterilize","Sharpen blades","Check pivot screw"]},
+      {name:"Surgical Thread", img:"./img/43.png", uses:["Make stitches","Close wounds","Ligate blood vessels"], maint:["Store cool & dry","Check expiry","Keep clean"]},
+      {name:"Thermometer", img:"./img/44.png", uses:["Measure body temperature","Detect fever","Monitor temperature trends"], maint:["Calibrate regularly","Inspect for damage","Clean probe with alcohol"]},
+      {name:"Tongue Spatula", img:"./img/45.png", uses:["Depress tongue","Hold tongue aside","Check oral lesions"], maint:["Dispose wooden ones","Sterilize metal ones","Store clean & dry"]},
+      {name:"Trolley", img:"./img/46.png", uses:["Hold sterile instruments","Hold non-sterile items","Dispense drugs"], maint:["Clean regularly","Empty trash bucket","Check wheels"]},
+      {name:"Urinary Bag", img:"./img/47.png", uses:["Collect urine","Monitor urine output","Keep patient dry"], maint:["Empty & clean with alcohol","Change regularly","Keep drainage port clean"]},
+      {name:"Uterine Cannula", img:"./img/48.png", uses:["Prevent contrast backflow in HSG","Inject contrast/saline","Assess tubal patency"], maint:["Clean & sterilize","Check tip for damage","Store sterile"]},
+      {name:"Vulpellum Forceps", img:"./img/49.png", uses:["Grip uterus/fallopian tube in HSG","Grasp and stabilize cervix","Apply traction"], maint:["Clean & sterilize","Check teeth","Lubricate hinge"]}
+    ];
+
+    // ========== EXAM ENGINE ==========
     let questions = [];
     let current = 0;
-    let timerInterval = null;
+    let timer = null;
     let timeLeft = 60;
 
     function shuffle(array) {
-      const arr = [...array];
+      let arr = [...array];
       for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        let j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       return arr;
     }
 
     function startExam() {
-      questions = shuffle(instruments);
+      questions = shuffle(data);
       current = 0;
       
-      document.getElementById('instruction-screen').classList.remove('active');
-      document.getElementById('question-screen').classList.add('active');
+      document.getElementById('screen-start').classList.remove('active');
+      document.getElementById('screen-question').classList.add('active');
       
       showQuestion();
     }
 
-    // Attach start button
-    document.getElementById('start-btn').addEventListener('click', startExam);
-
     function showQuestion() {
       if (current >= questions.length) {
-        showAnswerKey();
+        showAnswers();
         return;
       }
 
       const q = questions[current];
-      document.getElementById('q-number').textContent = `Question ${current + 1} / 49`;
-      document.getElementById('q-image').src = q.img;
-      document.getElementById('q-image').alt = q.name;
+      document.getElementById('q-num').textContent = `Question ${current + 1} / 49`;
+      document.getElementById('q-img').src = q.img;
+      document.getElementById('q-img').alt = q.name;
 
-      // Reset timer
-      clearInterval(timerInterval);
+      clearInterval(timer);
       timeLeft = 60;
-      const timerEl = document.getElementById('timer');
-      timerEl.textContent = timeLeft;
-      timerEl.classList.remove('warning');
+      const t = document.getElementById('timer');
+      t.textContent = timeLeft;
+      t.classList.remove('warning');
 
-      timerInterval = setInterval(() => {
+      timer = setInterval(() => {
         timeLeft--;
-        timerEl.textContent = timeLeft;
-        
-        if (timeLeft <= 10) {
-          timerEl.classList.add('warning');
-        }
-        
+        t.textContent = timeLeft;
+        if (timeLeft <= 10) t.classList.add('warning');
         if (timeLeft <= 0) {
-          clearInterval(timerInterval);
+          clearInterval(timer);
           current++;
           showQuestion();
         }
       }, 1000);
     }
 
-    function showAnswerKey() {
-      clearInterval(timerInterval);
-      document.getElementById('question-screen').classList.remove('active');
-      document.getElementById('answer-screen').classList.add('active');
+    function showAnswers() {
+      clearInterval(timer);
+      document.getElementById('screen-question').classList.remove('active');
+      document.getElementById('screen-answers').classList.add('active');
 
-      const list = document.getElementById('answer-list');
-      list.innerHTML = '';
+      const container = document.getElementById('answers');
+      container.innerHTML = '';
 
-      questions.forEach((q, index) => {
-        const card = document.createElement('div');
-        card.className = 'ans-card';
-        card.innerHTML = `
-          <h4>Q${index + 1}. ${q.name}</h4>
-          <p><strong>Uses:</strong></p>
-          <ul>\( {q.uses.map(u => `<li> \){u}</li>`).join('')}</ul>
-          <p><strong>Maintenance:</strong></p>
-          <ul>\( {q.maint.map(m => `<li> \){m}</li>`).join('')}</ul>
+      questions.forEach((q, i) => {
+        container.innerHTML += `
+          <div class="ans">
+            <h4>Q${i+1}. ${q.name}</h4>
+            <p><strong>Uses:</strong></p>
+            <ul>
+              <li>${q.uses[0]}</li>
+              <li>${q.uses[1]}</li>
+              <li>${q.uses[2]}</li>
+            </ul>
+            <p><strong>Maintenance:</strong></p>
+            <ul>
+              <li>${q.maint[0]}</li>
+              <li>${q.maint[1]}</li>
+              <li>${q.maint[2]}</li>
+            </ul>
+          </div>
         `;
-        list.appendChild(card);
       });
     }
   </script>
