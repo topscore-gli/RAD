@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 205 – Radiation Physics (Full Note + Interactive Examples)</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --bg:#1e1e2f;--card:#2a2a3f;--text:#f0f0ff;--muted:#c0c0e0;
+      --accent:#1db954;--danger:#ff6b6b;--info:#4ecdc4;--warning:#f59e0b;
+    }
+    body.light{
+      --bg:#f4f4f4;--card:#ffffff;--text:#1a1a1a;--muted:#555;
+      --accent:#0d9b4a;--danger:#d32f2f;--info:#0d9488;--warning:#d97706;
+    }
+    body{background:var(--bg);color:var(--text);display:flex;justify-content:center;min-height:100vh;transition:0.3s}
+    .container{width:100%;max-width:420px;min-height:100vh;background:var(--bg);padding-bottom:110px}
+    
+    .top-bar{position:sticky;top:0;z-index:40;background:var(--bg);padding:13px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+    .top-bar h1{font-size:15px;color:var(--accent);font-weight:900}
+    .theme-btn{width:38px;height:38px;border-radius:50%;border:none;background:var(--card);font-size:17px;cursor:pointer}
+    
+    .content{padding:16px 14px}
+    .header{text-align:center;padding:18px 12px;border-radius:14px;background:rgba(29,185,84,0.12);margin-bottom:20px}
+    .header h2{font-size:18px;color:var(--accent)}
+    
+    .card{background:var(--card);border-radius:14px;padding:16px 14px;margin-bottom:16px;border-left:5px solid var(--accent)}
+    .card h3{font-size:15px;color:var(--accent);margin-bottom:10px;font-weight:800}
+    .card h4{font-size:13.8px;color:var(--info);margin:12px 0 6px;font-weight:700}
+    .card p,.card li{font-size:13.3px;line-height:1.5;margin-bottom:4px}
+    .card ul{padding-left:16px;margin:6px 0}
+    
+    .q-box{background:rgba(245,158,11,0.12);border-left:4px solid var(--warning);padding:11px 12px;border-radius:9px;margin:11px 0;font-size:13.2px}
+    .answer{display:none;background:rgba(29,185,84,0.15);border-left:4px solid var(--accent);padding:11px 12px;border-radius:9px;margin-top:8px;font-size:13.2px}
+    .show-btn{margin-top:7px;padding:6px 12px;background:var(--accent);color:#000;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer}
+    
+    .btn-row{display:flex;gap:10px;margin:22px 0}
+    .btn{flex:1;padding:12px;border:none;border-radius:11px;font-weight:800;font-size:13px;cursor:pointer}
+    .btn-next{background:linear-gradient(135deg,#1db954,#128c3a);color:#000}
+    .btn-exam{background:linear-gradient(135deg,#4ecdc4,#0d9488);color:#000}
+  </style>
+</head>
+<body class="dark">
+  <div class="container">
+    <div class="top-bar">
+      <h1>RAD 205 – Radiation Physics</h1>
+      <button class="theme-btn" id="theme-toggle">🌙</button>
+    </div>
+
+    <div class="content">
+      <div class="header">
+        <h2>Full Note + Interactive Examples</h2>
+        <p style="font-size:12px;color:var(--muted);margin-top:3px">Click “Show Answer” to reveal solutions</p>
+      </div>
+
+      <!-- ==================== SERIES 1 ==================== -->
+      <div class="card">
+        <h3>SERIES 1: Electromagnetic Radiation & The Spectrum</h3>
+        
+        <p><strong>What is EMR?</strong> Transfer of energy through space by combined electric and magnetic fields. It has dual nature (wave and particle).</p>
+        
+        <h4>Wave Evidence</h4>
+        <ul>
+          <li>Interference (Fresnel)</li>
+          <li>Diffraction</li>
+        </ul>
+        
+        <h4>Particle Evidence</h4>
+        <ul>
+          <li>Compton effect</li>
+          <li>Photoelectric emission</li>
+        </ul>
+        
+        <h4>Important Relations</h4>
+        <ul>
+          <li>c = ν × λ</li>
+          <li>E = hν = hc/λ</li>
+          <li>c = 3 × 10⁸ m/s</li>
+          <li>hc ≈ 12.4 keV·Å or 1240 eV·nm</li>
+        </ul>
+
+        <h4>Electromagnetic Spectrum (long → short wavelength)</h4>
+        <ul>
+          <li>Radio / TV / Microwaves → Communication, Telemedicine</li>
+          <li>Infrared → Thermography, heat detection</li>
+          <li>Visible light → Image formation on screens & film</li>
+          <li>Ultraviolet → Sterilization, Vitamin D, phototherapy</li>
+          <li>X-rays & Gamma rays → Imaging and therapy</li>
+        </ul>
+
+        <!-- Interactive Questions -->
+        <div class="q-box">
+          <strong>Q1.</strong> Calculate the energy of an infrared photon with λ = 1000 nm.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">E = 1240 / 1000 = <strong>1.24 eV</strong></div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q2.</strong> Calculate the energy of UV light with λ = 250 nm.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">E = 1240 / 250 = <strong>4.96 eV</strong></div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q3.</strong> Differentiate between X-rays and Gamma rays.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">
+            X-rays → produced by electron transitions or Bremsstrahlung.<br>
+            Gamma rays → produced by nuclear transitions.<br>
+            Origin is different even if energy is the same.
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SERIES 2 ==================== -->
+      <div class="card">
+        <h3>SERIES 2: Atomic Structure & Quantum Mechanics</h3>
+        
+        <h4>Bohr’s Model (1913)</h4>
+        <ul>
+          <li>Electrons move in fixed permitted orbits</li>
+          <li>No radiation while in permitted orbit</li>
+          <li>Radiation occurs only when electron jumps between orbits</li>
+        </ul>
+        
+        <h4>de Broglie Hypothesis</h4>
+        <p>Every particle has an associated wavelength: <strong>λ = h / p</strong></p>
+        
+        <h4>Heisenberg Uncertainty Principle</h4>
+        <p>Δx · Δp ≥ ħ / 4π (cannot know position and momentum exactly at the same time)</p>
+        
+        <h4>Four Quantum Numbers</h4>
+        <ul>
+          <li><strong>n</strong> – Principal (shell: K, L, M…)</li>
+          <li><strong>l</strong> – Azimuthal (s, p, d, f)</li>
+          <li><strong>m<sub>l</sub></strong> – Magnetic (–l to +l)</li>
+          <li><strong>m<sub>s</sub></strong> – Spin (+½ or –½)</li>
+        </ul>
+
+        <div class="q-box">
+          <strong>Q4.</strong> Write the electron configuration of Magnesium (Z = 12) and its valency electrons.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">1s² 2s² 2p⁶ 3s²<br>Valency electrons = <strong>3s²</strong></div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q5.</strong> Write the electron configuration of Manganese (Z = 25).
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁵</div>
+        </div>
+      </div>
+
+      <!-- ==================== SERIES 3 ==================== -->
+      <div class="card">
+        <h3>SERIES 3: X-ray Discovery, Production & Factors</h3>
+        
+        <p><strong>Discovery:</strong> Wilhelm Conrad Röntgen, 8 November 1895, Würzburg, Germany. First Nobel Prize in Physics (1901).</p>
+        
+        <h4>Two Production Mechanisms</h4>
+        <ul>
+          <li><strong>Bremsstrahlung</strong> – continuous spectrum (electron decelerated by nucleus)</li>
+          <li><strong>Characteristic radiation</strong> – line spectrum (inner-shell electron ejected)</li>
+        </ul>
+        
+        <p><strong>Important formula:</strong> λ<sub>min</sub> = 12.4 / kVp (Å)</p>
+        
+        <h4>Factors Affecting the X-ray Beam</h4>
+        <ul>
+          <li><strong>kVp</strong> → Quality + Quantity</li>
+          <li><strong>mA / mAs</strong> → Quantity only</li>
+          <li><strong>Filtration</strong> → Increases mean energy, reduces intensity</li>
+          <li><strong>Target Z</strong> → Higher Z = more efficient production</li>
+          <li><strong>Waveform</strong> → 3-phase / HF better than single-phase</li>
+        </ul>
+
+        <div class="q-box">
+          <strong>Q6.</strong> An X-ray tube operates at 80 kVp. Calculate λ<sub>min</sub>.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">λ<sub>min</sub> = 12.4 / 80 = <strong>0.155 Å</strong></div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q7.</strong> What is the maximum photon energy at 120 kVp?
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer"><strong>120 keV</strong></div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q8.</strong> List factors that affect Quality and factors that affect Quantity.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">
+            <strong>Quality:</strong> kVp, Filtration, Target Z, Waveform<br>
+            <strong>Quantity:</strong> mA/mAs, kVp, Filtration, Target Z, Waveform, Distance
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SERIES 4 ==================== -->
+      <div class="card">
+        <h3>SERIES 4: Radioactivity & Nuclear Models</h3>
+        
+        <p><strong>Discovery:</strong> Becquerel (uranium), Marie & Pierre Curie (coined “radioactivity”, discovered Po & Ra).</p>
+        
+        <h4>Nuclear Models</h4>
+        <ul>
+          <li>Rutherford – nucleus contains protons & neutrons</li>
+          <li>Liquid Drop Model</li>
+          <li>Shell Model (Magic numbers: 2, 8, 20, 28, 50, 82, 126)</li>
+        </ul>
+        
+        <h4>Types of Decay</h4>
+        <ul>
+          <li><strong>Alpha (α)</strong> – emits ⁴₂He (A↓4, Z↓2)</li>
+          <li><strong>Beta-minus (β⁻)</strong> – neutron → proton (Z↑1)</li>
+          <li><strong>Beta-plus (β⁺)</strong> – proton → neutron (Z↓1)</li>
+          <li><strong>Gamma (γ)</strong> – isomeric transition (no change in A or Z)</li>
+          <li>Electron Capture & Internal Conversion</li>
+        </ul>
+        
+        <h4>Important Equations</h4>
+        <ul>
+          <li>N<sub>t</sub> = N₀ e<sup>–λt</sup></li>
+          <li>T<sub>½</sub> = 0.693 / λ</li>
+          <li>1/T<sub>eff</sub> = 1/T<sub>physical</sub> + 1/T<sub>biological</sub></li>
+        </ul>
+
+        <div class="q-box">
+          <strong>Q9.</strong> Write the nuclear equation for α-decay of Uranium-238.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">²³⁸₉₂U → ²³⁴₉₀Th + ⁴₂He</div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q10.</strong> Write the nuclear equation for β⁻ decay of Carbon-14.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">¹⁴₆C → ¹⁴₇N + β⁻ + antineutrino</div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q11.</strong> λ = 0.1155 day⁻¹. Calculate the half-life.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">T<sub>½</sub> = 0.693 / 0.1155 ≈ <strong>6 days</strong></div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q12.</strong> Initial activity = 800 MBq, T<sub>½</sub> = 6 h. Activity after 18 hours?
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">3 half-lives → 800 / 8 = <strong>100 MBq</strong></div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q13.</strong> Physical T½ = 6 h, Biological T½ = 10 h. Find effective half-life.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">1/T<sub>eff</sub> = 1/6 + 1/10 = 0.2667 → T<sub>eff</sub> ≈ <strong>3.75 hours</strong></div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="btn-row">
+        <button class="btn btn-next" onclick="alert('Send the next material when you are ready')">Next Page →</button>
+        <button class="btn btn-exam" onclick="window.location.href='exam.html'">📝 Go to Exam</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme
+    const btn = document.getElementById('theme-toggle');
+    function setTheme(t) {
+      document.body.classList.remove('light','dark');
+      document.body.classList.add(t);
+      btn.textContent = t === 'light' ? '☀️' : '🌙';
+      localStorage.setItem('theme', t);
+    }
+    setTheme(localStorage.getItem('theme') || 'dark');
+    btn.onclick = () => setTheme(document.body.classList.contains('light') ? 'dark' : 'light');
+
+    // Show / Hide Answer
+    function toggle(button) {
+      const ans = button.nextElementSibling;
+      if (ans.style.display === 'block') {
+        ans.style.display = 'none';
+        button.textContent = 'Show Answer';
+      } else {
+        ans.style.display = 'block';
+        button.textContent = 'Hide Answer';
+      }
+    }
+  </script>
+</body>
+</html>
