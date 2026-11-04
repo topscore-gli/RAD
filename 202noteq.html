@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMR, Atomic Structure, X-rays & Radioactivity</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:13px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="history.back()">←</button>
+      <h1>EMR • Atomic Structure • X-rays • Radioactivity</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 40:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 2400, PASS: 60 }; // 40 minutes
+
+const SECTIONS = {
+  0:  "1: Electromagnetic Radiation & The Spectrum",
+  25: "2: Atomic Structure & Quantum Mechanics",
+  50: "3: X-Ray Discovery, Production & Factors",
+  75: "4: Radioactivity & Nuclear Models"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  {q:"Who established the interference nature of electromagnetic radiation?",o:["Compton", "Schrödinger", "Fresnel", "Roentgen"],a:2,e:"Fresnel established the interference nature of electromagnetic radiation, providing clear evidence of its wave character."},
+  {q:"The corpuscular or particulate nature of electromagnetic radiation was established by which effect?",o:["Photoelectric emission", "Compton shift", "Diffraction", "Interference"],a:1,e:"The Compton effect (Compton shift) established the corpuscular or particulate nature of electromagnetic radiation."},
+  {q:"Which equation correctly represents the energy of a photon?",o:["E = mc^2", "E = h\\nu", "E = \\lambda/c", "E = h/c"],a:1,e:"The energy of a photon is given by E = hν, where h is Planck’s constant and ν is the frequency."},
+  {q:"What does the wavelength (\\lambda) of an electromagnetic wave represent?",o:["The number of crests arriving per second", "The distance between successive crests of the wave", "The height of the wave from the reference line", "The overall shape of the wave packet"],a:1,e:"Wavelength (λ) is the distance between successive crests of the wave."},
+  {q:"In a vacuum, the speed of electromagnetic radiation (c) is approximately:",o:["3 \\times 10^6 \\text{ ms}^{-1}", "3 \\times 10^{10} \\text{ ms}^{-1}", "3 \\times 10^8 \\text{ ms}^{-1}", "3 \\times 10^5 \\text{ ms}^{-1}"],a:2,e:"In a vacuum the speed of electromagnetic radiation is approximately 3 × 10⁸ m s⁻¹."},
+  {q:"The intensity of radiation from a small source decreases according to which relationship?",o:["I \\propto 1/d", "I \\propto 1/d^2", "I \\propto d^2", "I \\propto d"],a:1,e:"Intensity from a small source decreases with the square of the distance (inverse-square law): I ∝ 1/d²."},
+  {q:"Which member of the electromagnetic spectrum has the longest wavelength?",o:["Gamma rays", "Infrared", "Radio waves", "Ultraviolet"],a:2,e:"Radio waves have the longest wavelengths of all members of the electromagnetic spectrum."},
+  {q:"How are radio waves primarily produced?",o:["By electron transitions between sub-shells", "By hot objects obeying Stefan's Law", "By accelerated oscillating dipoles (time-varying electric charges)", "By nuclear transitions"],a:2,e:"Radio waves are produced by accelerated oscillating dipoles (time-varying electric charges) in a transmitter."},
+  {q:"Which type of radiation is used for thermography or infrared imaging in non-destructive testing (NDT)?",o:["Ultraviolet", "Infrared", "Visible light", "Microwaves"],a:1,e:"Infrared radiation is used for thermography and infrared imaging in non-destructive testing (NDT)."},
+  {q:"What is a major application of Ultraviolet (UV) light?",o:["Telemedicine", "Image formation on screens", "Sterilizing surgical instruments and theatres", "Crystallography"],a:2,e:"A major medical application of ultraviolet light is the sterilisation of surgical instruments and theatres."},
+  {q:"The production of X-rays involves electronic transitions, while Gamma rays are produced by:",o:["Bremsstrahlung", "Nuclear transitions", "Oscillating dipoles", "Thermal excitation"],a:1,e:"X-rays are produced by electronic transitions and Bremsstrahlung, whereas gamma rays arise from nuclear transitions."},
+  {q:"Which of the following is an example of a non-ionizing effect?",o:["DNA damage", "Broken bonds", "Low induced currents", "Excited electrons"],a:2,e:"Low induced currents are a non-ionising effect. DNA damage and broken bonds are ionising effects."},
+  {q:"What phenomenon is represented by the equation E_y = A\\sin(\\omega t + kx)?",o:["Longitudinal wave", "Transverse wave", "Quantum wave", "Standing wave"],a:1,e:"The equation E_y = A sin(ωt + kx) represents a transverse electromagnetic wave."},
+  {q:"In the context of electromagnetic waves, what is group velocity?",o:["The speed of an individual particle traveling on the wave", "The overall shape of the wave packet moving to the right", "The speed of light in a vacuum", "The speed of the magnetic field component"],a:1,e:"Group velocity is the speed at which the overall shape (envelope) of the wave packet travels."},
+  {q:"Detection of Infrared radiation is typically done using:",o:["Antennas", "Photographic material", "Photon detectors like HgCdTe, Bolometers, and thermistors", "Retina of the eye"],a:2,e:"Infrared radiation is detected by photon detectors such as HgCdTe devices, bolometers and thermistors."},
+  {q:"Why is UV light considered dangerous to the retina?",o:["It causes thermal heating", "Due to its oxidation properties", "It causes DNA damage", "It is highly penetrating"],a:1,e:"Ultraviolet light is dangerous to the retina because of its strong oxidising properties."},
+  {q:"Which of the following equations correctly relates energy, Planck's constant, speed of light, and wavelength?",o:["E = hc/\\lambda", "E = h\\lambda/c", "E = \\lambda/hc", "E = h/c\\lambda"],a:0,e:"Photon energy is related to wavelength by E = hc/λ."},
+  {q:"What are the applications of Visible light in medical imaging?",o:["Detecting bone fractures directly", "Sterilizing equipment", "Image formation on VDUs and screens after converting X-ray/gamma to visible light", "Thermography"],a:2,e:"Visible light is used for image formation on VDUs and screens after X-rays or gamma rays have been converted to light."},
+  {q:"Which radiation is blocked by aluminum and other metallic conductors?",o:["Infrared", "X-rays", "Radio waves", "Gamma rays"],a:2,e:"Radio waves are blocked by aluminium and other metallic conductors."},
+  {q:"Which of the following is NOT an application of X-rays and Gamma rays?",o:["Imaging and therapy", "Crystallography", "Tele radiology", "NDT"],a:2,e:"Tele-radiology is an application of radio/communication waves, not of X-rays or gamma rays."},
+  {q:"The dual nature of light means it behaves as:",o:["A transverse and longitudinal wave", "A wave and a particle", "An electric and magnetic field", "A group and phase velocity"],a:1,e:"The dual nature of light means it exhibits both wave properties (interference, diffraction) and particle properties (photoelectric effect, Compton scattering)."},
+  {q:"What does the term \"rectilinearly\" mean in the context of EMR propagation?",o:["In a circular path", "In a straight line", "In a wave packet", "In a random pattern"],a:1,e:"“Rectilinearly” means that electromagnetic radiation propagates in straight lines."},
+  {q:"Which of the following is a characteristic of X-rays but NOT Gamma rays?",o:["They are electromagnetic radiation", "They are produced via Bremsstrahlung or electronic transitions", "They have high frequencies", "They can be detected by photographic film"],a:1,e:"X-rays are produced by electronic transitions or Bremsstrahlung; gamma rays are produced by nuclear transitions."},
+  {q:"The frequency of visible light is approximately:",o:["10^4 Hz", "10^{12} Hz", "10^{15} Hz", "10^{20} Hz"],a:2,e:"The frequency of visible light is approximately 10¹⁵ Hz."},
+  {q:"What is the application of UV light in neonatal care?",o:["Thermography", "Treating neonatal jaundice", "Disinfecting water", "Crystallography"],a:1,e:"Ultraviolet light is used in neonatal care to treat jaundice."},
+  {q:"Who proposed the \"miniature planetary system\" model of the atom in 1913?",o:["Rutherford", "Schrödinger", "Bohr", "de Broglie"],a:2,e:"In 1913 Bohr proposed the miniature planetary model of the atom."},
+  {q:"According to Bohr's assumptions, when is energy radiated by an electron?",o:["When moving in a permitted orbit", "When moving from one orbit to another", "When spinning in place", "When interacting with a magnetic field"],a:1,e:"According to Bohr, energy is radiated only when an electron moves from one permitted orbit to another."},
+  {q:"What was a major limitation of the Bohr model?",o:["It could not predict light spectra for single-electron atoms", "It assumed electrons move in straight lines", "It failed to predict observed spectra for multi-electron atoms", "It contradicted Coulomb's law"],a:2,e:"A major limitation of the Bohr model is that it failed to predict the observed spectra of multi-electron atoms."},
+  {q:"Sommerfeld extended Bohr's concept by proposing that:",o:["Electron paths are generally circular", "Electron paths around the nucleus are generally elliptical", "Nuclei contain neutrons", "Electrons are waves"],a:1,e:"Sommerfeld extended Bohr’s model by proposing that electron paths are generally elliptical."},
+  {q:"Which phenomenon could Sommerfeld's model NOT explain?",o:["The Zeeman effect", "Electron diffraction", "The photoelectric effect", "Compton scattering"],a:0,e:"Sommerfeld’s model could not explain the Zeeman effect."},
+  {q:"The de Broglie hypothesis states that:",o:["All matter has both particle and wave nature", "Electrons orbit in fixed energy levels", "Energy and mass are equivalent", "Light is only a particle"],a:0,e:"de Broglie’s hypothesis states that all matter possesses both particle and wave nature."},
+  {q:"What is the mathematical representation of de Broglie's wavelength?",o:["\\lambda = hp", "\\lambda = h/p", "\\lambda = p/h", "\\lambda = h/p^2"],a:1,e:"de Broglie’s wavelength is given by λ = h/p, where p is the momentum of the particle."},
+  {q:"Heisenberg's Uncertainty Principle states that one cannot precisely know:",o:["The charge and mass of an electron", "The position and momentum of a particle simultaneously", "The energy of a photon", "The wavelength of an X-ray"],a:1,e:"Heisenberg’s uncertainty principle states that the position and momentum of a particle cannot both be known with arbitrary precision at the same time."},
+  {q:"In the Schrödinger equation, what does the square of the wave function (\\psi^*\\psi) represent?",o:["The energy of the electron", "The velocity of the electron", "The probability of locating the position of the electron", "The wavelength of the electron"],a:2,e:"The square of the wave function (ψ*ψ) gives the probability density of finding the electron at a given location."},
+  {q:"The Schrödinger equation is transformed into which coordinate system because of the radial symmetry of the atom?",o:["Cartesian coordinates", "Spherical polar coordinates", "Cylindrical coordinates", "Linear coordinates"],a:1,e:"Because of the radial symmetry of the atom, the Schrödinger equation is transformed into spherical polar coordinates."},
+  {q:"Which quantum number determines the shell or orbit number (distance from the nucleus)?",o:["Magnetic quantum number", "Azimuthal quantum number", "Principal quantum number", "Spin quantum number"],a:2,e:"The principal quantum number (n) determines the shell or orbit number (the approximate distance of the electron from the nucleus)."},
+  {q:"The azimuthal (angular momentum) quantum number is denoted by l and has values ranging from:",o:["0 to n", "1 to n", "0 to (n-1)", "-1 to +1"],a:2,e:"The azimuthal quantum number l takes integer values from 0 to (n–1)."},
+  {q:"The azimuthal quantum numbers 0, 1, 2, 3 are denoted by which letters?",o:["K, L, M, N", "S, P, D, F", "A, B, C, D", "X, Y, Z, W"],a:1,e:"The azimuthal quantum numbers 0, 1, 2, 3 are denoted by the letters s, p, d, f respectively."},
+  {q:"What does the spin quantum number (m_s) designate?",o:["The shape of the orbital", "The orientation of the electron's spin (up or down)", "The distance from the nucleus", "The electron-electron interaction"],a:1,e:"The spin quantum number m_s designates the orientation of the electron’s intrinsic spin ( +½ or –½ )."},
+  {q:"According to Pauli's exclusion principle, what is the maximum number of electrons that can occupy the same quantum state?",o:["1", "2", "4", "6"],a:1,e:"Pauli’s exclusion principle states that no two electrons can occupy the identical quantum state; a maximum of two electrons (opposite spins) can share the same orbital."},
+  {q:"What is the electron configuration of Sodium (Na = 11)?",o:["1S^2, 2S^2, 2P^6, 3S^1", "1S^2, 2S^2, 2P^6, 3P^1", "1S^2, 2S^2, 2P^5, 3S^2", "1S^2, 2S^2, 2P^6, 3S^2"],a:0,e:"The ground-state electron configuration of sodium (Z = 11) is 1s² 2s² 2p⁶ 3s¹."},
+  {q:"The electronic state of the outermost electron is known as the:",o:["Ground state", "Valency state", "Excited state", "Isomeric state"],a:1,e:"The electronic state of the outermost electron is called the valency state."},
+  {q:"In the quantum mechanical model, what are the solutions to the wave equations that give sensible values called?",o:["Eigenfunctions", "Eigenvalues", "Wave packets", "Photons"],a:1,e:"The solutions of the wave equation that yield physically sensible values are called eigenvalues."},
+  {q:"What is the total energy (E) of an electron in an atom equal to?",o:["Kinetic energy only", "Potential energy only", "Sum of kinetic and potential energy (K + V)", "The difference between kinetic and potential energy"],a:2,e:"The total energy of an electron in an atom is the sum of its kinetic and potential energies (E = K + V)."},
+  {q:"The principal quantum number values 1, 2, 3, 4 correspond to which electron shells?",o:["S, P, D, F", "K, L, M, N", "A, B, C, D", "X, Y, Z, W"],a:1,e:"The principal quantum numbers 1, 2, 3, 4 correspond to the K, L, M and N shells respectively."},
+  {q:"What confirms the wave nature of electrons (de Broglie's hypothesis)?",o:["The Compton effect", "Diffraction of a beam of electrons in an electron microscope", "The photoelectric effect", "The Zeeman effect"],a:1,e:"The wave nature of electrons was confirmed by the diffraction of an electron beam in an electron microscope."},
+  {q:"How many electrons can the n=2 shell hold at maximum?",o:["2", "6", "8", "18"],a:2,e:"The n = 2 shell can hold a maximum of eight electrons (2 in the 2s subshell + 6 in the 2p subshell)."},
+  {q:"What causes hyperfine lines in atomic spectra?",o:["Transition from one principal shell to another", "Transition from a subshell to another subshell (e.g., 2p^6 - 2s^1)", "Nuclear spin interaction", "Bremsstrahlung"],a:1,e:"Hyperfine lines arise from transitions between subshells (for example 2p → 2s)."},
+  {q:"If a wave function is represented by \\psi, what does \\psi itself represent?",o:["The exact position of the electron", "The energy of the electron", "A wave equation representing the electron", "The mass of the electron"],a:2,e:"The wave function ψ itself is a mathematical representation of the electron as a wave."},
+  {q:"Which of the following is NOT a valid set of quantum numbers for an electron in an atom?",o:["n=2, l=1, m_l=0, m_s=+1/2", "n=1, l=0, m_l=0, m_s=-1/2", "n=3, l=3, m_l=1, m_s=+1/2", "n=2, l=0, m_l=0, m_s=+1/2"],a:2,e:"For n = 3 the maximum allowed value of l is 2; therefore the set n = 3, l = 3 is invalid."},
+  {q:"Who discovered X-rays on November 8, 1895?",o:["Marie Curie", "Henri Becquerel", "Wilhelm Conrad Röntgen", "Ernest Rutherford"],a:2,e:"X-rays were discovered by Wilhelm Conrad Röntgen on 8 November 1895."},
+  {q:"What was the first Nobel Prize in Physics awarded for?",o:["Discovery of radioactivity", "Discovery of X-rays", "Discovery of the electron", "Discovery of the nucleus"],a:1,e:"The first Nobel Prize in Physics was awarded to Röntgen for the discovery of X-rays."},
+  {q:"What does the term \"Bremsstrahlung\" mean?",o:["Characteristic radiation", "Braking radiation", "Secondary radiation", "Scatter radiation"],a:1,e:"“Bremsstrahlung” is a German word meaning “braking radiation”."},
+  {q:"The continuous X-ray spectrum is produced by:",o:["Electron transitions between shells", "Nuclear transitions", "Deceleration of fast-moving electrons by the nucleus", "Auger electron emission"],a:2,e:"The continuous X-ray spectrum is produced when fast-moving electrons are decelerated (braked) by the nuclear field of the target atoms."},
+  {q:"What is the primary requirement for X-ray production to ensure electrons reach maximum velocity?",o:["High atomic number target", "Vacuum or partially evacuated glass envelope", "High tube current", "Added filtration"],a:1,e:"A vacuum (or partially evacuated envelope) is required so that electrons can reach maximum velocity before striking the target."},
+  {q:"The source of electrons in an X-ray tube is usually:",o:["A copper anode", "A tungsten filament (via thermionic emission)", "An aluminum filter", "A glass envelope"],a:1,e:"Electrons are supplied by a tungsten filament through thermionic emission."},
+  {q:"What is the mathematical relationship for the minimum wavelength (\\lambda_{min}) of an X-ray beam?",o:["\\lambda_{min} = 12.4 \\times kVp", "\\lambda_{min} = 12.4 / kVp", "\\lambda_{min} = kVp / 12.4", "\\lambda_{min} = 12.4 / mA"],a:1,e:"The minimum wavelength of the continuous spectrum is given by λ_min = 12.4 / kVp (in ångströms when kVp is in kilovolts)."},
+  {q:"Characteristic X-rays are produced when:",o:["Electrons are decelerated by the nucleus", "An outer-shell electron fills a vacancy in an inner shell", "The nucleus undergoes radioactive decay", "A high-speed electron collides with another electron"],a:1,e:"Characteristic X-rays are produced when an outer-shell electron fills a vacancy in an inner shell."},
+  {q:"The energy of a characteristic X-ray photon is equal to:",o:["The kinetic energy of the incoming electron", "The difference between the binding energies of the initial and final states (E = hv(n_i - n_f))", "The maximum energy of the Bremsstrahlung spectrum", "The applied tube potential (kVp)"],a:1,e:"The energy of a characteristic photon equals the difference in binding energies of the two shells involved."},
+  {q:"In the complete X-ray spectrum, what does the x-axis (energy) determine?",o:["The quantity of radiation", "The quality (penetrating ability) of radiation", "The tube current (mA)", "The exposure time"],a:1,e:"The energy axis of the spectrum determines the quality (penetrating ability) of the beam."},
+  {q:"How does increasing the tube potential (kVp) affect the X-ray beam?",o:["Increases wavelength and decreases energy", "Decreases wavelength and increases energy (quality)", "Has no effect on quality, only quantity", "Decreases both quality and quantity"],a:1,e:"Increasing kVp decreases the minimum wavelength and raises the energy (quality) of the beam."},
+  {q:"The intensity (quantity) of X-rays is proportional to which factor?",o:["kVp", "kVp^2", "mA^2", "Target atomic number"],a:1,e:"X-ray intensity (quantity) is proportional to the square of the tube voltage (I ∝ kVp²)."},
+  {q:"What is the effect of tube current (mA) on the X-ray beam?",o:["on the X-ray beam?", "Decreases quality", "Increases quantity (intensity) without affecting quality", "Increases both quality and quantity"],a:2,e:"Increasing tube current (mA) increases the quantity (intensity) of X-rays but does not change their quality (energy)."},
+  {q:"What is the primary purpose of added filtration in an X-ray tube?",o:["To increase the maximum energy of the beam", "To remove low-energy, long-wavelength photons", "To increase the intensity of the beam", "To increase the characteristic X-ray peaks"],a:1,e:"Added filtration removes low-energy, long-wavelength photons that would otherwise contribute only to patient dose."},
+  {q:"How does filtration affect the maximum energy of the X-ray beam?",o:["It increases the maximum energy", "It decreases the maximum energy", "It has no effect on the maximum energy, but increases the mean energy", "It completely removes the maximum energy"],a:2,e:"Filtration does not change the maximum energy of the beam; it raises the mean energy by removing the softest photons."},
+  {q:"Why does a high atomic number (Z) target material increase X-ray production efficiency?",o:["It produces lower energy characteristic peaks", "It has a stronger Coulomb force to brake electrons (more Bremsstrahlung)", "It has a larger vacuum", "It requires less tube current"],a:1,e:"A high-Z target produces more Bremsstrahlung because the stronger Coulomb field of the nucleus brakes the electrons more efficiently."},
+  {q:"Which supply waveform produces the highest effective voltage and quantity of X-rays per unit time?",o:["Single-phase", "Three-phase or high frequency", "Direct current (DC)", "Alternating current (AC)"],a:1,e:"Three-phase or high-frequency supplies produce a higher effective voltage and therefore a greater quantity of X-rays per unit time than single-phase supplies."},
+  {q:"As applied voltage increases, the spatial distribution of the X-ray beam is:",o:["More in the backward direction (backscatter)", "More in the forward direction from the point of bombardment", "Evenly distributed in all directions", "Concentrated at 90 degrees to the electron beam"],a:1,e:"As tube voltage increases, the spatial distribution of the X-ray beam becomes more forward-directed."},
+  {q:"What percentage of electron energy is converted to X-rays (radiation) in a typical 60 kVp X-ray tube?",o:[">95%", "40%", "<1%", "70%"],a:2,e:"At 60 kVp less than 1 % of the electron kinetic energy is converted into X-rays; the remainder appears as heat."},
+  {q:"For a tungsten target, what is the K-shell absorption edge energy?",o:["12.4 keV", "59.9 keV", "69.9 keV", "100 keV"],a:2,e:"For tungsten the K-shell absorption edge is 69.9 keV."},
+  {q:"What does \"kVp\" stand for in X-ray production?",o:["Kilovoltage peak", "Kilovoltage potential", "Kinetic voltage peak", "Kilovoltage per second"],a:0,e:"kVp stands for kilovoltage peak – the maximum voltage applied across the X-ray tube."},
+  {q:"Which of the following is NOT a requirement for X-ray production?",o:["A vacuum or evacuated glass envelope", "A source of electrons", "A means of accelerating electrons", "A cooling system for the anode"],a:3,e:"The fundamental requirements for X-ray production are a vacuum, a source of electrons, a means of accelerating them, and a target. Cooling, although essential in practice, is not listed as a fundamental production requirement."},
+  {q:"If an X-ray tube operates at 100 kVp, what is the minimum wavelength (\\lambda_{min})?",o:["12.4 Å", "0.124 Å", "1.24 Å", "0.0124 Å"],a:1,e:"λ_min = 12.4 / 100 = 0.124 Å."},
+  {q:"What effect does increasing tube current (mA) have on the X-ray spectrum?",o:["have on the X-ray spectrum?", "Shifts the spectrum to the left (lower energy)", "Increases the amplitude (height) of the spectrum without shifting it", "Decreases the amplitude"],a:2,e:"Increasing mA raises the amplitude (height) of the spectrum without shifting it along the energy axis."},
+  {q:"The characteristic X-ray peaks for a high atomic number target compared to a low atomic number target are:",o:["At lower energies", "At the same energies", "At higher energies", "Non-existent"],a:2,e:"Characteristic peaks from a high-Z target occur at higher energies than those from a low-Z target."},
+  {q:"Who discovered radioactivity as a phenomenon separate from X-rays?",o:["Wilhelm Röntgen", "Antoine Henri Becquerel", "Marie Curie", "Ernest Rutherford"],a:1,e:"Antoine Henri Becquerel discovered radioactivity as a phenomenon distinct from X-rays."},
+  {q:"Which two elements were discovered by Marie and Pierre Curie?",o:["Uranium and Thorium", "Polonium and Radium", "Radon and Radium", "Uranium and Plutonium"],a:1,e:"Marie and Pierre Curie discovered the radioactive elements polonium and radium."},
+  {q:"Who discovered the atomic nucleus in 1911?",o:["Niels Bohr", "Ernest Rutherford", "James Chadwick", "J.J. Thomson"],a:1,e:"Ernest Rutherford discovered the atomic nucleus in 1911."},
+  {q:"In the notation ^A_Z X, what does A represent?",o:["Atomic number", "Mass number (protons + neutrons)", "Number of electrons", "Number of neutrons"],a:1,e:"In the notation ᴬ_Z X, A is the mass number (protons + neutrons)."},
+  {q:"Which nuclear model treats the nucleus as an electrically charged drop of liquid?",o:["Shell Model", "Liquid Drop Model", "Planetary Model", "Quantum Model"],a:1,e:"The liquid-drop model treats the nucleus as an electrically charged drop of liquid."},
+  {q:"In the Shell Model of the nucleus, which set of numbers represents the \"magic numbers\" for stability?",o:["2, 8, 20, 28, 50", "1, 3, 5, 7, 9", "4, 16, 32, 64", "10, 20, 30, 40"],a:0,e:"The magic numbers that confer special nuclear stability are 2, 8, 20, 28, 50, \\ldots"},
+  {q:"When a nucleus undergoes Alpha (\\alpha) decay, what happens to its mass number (A) and atomic number (Z)?",o:["and atomic number (Z)?", "A decreases by 4, Z decreases by 2", "A stays the same, Z decreases by 1", "A decreases by 1, Z stays the same"],a:1,e:"In α-decay the mass number decreases by 4 and the atomic number decreases by 2."},
+  {q:"In Beta-minus (β⁻) decay, what transformation occurs?",o:["Proton → Neutron", "Neutron → Proton", "Proton → Alpha particle", "Neutron → Electron"],a:1,e:"In β⁻ decay a neutron is converted into a proton with the emission of an electron and an antineutrino."},
+  {q:"What is emitted during Beta-plus (\\beta^+) decay?",o:["An electron and an antineutrino", "A positron and a neutrino", "A helium nucleus", "Only a gamma ray"],a:1,e:"β⁺ decay emits a positron and a neutrino."},
+  {q:"In Gamma (\\gamma) decay (isomeric transition), what happens to the atomic number (Z) and mass number (A)?",o:["?", "Z decreases by 1, A stays the same", "There is no change in Z or A, only energy state changes", "A decreases by 4, Z decreases by 2"],a:2,e:"In isomeric (gamma) transition neither the mass number nor the atomic number changes; only the energy state of the nucleus changes."},
+  {q:"What is Electron Capture (EC)?",o:["An electron is ejected from the atom", "An orbital electron is captured by the nucleus, turning a proton into a neutron", "?", "An electron and positron annihilate"],a:1,e:"In electron capture an orbital electron is captured by the nucleus, converting a proton into a neutron."},
+  {q:"What produces an Auger electron?",o:["Nuclear transition from an excited state", "Inner shell vacancy filled by an outer shell electron (with energy transferred to another electron)", "Beta decay in the nucleus", "Bremsstrahlung interaction"],a:1,e:"An Auger electron is ejected when the energy released by an outer-shell electron filling an inner-shell vacancy is transferred to another orbital electron."},
+  {q:"The radioactive decay law is mathematically expressed as:",o:["N_t = N_0 e^{\\lambda t}", "N_t = N_0 e^{-\\lambda t}", "N_t = N_0 (1 - e^{-\\lambda t})", "N_t = N_0 + \\lambda t"],a:1,e:"The radioactive decay law is N_t = N_0 e^(–λt)."},
+  {q:"What is the unit of radioactivity?",o:["Gray (Gy)", "Sievert (Sv)", "Becquerel (Bq)", "Roentgen (R)"],a:2,e:"The SI unit of radioactivity is the becquerel (Bq)."},
+  {q:"The half-life (T_{1/2}) of a radionuclide is mathematically related to the decay constant (\\lambda) by the equation:",o:["T_{1/2} = \\lambda / 0.693", "T_{1/2} = 0.693 / \\lambda", "T_{1/2} = \\ln 2 \\times \\lambda", "T_{1/2} = \\lambda"],a:1,e:"Half-life and decay constant are related by T½ = 0.693 / λ."},
+  {q:"What is the condition for \"Secular Equilibrium\" between a parent and daughter radionuclide?",o:["T_{1/2p} \\ll T_{1/2d}", "T_{1/2p} \\approx T_{1/2d}", "T_{1/2p} \\gg T_{1/2d}", "The activities are never equal"],a:2,e:"Secular equilibrium occurs when the parent half-life is much longer than the daughter half-life (T½p ≫ T½d)."},
+  {q:"Effective half-life (T_{eff}) is determined by:",o:["Physical half-life only", "Biological half-life only", "Both physical and biological half-lives", "The decay constant only"],a:2,e:"Effective half-life is determined by both the physical and the biological half-lives."},
+  {q:"Which equation correctly calculates Effective Half-Life?",o:["1/T_{eff} = 1/T_{1/2} + 1/T_b", "T_{eff} = T_{1/2} + T_b", "T_{eff} = T_{1/2} \\times T_b", "1/T_{eff} = T_{1/2} / T_b"],a:0,e:"The reciprocal relationship is 1/T_eff = 1/T½ + 1/T_b."},
+  {q:"What is an example of Artificial Radioactivity?",o:["Uranium-238 decaying to Thorium-234", "Bombarding Cobalt-59 with neutrons to produce Cobalt-60", "Carbon-14 decaying to Nitrogen-14", "Radium-226 decaying to Radon-222"],a:1,e:"Bombarding cobalt-59 with neutrons to produce cobalt-60 is an example of artificial radioactivity."},
+  {q:"Most artificial radioactivity processes are:",o:["Fission", "Fusion", "Alpha decay", "Spontaneous"],a:1,e:"Most artificial radioactivity is produced by fusion-type reactions, whereas natural radioactivity proceeds mainly by fission-type processes."},
+  {q:"What is the most common application of Gamma rays in industry?",o:["Carbon dating", "Nuclear power generation", "Gamma radiography for metallic defects/pipeline inspection", "Radiotracing"],a:2,e:"A major industrial application of gamma rays is gamma radiography for the detection of metallic defects and pipeline inspection."},
+  {q:"What type of radiation is emitted in the isomeric transition of Technetium-99m to Technetium-99?",o:["Alpha", "Beta-minus", "Gamma", "Positron"],a:2,e:"Technetium-99m decays to technetium-99 by isomeric transition, emitting a gamma photon."},
+  {q:"An alpha particle is identical to a:",o:["Hydrogen nucleus", "Helium nucleus", "Lithium nucleus", "Beta particle"],a:1,e:"An alpha particle is identical to a helium nucleus (⁴₂He)."},
+  {q:"In Beta-Plus (\\beta^+) decay, a proton is converted into a neutron, and what else is emitted?",o:["An electron and an antineutrino", "A positron and a neutrino", "An alpha particle", "A gamma ray"],a:1,e:"In β⁺ decay a proton is converted into a neutron with the emission of a positron and a neutrino."},
+  {q:"What is the \"magic number\" of nucleons in the first nucleonic shell (analogous to the alpha particle)?",o:["2", "8", "20", "50"],a:0,e:"The first nucleonic shell corresponds to the alpha particle; the lowest magic number is therefore 2."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('emr_atomic_xray_radio_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+  var total = state.data.length;
+
+  document.getElementById('pbar').style.width = (done / total * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + total;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Q' + (state.q + 1) + '/' + total;
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('emr_atomic_xray_radio_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent mastery of Electromagnetic Radiation, Atomic Structure, X-ray Production and Radioactivity. Outstanding work!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid understanding. Review quantum numbers, Bremsstrahlung vs characteristic radiation, and nuclear decay modes to strengthen weaker areas.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on the differences between X-ray and gamma production, the four quantum numbers, and the main decay modes. Practice will raise your score quickly.';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — these topics contain many precise definitions. Go through the explanations carefully, revise the key formulas and concepts, then try again. You can master them!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  // Dynamic sections from SECTIONS object
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a,b){return a-b;});
+  for (var s = 0; s < keys.length; s++) {
+    var start = keys[s];
+    var end = (s + 1 < keys.length) ? keys[s + 1] : state.data.length;
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + SECTIONS[start] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      if (i >= state.data.length) break;
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('emr_atomic_xray_radio_quiz_progress');
+  location.reload();
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('emr_atomic_xray_radio_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('emr_atomic_xray_radio_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
