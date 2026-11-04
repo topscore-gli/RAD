@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radiation Physics, Filtration & Luminescence</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--bg:#1e1e2f;--si:#171723;--so:#25253b;--t:#fff;--a:#1db954;--d:#ff4d4d;--w:#ff9800;--info:#2196f3}
+    body.light{--bg:#e0e5ec;--si:#a3b1c6;--so:#ffffff;--t:#2d3748;--a:#48bb78;--d:#e53e3e;--w:#dd6b20;--info:#1976d2}
+    body{background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+    
+    #load{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+    #load.hide{opacity:0;pointer-events:none;display:none}
+    .spinner{width:40px;height:40px;border:3px solid var(--si);border-top-color:var(--a);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    
+    #quiz{display:none;max-width:800px;margin:0 auto;padding:80px 12px 100px}
+    
+    .top{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .top h1{font-size:13px;font-weight:600;flex:1;text-align:center}
+    .btn{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;color:var(--t);cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .btn:active{box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    
+    .prog{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--si);z-index:99}
+    .prog-bar{height:100%;background:var(--a);width:0%;transition:width .2s}
+    .prog-text{position:fixed;top:62px;right:12px;font-size:11px;background:var(--bg);padding:2px 8px;border-radius:10px;box-shadow:1px 1px 2px var(--si)}
+    
+    .q-cont{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so)}
+    .timer{font-size:13px;margin-bottom:12px;color:#888;display:flex;align-items:center;gap:6px}
+    .timer.warn{color:var(--w);font-weight:600}
+    .timer.danger{color:var(--d);font-weight:600;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .section-type{display:inline-block;padding:4px 12px;background:var(--a);color:#fff;font-size:11px;border-radius:20px;margin-bottom:10px;font-weight:600}
+    .question{font-size:15px;font-weight:600;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.03);border-radius:8px;line-height:1.6}
+    
+    .opts{display:flex;flex-direction:column;gap:10px}
+    .opt{padding:14px 16px;background:var(--bg);border-radius:10px;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so);display:flex;align-items:center;gap:12px;transition:all .15s;border:2px solid transparent}
+    .opt:hover{border-color:rgba(29,185,84,.3)}
+    .opt.sel{border-color:var(--a);background:rgba(29,185,84,.05);box-shadow:inset 2px 2px 4px var(--si),inset -2px -2px 4px var(--so)}
+    .opt-mark{width:26px;height:26px;border-radius:50%;background:var(--si);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .opt.sel .opt-mark{background:var(--a);color:#fff}
+    .opt p{font-size:14px;flex:1}
+    
+    .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px;box-shadow:0 -2px 8px rgba(0,0,0,.1);z-index:100}
+    .nav-btn{padding:12px 24px;border-radius:8px;border:none;background:var(--bg);color:var(--t);font-size:14px;font-weight:600;cursor:pointer;box-shadow:3px 3px 6px var(--si),-3px -3px 6px var(--so)}
+    .nav-btn:disabled{opacity:.4;cursor:not-allowed}
+    .nav-btn.primary{background:var(--a);color:#fff}
+    .nav-center{width:48px;height:48px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(29,185,84,.3)}
+    
+    .pop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px}
+    .pop.show{display:flex}
+    .pop-box{background:var(--bg);border-radius:16px;padding:20px;width:100%;max-width:360px;max-height:80vh;overflow-y:auto}
+    .pop-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .pop h3{font-size:16px}
+    .pop-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+    .pop-grid button{aspect-ratio:1;border:none;border-radius:8px;background:var(--bg);color:var(--t);font-size:12px;font-weight:600;cursor:pointer;box-shadow:2px 2px 4px var(--si),-2px -2px 4px var(--so)}
+    .pop-grid button.ans{background:var(--a);color:#fff}
+    .pop-grid button.cur{border:2px solid var(--a)}
+    
+    .res{display:none;position:fixed;inset:0;background:var(--bg);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}
+    .res.show{display:flex}
+    .res-box{background:var(--bg);padding:32px;border-radius:24px;box-shadow:8px 8px 16px var(--si),-8px -8px 12px var(--so);max-width:400px;width:100%}
+    .res-circle{width:140px;height:140px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:6px 6px 12px var(--si),-6px -6px 12px var(--so)}
+    .res-score{font-size:36px;font-weight:800;color:var(--a)}
+    .res-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-top:4px}
+    .res h2{font-size:24px;margin-bottom:8px}
+    .res p{color:#888;margin-bottom:24px;font-size:15px;line-height:1.5}
+    .res-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    .res-btns button{min-width:120px}
+    
+    .det{display:none;position:fixed;inset:0;background:var(--bg);z-index:250;overflow-y:auto;padding:80px 16px 24px}
+    .det-head{position:fixed;top:0;left:0;right:0;height:56px;background:var(--bg);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);z-index:251}
+    .det h3{flex:1;font-size:16px}
+    .det-summary{background:var(--bg);padding:20px;border-radius:16px;margin-bottom:20px;box-shadow:4px 4px 8px var(--si),-4px -4px 8px var(--so);text-align:center}
+    .det-summary .big{font-size:48px;font-weight:800;color:var(--a)}
+    .det-item{margin-bottom:16px;padding:16px;background:rgba(0,0,0,.03);border-radius:12px;border-left:4px solid var(--d)}
+    .det-item.ok{border-left-color:var(--a)}
+    .det-item h4{font-size:13px;color:#888;margin-bottom:8px}
+    .det-item .q-text{font-size:15px;font-weight:600;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:8px}
+    .det-item .ans-row{display:flex;gap:16px;margin-bottom:6px;font-size:14px}
+    .det-item .ans-row strong{min-width:80px}
+    .det-item .exp{font-size:13px;color:#666;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;box-shadow:inset 2px 2px 4px var(--si);line-height:1.6}
+    
+    .hide{display:none!important}
+    @media(max-width:400px){
+      .opt{padding:12px}
+      .res-box{padding:24px}
+      .res-circle{width:120px;height:120px}
+      .res-score{font-size:32px}
+      .pop-grid{grid-template-columns:repeat(5,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div id="load"><div class="spinner"></div></div>
+
+  <div id="quiz">
+    <div class="top">
+      <button class="btn" onclick="history.back()">←</button>
+      <h1>Radiation Physics • Filtration • Luminescence</h1>
+      <button class="btn" onclick="toggleTheme()">🌙</button>
+    </div>
+    
+    <div class="prog"><div class="prog-bar" id="pbar"></div></div>
+    <div class="prog-text" id="ptxt">0/0</div>
+    
+    <div class="q-cont">
+      <div class="timer" id="timer">⏱️ 30:00</div>
+      <div class="section-type" id="stype">Section A</div>
+      <div class="question" id="question"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    
+    <div class="nav">
+      <button class="nav-btn" id="prevBtn" onclick="prev()">← Prev</button>
+      <button class="nav-center" onclick="showPop()">📋</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <div class="pop" id="pop" onclick="hidePop(event)">
+    <div class="pop-box" onclick="event.stopPropagation()">
+      <div class="pop-head">
+        <h3>Question Navigator</h3>
+        <button class="btn" onclick="hidePop()">✕</button>
+      </div>
+      <div class="pop-grid" id="pgrid"></div>
+      <div style="font-size:12px;color:#888;text-align:center;margin-top:8px">
+        <span style="color:var(--a)">●</span> Answered &nbsp;
+        <span style="color:var(--t)">●</span> Current &nbsp;
+        <span style="color:#666">●</span> Unanswered
+      </div>
+    </div>
+  </div>
+
+  <div class="res" id="res">
+    <div class="res-box">
+      <div class="res-circle">
+        <div class="res-score" id="rscore">0%</div>
+        <div class="res-label">Score</div>
+      </div>
+      <h2 id="rtitle">Quiz Complete!</h2>
+      <p id="rmsg">You completed the quiz</p>
+      <div class="res-btns">
+        <button class="primary" onclick="showDet()">📊 View Details</button>
+        <button class="nav-btn" onclick="continueQuiz()">↩ Continue</button>
+        <button class="nav-btn" onclick="restart()" style="background:var(--d);color:#fff">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="det" id="det">
+    <div class="det-head">
+      <button class="btn" onclick="hideDet()">← Back</button>
+      <h3>Detailed Results</h3>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+    </div>
+    <div id="dcont"></div>
+  </div>
+
+<script>
+const CONFIG = { TIME: 1800, PASS: 60 }; // 30 minutes
+
+const SECTIONS = {
+  0:  "1: Radiation Physics & Interactions",
+  30: "2: Filtration & Shielding",
+  50: "3: Luminescence"
+};
+
+function getSection(qIndex) {
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a, b) { return b - a; });
+  for (var i = 0; i < keys.length; i++) {
+    if (qIndex >= keys[i]) return SECTIONS[keys[i]];
+  }
+  return "Introduction";
+}
+
+const QUIZ_DATA = [
+  {q:"X-rays are produced at the atomic level via which two primary processes?",o:["Photoelectric and Compton", "Bremsstrahlung and Characteristic radiation", "Pair production and Photodisintegration", "Coherent and Incoherent scattering"],a:1,e:"X-rays are produced at the atomic level by two primary processes: Bremsstrahlung and characteristic radiation."},
+  {q:"Which of the following is an example of particulate radiation?",o:["Gamma rays", "X-rays", "Alpha particles", "Radio waves"],a:2,e:"Alpha particles are an example of particulate radiation. Gamma rays, X-rays and radio waves are electromagnetic."},
+  {q:"In the photoelectric (P.E) process, the incident photon energy must be:",o:["Much greater than the binding energy of the electron", "Equal to or slightly greater than the binding energy of the electron", "Exactly 1.02 MeV", "Less than the binding energy of the electron"],a:1,e:"For the photoelectric effect to occur, the incident photon energy must be equal to or slightly greater than the binding energy of the electron (typically a K-shell electron)."},
+  {q:"The probability of the photoelectric effect occurring is proportional to:",o:["Z/E", "Z^2/E", "Z^3/E^3", "Z^3/E^2"],a:2,e:"The probability of the photoelectric effect is proportional to Z³/E³, where Z is the atomic number and E is the photon energy."},
+  {q:"Which of the following is NOT a radiological implication of the photoelectric effect?",o:["It enhances image contrast", "It produces characteristic radiation", "It completely absorbs the photon, adding to subject dose", "It is independent of the atomic number (Z) of the element"],a:3,e:"The photoelectric effect is strongly dependent on atomic number (Z). It is not independent of Z; that is a characteristic of Compton scattering."},
+  {q:"In Compton scattering, the probability of the process occurring is dependent on:",o:["Atomic number (Z)", "Electron density", "Nuclear binding energy", "The mass of the nucleus"],a:1,e:"The probability of Compton scattering depends on electron density, which is approximately the same for all elements except hydrogen."},
+  {q:"The threshold energy required for Pair Production to occur is:",o:["0.51 MeV", "1.02 MeV", "8 MeV", "15 MeV"],a:1,e:"Pair production requires a threshold energy of 1.02 MeV (the combined rest-mass energy of an electron and a positron)."},
+  {q:"Coherent scattering is also known as:",o:["Compton scattering", "Unmodified or classical scattering", "Photodisintegration", "Bremsstrahlung"],a:1,e:"Coherent scattering is also known as unmodified or classical scattering."},
+  {q:"Which type of coherent scattering involves a photon interacting with all electrons of an atom?",o:["Thomson scattering", "Compton scattering", "Rayleigh scattering", "Photoelectric effect"],a:2,e:"Rayleigh scattering involves a photon interacting with all the electrons of an atom; Thomson scattering involves a single electron."},
+  {q:"Photodisintegration occurs when the photon energy reaches the threshold of the nuclear binding energy, which is approximately:",o:["1.02 MeV", "0.51 MeV", "8 - 15 MeV", "30 - 40 keV"],a:2,e:"Photodisintegration occurs when the photon energy reaches the nuclear binding energy threshold, approximately 8–15 MeV."},
+  {q:"Which interaction dominates at low photon energies and high atomic number (Z)?",o:["Compton effect", "Photoelectric effect", "Pair production", "Coherent scattering"],a:1,e:"At low photon energies and high atomic number, the photoelectric effect is the dominant interaction."},
+  {q:"All particles exhibit a Bragg peak near the end of their path, EXCEPT:",o:["Protons", "Alpha particles", "Electrons", "Neutrons"],a:2,e:"All charged particles except electrons exhibit a Bragg peak near the end of their range; electrons scatter excessively and do not produce a classic Bragg peak."},
+  {q:"The formula for Stopping Power (S) is given as:",o:["S(E) = -dE/dx", "S(E) = dE/dx", "S(E) = \\mu/\\rho", "S(E) = N_0 e^{-\\mu x}"],a:0,e:"Stopping power is defined as S(E) = –dE/dx (energy lost per unit path length)."},
+  {q:"Neutrons are considered indirectly ionizing radiation because they deposit energy by:",o:["Direct Coulomb interactions with orbital electrons", "Transfer to heavy charged particles which then interact via Coulomb forces", "Photoelectric absorption in the nucleus", "Pair production"],a:1,e:"Neutrons are indirectly ionising: they transfer energy to heavy charged particles, which then interact via Coulomb forces."},
+  {q:"Which of the following elements has a high cross-section for interaction with neutrons?",o:["Lead", "Aluminum", "Boron", "Copper"],a:2,e:"Boron (along with hydrogen, water, paraffin and cadmium) has a high cross-section for neutron interactions."},
+  {q:"The linear attenuation coefficient (\\mu) has units of:",o:["cm", "cm^{-1}", "MeV", "kg/m^3"],a:1,e:"The linear attenuation coefficient µ has units of cm⁻¹."},
+  {q:"The Half Value Layer (HVL) is calculated using which formula?",o:["HVL = \\mu / 0.693", "HVL = 0.693 / \\mu", "HVL = \\mu \\times 0.693", "HVL = 1 / \\mu"],a:1,e:"Half-value layer is given by HVL = 0.693 / µ."},
+  {q:"An \"absorption edge\" in an attenuation graph is characterized by:",o:["A sudden decrease in attenuation", "An anomalous increase in \\mu at a specific energy", "A constant \\mu regardless of energy", "The complete transmission of the beam"],a:1,e:"An absorption edge is characterised by an anomalous increase in the attenuation coefficient at a specific energy (the binding energy of an inner shell)."},
+  {q:"How does increasing the density of a material affect the attenuation coefficient?",o:["It decreases the attenuation coefficient", "It increases the attenuation coefficient (more electrons per gram)", "It has no effect", "It only affects Compton scattering"],a:1,e:"Increasing material density increases the attenuation coefficient because there are more electrons per unit volume."},
+  {q:"Which interaction process results in the complete absorption of a photon?",o:["Compton scattering", "Coherent scattering", "Photoelectric effect", "Pair production (before annihilation)"],a:2,e:"The photoelectric effect results in complete absorption of the incident photon."},
+  {q:"In the photoelectric effect, what happens after the inner-shell electron is ejected?",o:["The nucleus splits", "An outer-shell electron transitions to fill the vacancy, emitting characteristic radiation", "A positron is emitted", "The atom becomes a free radical"],a:1,e:"After an inner-shell electron is ejected, an outer-shell electron fills the vacancy and the excess energy is emitted as characteristic radiation."},
+  {q:"Why is lead (Pb) a better absorber of X-rays than aluminum (Al)?",o:["Pb has a lower atomic number and lower density", "Pb has a higher atomic number, making the photoelectric effect (which is Z-dependent) more probable", "Al undergoes more Compton scattering", "Pb has a lower K-edge"],a:1,e:"Lead is a better X-ray absorber than aluminium because its high atomic number makes the photoelectric effect (∝ Z³) far more probable."},
+  {q:"In Compton scattering, the scattered photon has:",o:["More energy than the incident photon", "The same energy but a different direction", "Less energy than the incident photon and a longer wavelength", "No energy"],a:2,e:"In Compton scattering the scattered photon has less energy (and therefore a longer wavelength) than the incident photon."},
+  {q:"In pair production, the positron (e^+) eventually undergoes:",o:["Beta decay", "Annihilation with an electron, producing two 0.51 MeV photons", "Photodisintegration", "Capture by the nucleus"],a:1,e:"The positron eventually annihilates with an electron, producing two 0.511 MeV photons."},
+  {q:"Coherent scattering (Thomson/Rayleigh) results in:",o:["Ionization of the atom", "No change in energy but a slight change in direction", "Ejection of a high-speed electron", "Production of a positron"],a:1,e:"Coherent (Thomson/Rayleigh) scattering produces no change in photon energy, only a slight change in direction; no ionisation occurs."},
+  {q:"Electron beam depth-dose curves are characterized by:",o:["A slow buildup and slow fall-off", "A rapid rise to 100%, uniform dose region, and rapid dose fall-off", "A Bragg peak at the very end of the track", "Increasing dose with depth"],a:1,e:"Electron depth-dose curves show a rapid rise to 100 %, a region of relatively uniform dose, followed by a rapid fall-off."},
+  {q:"Thermal neutrons are typically used for:",o:["Radiotherapy", "Capture for activation analysis and creating instability in the nucleus", "Producing X-rays", "Shielding gamma rays"],a:1,e:"Thermal neutrons are used in neutron-capture activation analysis and to create nuclear instability."},
+  {q:"The exponential attenuation equation for photons is:",o:["N = N_0 e^{\\mu x}", "N = N_0 e^{-\\mu x}", "N = N_0 \\ln(\\mu x)", "N = N_0 / e^{\\mu x}"],a:1,e:"Photon attenuation follows the exponential law N = N₀ e^(–µx)."},
+  {q:"Which of the following is true regarding the mass attenuation coefficient?",o:["It is the linear attenuation coefficient multiplied by mass", "It is the linear attenuation coefficient divided by density (\\mu/\\rho)", "It has units of cm", "It is independent of the material"],a:1,e:"Mass attenuation coefficient is the linear attenuation coefficient divided by density (µ/ρ)."},
+  {q:"Delta rays are best described as:",o:["Primary X-rays", "Secondary electrons with enough energy to create further ion pairs after the initial interaction", "Scattered photons", "Neutrons released from the nucleus"],a:1,e:"Delta rays are secondary electrons that possess enough energy to produce further ion pairs after the initial interaction."},
+  {q:"The primary purpose of filtration in diagnostic radiology is to:",o:["Increase the intensity of the beam", "Remove low-energy (soft) X-rays to reduce patient skin dose and improve image quality", "Increase the maximum energy of the X-ray beam", "Filter out all characteristic radiation"],a:1,e:"The primary purpose of filtration is to remove low-energy (soft) X-rays, thereby reducing patient skin dose and improving the quality of the beam that reaches the image receptor."},
+  {q:"Which of the following is NOT an effect of filtration on the X-ray spectrum?",o:["Reduction in overall intensity", "Improvement of the mean/effective energy", "Increase in the proportion of low-energy photons", "Removal of weak or soft rays"],a:2,e:"Filtration reduces the proportion of low-energy photons; it does not increase them."},
+  {q:"A good filter material must:",o:["Attenuate radiation predominantly by the Compton process", "Have an absorption edge exactly at the energies to be removed", "Attenuate radiation predominantly by the photoelectric process and not have an absorption edge close to the energies to be removed", "Be as thin as possible regardless of uniformity"],a:2,e:"A good filter material attenuates predominantly by the photoelectric process and should not have an absorption edge close to the energies that need to be removed."},
+  {q:"The K-edge of Tin (Sn) is approximately:",o:["88 keV", "29 keV", "9 keV", "1.6 keV"],a:1,e:"The K-edge of tin (Sn) is approximately 29 keV."},
+  {q:"A Thoreaus filter (composite filter) typically consists of:",o:["Pb + Al", "Sn + Cu + Al", "Cu + Pb + W", "Mo + Rh"],a:1,e:"A typical Thoreaus filter consists of tin + copper + aluminium (commonly 0.4 mm Sn + 0.25 mm Cu + 1.0 mm Al)."},
+  {q:"In a composite filter, the high Z material is arranged:",o:["Farthest from the X-ray target", "Nearest to the X-ray target", "Between the Cu and Al plates", "It doesn't matter"],a:1,e:"In a composite filter the highest-Z material is placed nearest the X-ray target."},
+  {q:"For an X-ray tube operated between 100-250 kVp, the standard filter material is:",o:["Aluminum", "Copper", "Tin", "Lead"],a:1,e:"For tubes operated between 100–250 kVp the standard added filter material is copper."},
+  {q:"Inherent filtration in an X-ray tube is primarily due to:",o:["Added aluminum plates outside the housing", "The glass/metal envelope, dielectric oil bath, and glass window", "The collimator mirror", "The patient's body"],a:1,e:"Inherent filtration arises mainly from the glass or metal envelope, the insulating oil and the tube window."},
+  {q:"What is the typical total filtration for an 80 kVp X-ray beam?",o:["0.5 mm Al", "1.0 mm Al", "2.0 - 2.5 mm Al", "4.0 mm Al"],a:2,e:"Typical total filtration for an 80 kVp beam is 2.0–2.5 mm aluminium equivalent."},
+  {q:"Mammography uses a specific filter material of:",o:["4 mm Al", "0.030 mm Mo (Molybdenum)", "0.5 mm Cu", "1.5 mm Sn"],a:1,e:"Mammography tubes commonly use a 0.030 mm molybdenum filter."},
+  {q:"The Half Value Layer (HVL) is defined as:",o:["The thickness of an absorber that doubles the radiation intensity", "The thickness of an absorber that reduces the intensity of radiation to half its original value", "The energy required to reduce intensity by 10%", "The linear attenuation coefficient"],a:1,e:"HVL is the thickness of absorber that reduces the intensity of a radiation beam to half its original value."},
+  {q:"Why is HVL alone not sufficient to specify the penetration of a beam?",o:["Because HVL is measured in different units", "Because the 1st HVL may not equal the 2nd HVL (beam hardening)", "Because HVL is not related to energy", "Because it only applies to gamma rays"],a:1,e:"A single HVL is insufficient because the first HVL is often smaller than the second (beam hardening); a homogeneity coefficient is therefore required."},
+  {q:"The Homogeneity Coefficient is calculated as:",o:["2nd HVL / 1st HVL", "1st HVL / 2nd HVL", "1st HVL x 2nd HVL", "\\mu / HVL"],a:1,e:"Homogeneity coefficient = 1st HVL / 2nd HVL."},
+  {q:"Which of the following is a good shielding material for neutrons?",o:["Lead", "Aluminum", "Hydrogen-rich materials like water and paraffin", "Copper"],a:2,e:"Hydrogen-rich materials such as water and paraffin are effective neutron shields."},
+  {q:"The term \"Pb equivalent\" refers to:",o:["The mass of lead in a protective apron", "The thickness of lead that provides a given reduction in intensity", "The atomic number of lead", "The half-value layer of lead"],a:1,e:"Lead equivalent is the thickness of lead that produces the same attenuation as the material or barrier in question."},
+  {q:"Which of the following is NOT a typical protective device for external radiation exposure?",o:["Lead apron", "Lead collar", "Lead gonad shield", "Aluminum gloves"],a:3,e:"Protective devices for external exposure are made of lead (aprons, collars, gonad shields, gloves). Aluminium gloves do not provide adequate shielding."},
+  {q:"The primary barrier in a radiation therapy room is designed to attenuate:",o:["Only scattered radiation", "The primary (useful) X-ray beam", "Only leakage radiation", "Neutrons only"],a:1,e:"The primary barrier is designed to attenuate the useful (primary) beam."},
+  {q:"Which of the following statements about filter materials is true?",o:["Sn and Cu are always used alone", "Above 2 MV, a Pb filter is standard", "Sn + Cu are never used alone but in combination", "Aluminum is used for 600 kVp - 2 MV beams"],a:2,e:"Tin and copper are never used alone as filters; they are always used in combination (as in the Thoreaus filter)."},
+  {q:"In a composite filter, the purpose of the backup metal (e.g., Cu behind Sn) is to:",o:["Increase the overall intensity", "Absorb the characteristic radiation emitted by the first filter material", "Reduce the energy of the beam", "Act as a primary barrier"],a:1,e:"The lower-Z backup metal (e.g. copper behind tin) absorbs the characteristic radiation emitted by the higher-Z filter material."},
+  {q:"The function of added filtration is to:",o:["Replace inherent filtration", "Provide filtration outside the X-ray tube and housing that can be changed", "Permanently seal the tube", "Filter out all useful X-rays"],a:1,e:"Added filtration is any filtration placed outside the X-ray tube and housing; it can be changed according to the examination."},
+  {q:"Luminescence is the phenomenon where materials (phosphors) emit:",o:["Short-wavelength radiation after absorbing long-wavelength radiation", "Long-wavelength radiation (usually visible light) after absorbing short-wavelength radiation (X-rays/gamma)", "Only X-rays after absorbing visible light", "Heat after absorbing X-rays"],a:1,e:"Luminescence is the emission of longer-wavelength radiation (usually visible light) by a phosphor after it has absorbed shorter-wavelength radiation such as X-rays or gamma rays."},
+  {q:"In fluorescence, the emission of light is:",o:["Delayed by several minutes", "Instantaneous (nanoseconds to microseconds) after absorption", "Permanent", "Dependent on thermal energy"],a:1,e:"In fluorescence the emission of light is essentially instantaneous (nanoseconds to microseconds) after absorption."},
+  {q:"Phosphorescence differs from fluorescence because:",o:["It is instantaneous", "The emission of light is delayed beyond the primary decay time", "It requires a laser beam", "It requires thermal energy"],a:1,e:"Phosphorescence differs from fluorescence in that light emission is delayed beyond the primary decay time."},
+  {q:"Thermoluminescence requires:",o:["A laser beam to stimulate emission", "The supply and absorption of thermal energy before light emission", "Instantaneous absorption of X-rays", "A chemical reaction"],a:1,e:"Thermoluminescence requires the absorption of thermal energy before the trapped electrons can return to the ground state and emit light."},
+  {q:"Photostimulated luminescence occurs when:",o:["A laser beam scans the phosphor that absorbed radiation", "Thermal energy is applied", "A chemical reaction occurs", "The phosphor is exposed to visible light"],a:0,e:"Photostimulated luminescence occurs when a laser beam scans a phosphor that has previously absorbed radiation (the principle used in computed radiography)."},
+  {q:"In the fluorescence process, the emitted light has a ____________ wavelength than the absorbed light.",o:["Shorter", "Longer", "Identical", "Variable (random)"],a:1,e:"The light emitted in fluorescence has a longer wavelength than the radiation that was absorbed."},
+  {q:"The three stages of fluorescence are:",o:["Absorption, Conduction, Emission", "Excitation, Ionization, Recombination", "Heating, Cooling, Emission", "Absorption, Scattering, Reflection"],a:0,e:"The three stages of fluorescence are absorption, conduction (excitation to a higher energy band) and emission."},
+  {q:"In the context of phosphors, QDE stands for:",o:["Quantum Detection Efficiency", "Quality Dose Equivalent", "Quantum Decay Energy", "Quenching Dose Effect"],a:0,e:"QDE stands for Quantum Detection Efficiency – a measure of the phosphor’s ability to absorb incident X-ray quanta."},
+  {q:"For maximum absorption in a phosphor, which interaction process must predominate?",o:["Compton scattering", "Photoelectric effect", "Coherent scattering", "Pair production"],a:1,e:"Maximum absorption in a phosphor occurs when the photoelectric effect predominates."},
+  {q:"To achieve high QDE in a phosphor, the K-edge of the phosphor element should be:",o:["Much lower than the incident photon energy", "Equal to or slightly greater than the incident photon energy", "Exactly 1.02 MeV", "At the same energy as visible light"],a:1,e:"For high quantum detection efficiency the K-edge of the phosphor should be equal to or slightly greater than the energy of the incident photons."},
+  {q:"Which of the following elements has a K-edge of 37.4?",o:["Lead (Pb)", "Iodine (I)", "Barium (Ba)", "Tungsten (W)"],a:2,e:"Barium has a K-edge of 37.4 keV."},
+  {q:"Photon Conversion Efficiency (PCE) describes:",o:["The ratio of X-ray quanta absorbed to the intensity of created photons", "The ratio of heat generated to light emitted", "The efficiency of the X-ray tube", "The ratio of Compton to Photoelectric interactions"],a:0,e:"Photon conversion efficiency (PCE) is the ratio of the number of X-ray quanta absorbed to the intensity of the light photons produced."},
+  {q:"In the crystal lattice of a phosphor, when electrons are excited to the conduction band, they leave behind:",o:["Positrons", "Holes in the valence band", "Protons", "Neutrons"],a:1,e:"When electrons are excited from the valence band into the conduction band they leave behind positively charged holes in the valence band."},
+  {q:"The rapid emission of light from a phosphor (usually less than 10 seconds) immediately after absorption is called:",o:["Phosphorescence", "Thermoluminescence", "Primary luminescence", "Secondary luminescence"],a:2,e:"Rapid emission of light (usually within a few seconds) immediately after absorption is called primary luminescence."},
+  {q:"Which of the following is an example of a phosphor that absorbs yellow light and emits red light?",o:["Quinine sulphate solution", "Alcohol solution of chlorophyll", "Barium platinocyanide", "Sodium iodide"],a:1,e:"An alcoholic solution of chlorophyll absorbs yellow light and emits red light."},
+  {q:"In fluorescence, what happens during the \"conduction\" stage?",o:["The electron returns to its ground state", "The electron is excited to a higher energy level/orbit", "The nucleus splits", "The atom is permanently ionized"],a:1,e:"During the conduction stage the electron is raised to a higher energy level (conduction band) before it returns to the ground state."},
+  {q:"Intensifying screens in radiology use phosphors to:",o:["Convert X-rays to visible light", "Convert visible light to X-rays", "Protect the patient from radiation", "Filter the X-ray beam"],a:0,e:"Intensifying screens contain phosphors that convert a portion of the incident X-ray energy into visible light, which then exposes the film."},
+  {q:"In the photoelectric effect within a phosphor, what is the fate of the characteristic radiation emitted?",o:["It is always absorbed by the patient", "It is generally in the visible spectrum and contributes to the light emission", "It escapes as a primary X-ray", "It causes photodisintegration"],a:1,e:"In a phosphor the characteristic radiation (or recombination radiation) produced after photoelectric absorption generally lies in the visible spectrum and therefore contributes to the light output."},
+  {q:"A material that emits light only when stimulated by a laser beam, used in Computed Radiography, is utilizing:",o:["Thermoluminescence", "Photostimulated luminescence", "Chemiluminescence", "Fluorescence"],a:1,e:"A material that emits light only when stimulated by a laser beam (as used in computed radiography) utilises photostimulated luminescence."},
+  {q:"Which of the following has the shortest wavelength?",o:["Radio waves", "Infrared", "Visible light", "Gamma rays"],a:3,e:"Gamma rays have the shortest wavelength of the radiations listed; wavelength increases from gamma rays through X-rays, ultraviolet, visible, infrared and radio waves."}
+];
+
+var state = {
+  data: QUIZ_DATA,
+  ans: new Array(QUIZ_DATA.length).fill(null),
+  q: 0,
+  time: CONFIG.TIME,
+  timer: null,
+  submitted: false
+};
+
+function init() {
+  var loadEl = document.getElementById('load');
+  if (loadEl) loadEl.classList.add('hide');
+
+  try {
+    var saved = sessionStorage.getItem('radphys_filt_lum_quiz_progress');
+    if (saved) {
+      var d = JSON.parse(saved);
+      if (Date.now() - d.ts < 86400000 && !d.submitted) {
+        state.q = d.q;
+        state.ans = d.ans;
+        state.time = d.time;
+      }
+    }
+  } catch (e) {}
+
+  document.getElementById('quiz').style.display = 'block';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  if (state.timer) clearInterval(state.timer);
+  state.timer = setInterval(function() {
+    if (state.time > 0) {
+      state.time--;
+      updateTimer();
+      if (state.time % 10 === 0) saveProgress();
+    } else {
+      submit(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(state.time / 60);
+  var s = state.time % 60;
+  var el = document.getElementById('timer');
+  el.textContent = '⏱️ ' + m + ':' + (s < 10 ? '0' + s : s);
+  el.className = 'timer' + (state.time < 60 ? ' danger' : state.time < 300 ? ' warn' : '');
+}
+
+function render() {
+  var q = state.data[state.q];
+  var done = state.ans.filter(function(x) { return x !== null; }).length;
+  var total = state.data.length;
+
+  document.getElementById('pbar').style.width = (done / total * 100) + '%';
+  document.getElementById('ptxt').textContent = done + '/' + total;
+  document.getElementById('stype').textContent = 'Section ' + getSection(state.q) + ' • Q' + (state.q + 1) + '/' + total;
+  document.getElementById('question').textContent = q.q;
+
+  var opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  for (var i = 0; i < q.o.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'opt' + (state.ans[state.q] === i ? ' sel' : '');
+    d.innerHTML = '<div class="opt-mark">' + String.fromCharCode(65 + i) + '</div><p>' + q.o[i] + '</p>';
+    d.onclick = (function(idx) {
+      return function() { select(idx); };
+    })(i);
+    opts.appendChild(d);
+  }
+
+  document.getElementById('prevBtn').disabled = state.q === 0;
+  document.getElementById('nextBtn').textContent = state.q === state.data.length - 1 ? 'Submit Quiz ✓' : 'Next →';
+}
+
+function select(i) {
+  state.ans[state.q] = i;
+  var opts = document.querySelectorAll('.opt');
+  for (var j = 0; j < opts.length; j++) {
+    opts[j].classList.toggle('sel', j === i);
+  }
+  saveProgress();
+}
+
+function next() {
+  if (state.q === state.data.length - 1) {
+    var unans = state.ans.filter(function(x) { return x === null; }).length;
+    if (unans > 0 && !confirm(unans + ' question(s) unanswered. Submit anyway?')) {
+      showPop();
+      return;
+    }
+    submit(false);
+    return;
+  }
+  state.q++;
+  render();
+}
+
+function prev() {
+  if (state.q > 0) state.q--;
+  render();
+}
+
+function saveProgress() {
+  try {
+    sessionStorage.setItem('radphys_filt_lum_quiz_progress', JSON.stringify({
+      q: state.q,
+      ans: state.ans,
+      time: state.time,
+      submitted: state.submitted,
+      ts: Date.now()
+    }));
+  } catch (e) {}
+}
+
+function submit(timeout) {
+  clearInterval(state.timer);
+  state.submitted = true;
+  saveProgress();
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+  document.getElementById('rscore').textContent = pct + '%';
+
+  var title, msg;
+  if (timeout) title = '⏰ Time Up!';
+  else if (pct >= 80) title = '🎉 Outstanding!';
+  else if (pct >= 60) title = '🌟 Well Done!';
+  else if (pct >= 40) title = '👍 Good Effort!';
+  else title = '💪 Keep Going!';
+
+  if (pct >= 80) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Excellent command of radiation interactions, filtration, shielding and luminescence. Outstanding performance!';
+  } else if (pct >= 60) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>✓ Pass mark achieved! Solid knowledge. Review photoelectric vs Compton dominance, HVL/homogeneity coefficient and the stages of fluorescence to strengthen any weak spots.';
+  } else if (pct >= 40) {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>You’re making progress. Focus on the energy dependence of the interaction processes, the purpose of composite filters, and the differences between fluorescence, phosphorescence and photostimulated luminescence.';
+  } else {
+    msg = 'You scored <strong>' + correct + '/' + state.data.length + '</strong> (' + pct + '%)<br><br>Don’t worry — these topics contain many precise definitions and formulae. Study the explanations carefully, revise the key concepts, then try again. You can master them!';
+  }
+
+  document.getElementById('rtitle').textContent = title;
+  document.getElementById('rmsg').innerHTML = msg;
+}
+
+function continueQuiz() {
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+}
+
+function showPop() {
+  var g = document.getElementById('pgrid');
+  g.innerHTML = '';
+  for (var i = 0; i < state.data.length; i++) {
+    var b = document.createElement('button');
+    b.textContent = i + 1;
+    if (state.ans[i] !== null) b.className = 'ans';
+    if (i === state.q) b.style.border = '2px solid var(--a)';
+    b.onclick = (function(idx) {
+      return function() {
+        state.q = idx;
+        hidePop();
+        render();
+      };
+    })(i);
+    g.appendChild(b);
+  }
+  document.getElementById('pop').classList.add('show');
+}
+
+function hidePop(e) {
+  if (!e || e.target.id === 'pop') {
+    document.getElementById('pop').classList.remove('show');
+  }
+}
+
+function showDet() {
+  var c = document.getElementById('dcont');
+  c.innerHTML = '';
+
+  var correct = 0;
+  for (var i = 0; i < state.data.length; i++) {
+    if (state.ans[i] === state.data[i].a) correct++;
+  }
+  var pct = Math.round((correct / state.data.length) * 100);
+
+  var sum = document.createElement('div');
+  sum.className = 'det-summary';
+  sum.innerHTML = '<div class="big">' + pct + '%</div><div>' + correct + '/' + state.data.length + ' correct</div>';
+  c.appendChild(sum);
+
+  var keys = Object.keys(SECTIONS).map(Number).sort(function(a,b){return a-b;});
+  for (var s = 0; s < keys.length; s++) {
+    var start = keys[s];
+    var end = (s + 1 < keys.length) ? keys[s + 1] : state.data.length;
+
+    var ph = document.createElement('div');
+    ph.style.cssText = 'margin:20px 0 12px;padding:12px;background:var(--a);color:#fff;border-radius:8px;font-size:14px';
+    ph.innerHTML = '<strong>Section ' + SECTIONS[start] + '</strong>';
+    c.appendChild(ph);
+
+    for (var i = start; i < end; i++) {
+      if (i >= state.data.length) break;
+      var q = state.data[i];
+      var ans = state.ans[i];
+      var ok = ans === q.a;
+      var d = document.createElement('div');
+      d.className = 'det-item' + (ok ? ' ok' : '');
+      d.innerHTML = 
+        '<h4>Question ' + (i + 1) + '</h4>' +
+        '<div class="q-text">' + q.q + '</div>' +
+        '<div class="ans-row"><strong>Your answer:</strong> ' + (ans !== null ? String.fromCharCode(65 + ans) + ') ' + q.o[ans] : 'Not answered') + '</div>' +
+        '<div class="ans-row"><strong>Correct:</strong> ' + String.fromCharCode(65 + q.a) + ') ' + q.o[q.a] + '</div>' +
+        '<div class="exp">' + q.e + '</div>';
+      c.appendChild(d);
+    }
+  }
+
+  document.getElementById('res').classList.remove('show');
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('det').style.display = 'block';
+}
+
+function hideDet() {
+  document.getElementById('det').style.display = 'none';
+  document.getElementById('res').style.display = 'flex';
+  document.getElementById('res').classList.add('show');
+}
+
+function restart() {
+  if (!confirm('Start a new quiz? All progress will be reset.')) return;
+  sessionStorage.removeItem('radphys_filt_lum_quiz_progress');
+  location.reload();
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('radphys_filt_lum_quiz_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('radphys_filt_lum_quiz_theme') === 'light') {
+    document.body.classList.add('light');
+  }
+  init();
+});
+</script>
+</body>
+</html>
