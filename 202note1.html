@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAD 205 – Series 5, 6 & 7 (Interactions, Filtration, Luminescence)</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif}
+    :root{
+      --bg:#1e1e2f;--card:#2a2a3f;--text:#f0f0ff;--muted:#c0c0e0;
+      --accent:#1db954;--danger:#ff6b6b;--info:#4ecdc4;--warning:#f59e0b;
+    }
+    body.light{
+      --bg:#f4f4f4;--card:#ffffff;--text:#1a1a1a;--muted:#555;
+      --accent:#0d9b4a;--danger:#d32f2f;--info:#0d9488;--warning:#d97706;
+    }
+    body{background:var(--bg);color:var(--text);display:flex;justify-content:center;min-height:100vh;transition:0.3s}
+    .container{width:100%;max-width:420px;min-height:100vh;background:var(--bg);padding-bottom:110px}
+    
+    .top-bar{position:sticky;top:0;z-index:40;background:var(--bg);padding:13px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+    .top-bar h1{font-size:14px;color:var(--accent);font-weight:900}
+    .theme-btn{width:38px;height:38px;border-radius:50%;border:none;background:var(--card);font-size:17px;cursor:pointer}
+    
+    .content{padding:16px 14px}
+    .header{text-align:center;padding:18px 12px;border-radius:14px;background:rgba(29,185,84,0.12);margin-bottom:18px}
+    .header h2{font-size:17px;color:var(--accent)}
+    
+    .card{background:var(--card);border-radius:14px;padding:16px 14px;margin-bottom:16px;border-left:5px solid var(--accent)}
+    .card h3{font-size:15px;color:var(--accent);margin-bottom:10px;font-weight:800}
+    .card h4{font-size:13.7px;color:var(--info);margin:12px 0 6px;font-weight:700}
+    .card p,.card li{font-size:13.2px;line-height:1.5;margin-bottom:4px}
+    .card ul{padding-left:16px;margin:6px 0}
+    
+    .note{background:rgba(78,205,196,0.12);border-left:4px solid var(--info);padding:10px 12px;border-radius:8px;margin:10px 0;font-size:13px}
+    .q-box{background:rgba(245,158,11,0.12);border-left:4px solid var(--warning);padding:11px 12px;border-radius:9px;margin:11px 0;font-size:13.1px}
+    .answer{display:none;background:rgba(29,185,84,0.15);border-left:4px solid var(--accent);padding:11px 12px;border-radius:9px;margin-top:8px;font-size:13.1px}
+    .show-btn{margin-top:7px;padding:6px 12px;background:var(--accent);color:#000;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer}
+    
+    .btn-row{display:flex;gap:10px;margin:22px 0}
+    .btn{flex:1;padding:12px;border:none;border-radius:11px;font-weight:800;font-size:13px;cursor:pointer}
+    .btn-next{background:linear-gradient(135deg,#1db954,#128c3a);color:#000}
+    .btn-exam{background:linear-gradient(135deg,#4ecdc4,#0d9488);color:#000}
+  </style>
+</head>
+<body class="dark">
+  <div class="container">
+    <div class="top-bar">
+      <h1>RAD 202</h1>
+      <button class="theme-btn" id="theme-toggle">🌙</button>
+    </div>
+
+    <div class="content">
+      <div class="header">
+        <h2>Radiation Interactions • Filtration • Luminescence</h2>
+        <p style="font-size:12px;color:var(--muted);margin-top:3px">Full note + Interactive questions</p>
+      </div>
+
+      <!-- ==================== SERIES 5 ==================== -->
+      <div class="card">
+        <h3>SERIES 5: Radiation Interactions with Matter</h3>
+
+        <p><strong>Why this topic is important:</strong> It is the foundation of diagnostic imaging, radiotherapy, radiation protection, detection, and radiobiology.</p>
+
+        <h4>Two Categories of Radiation</h4>
+        <ul>
+          <li><strong>Electromagnetic</strong> – X-rays and Gamma rays</li>
+          <li><strong>Particulate</strong> – Alpha (α), Beta (β⁺, β⁻), Protons, Neutrons</li>
+        </ul>
+
+        <h4>Photon Interactions</h4>
+        <ul>
+          <li>Photoelectric Effect</li>
+          <li>Compton (Incoherent) Scattering</li>
+          <li>Coherent (Classical / Rayleigh) Scattering</li>
+          <li>Pair Production</li>
+          <li>Photodisintegration</li>
+        </ul>
+
+        <h4>1. Photoelectric Effect</h4>
+        <ul>
+          <li>Photon energy ≥ Binding Energy of the electron (usually K-shell)</li>
+          <li>Photon is completely absorbed</li>
+          <li>Electron is ejected (photoelectron)</li>
+          <li>Outer electron fills the vacancy → Characteristic X-ray is emitted</li>
+          <li>Probability ∝ Z³ / E³</li>
+          <li>Dominates at low energy and high Z</li>
+        </ul>
+        <div class="note">This is the main reason for contrast in diagnostic X-ray images (bone vs soft tissue).</div>
+
+        <h4>2. Compton Scattering</h4>
+        <ul>
+          <li>Photon energy ≫ Binding Energy</li>
+          <li>Photon collides with a “free” electron</li>
+          <li>Scattered photon + recoil electron are produced</li>
+          <li>Wavelength change: Δλ = 0.024 (1 – cosθ) Å</li>
+          <li>Probability depends on electron density (almost independent of Z)</li>
+          <li>Dominates in the diagnostic and therapy energy range (0.1 – 10 MeV)</li>
+        </ul>
+        <div class="note">Compton scatter reduces image contrast and is the main reason we use grids.</div>
+
+        <h4>3. Pair Production</h4>
+        <ul>
+          <li>Threshold energy = 1.02 MeV</li>
+          <li>Photon disappears near the nucleus and creates an electron + positron</li>
+          <li>Positron later annihilates → two 0.511 MeV photons</li>
+        </ul>
+
+        <h4>4. Coherent Scattering</h4>
+        <ul>
+          <li>No energy loss, only slight change in direction</li>
+          <li>No ionization – only excitation</li>
+          <li>Not very important in radiology</li>
+        </ul>
+
+        <h4>5. Photodisintegration</h4>
+        <ul>
+          <li>Threshold ≈ 8–15 MeV</li>
+          <li>Photon is absorbed by the nucleus → nuclear fragment is emitted</li>
+          <li>Rare in diagnostic and ordinary therapy energies</li>
+        </ul>
+
+        <h4>Attenuation</h4>
+        <ul>
+          <li>N = N₀ e<sup>–μx</sup></li>
+          <li>HVL = 0.693 / μ</li>
+          <li>Linear attenuation coefficient (μ) and Mass attenuation coefficient (μ/ρ)</li>
+        </ul>
+
+        <div class="q-box">
+          <strong>Q1.</strong> Which interaction is completely absorptive and which mainly scatters?
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">
+            Completely absorptive → Photoelectric Effect & Pair Production<br>
+            Mainly scattering → Compton Scattering & Coherent Scattering
+          </div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q2.</strong> Why is Lead a better absorber than Aluminium?
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">
+            Lead has a much higher atomic number (Z = 82) than Aluminium (Z = 13).  
+            Photoelectric effect is proportional to Z³, so Lead absorbs far more efficiently.
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SERIES 6 ==================== -->
+      <div class="card">
+        <h3>SERIES 6: Filtration & Shielding</h3>
+
+        <h4>Filtration</h4>
+        <ul>
+          <li>Selective removal of low-energy (soft) photons from a polyenergetic beam</li>
+          <li>Hardens the beam (increases mean energy)</li>
+          <li>Reduces patient skin dose</li>
+          <li>Improves image quality and beam penetration</li>
+        </ul>
+
+        <h4>Types of Filtration</h4>
+        <ul>
+          <li><strong>Inherent filtration</strong> ≈ 0.5 mm Al (glass envelope, oil, window)</li>
+          <li><strong>Added filtration</strong> – thin sheets of Al, Cu, etc. placed outside the tube</li>
+          <li><strong>Total filtration</strong> = Inherent + Added</li>
+        </ul>
+
+        <h4>Common Filter Materials & K-edges</h4>
+        <ul>
+          <li>Aluminium (K-edge 1.6 keV)</li>
+          <li>Copper (9 keV)</li>
+          <li>Tin (29 keV)</li>
+          <li>Lead (88 keV)</li>
+          <li>Molybdenum (20 keV) – used in mammography</li>
+        </ul>
+
+        <div class="note">
+          <strong>Thoreaus filter</strong> (Sn + Cu + Al) is a classic compound filter.  
+          High-Z material is placed nearest the tube.
+        </div>
+
+        <h4>Standard Total Filtration</h4>
+        <ul>
+          <li>50–70 kVp → 1.5–2.0 mm Al</li>
+          <li>80 kVp → 2.0–2.5 mm Al</li>
+          <li>CT → ≈ 4 mm Al</li>
+          <li>Mammography → 0.03 mm Mo</li>
+        </ul>
+
+        <h4>Shielding</h4>
+        <ul>
+          <li>Purpose: Protect staff, public and sensitive organs</li>
+          <li>Materials: Lead, lead glass, concrete, lead rubber, lead aprons</li>
+          <li>Alpha → stopped by paper/skin</li>
+          <li>Beta → stopped by a few mm of aluminium or plastic</li>
+          <li>Gamma / X-rays → need lead or thick concrete</li>
+          <li>Neutrons → hydrogen-rich materials (water, paraffin) + cadmium/boron</li>
+        </ul>
+
+        <div class="q-box">
+          <strong>Q3.</strong> Differentiate between Filtration and Shielding.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">
+            <strong>Filtration</strong> – removes low-energy photons from the useful beam to reduce patient dose and harden the beam.<br>
+            <strong>Shielding</strong> – stops or reduces radiation that is not part of the useful beam (scattered or primary radiation outside the field) to protect people and the environment.
+          </div>
+        </div>
+
+        <div class="q-box">
+          <strong>Q4.</strong> Calculate the concrete thickness needed to reduce dose from 100 Gy to 0.5 Gy if μ = 0.03 mm⁻¹.
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">
+            I = I₀ e<sup>–μx</sup><br>
+            0.5 = 100 × e<sup>–0.03x</sup><br>
+            0.005 = e<sup>–0.03x</sup><br>
+            ln(0.005) = –0.03x<br>
+            –5.298 = –0.03x<br>
+            x = 5.298 / 0.03 ≈ <strong>176.6 mm</strong> (≈ 17.7 cm)
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SERIES 7 ==================== -->
+      <div class="card">
+        <h3>SERIES 7: Luminescence</h3>
+
+        <p><strong>Luminescence</strong> is the emission of longer-wavelength light by a material after it has absorbed shorter-wavelength radiation (X-rays or UV).</p>
+
+        <h4>Main Types</h4>
+        <ul>
+          <li><strong>Fluorescence</strong> – light is emitted almost immediately (stops when excitation stops)</li>
+          <li><strong>Phosphorescence</strong> – light continues for some time after excitation stops</li>
+          <li><strong>Thermoluminescence</strong> – heat is needed to release the light</li>
+          <li><strong>Photostimulated luminescence</strong> – laser light is used to release the stored energy (basis of Computed Radiography)</li>
+        </ul>
+
+        <h4>How Fluorescence Works in Intensifying Screens</h4>
+        <ul>
+          <li>X-ray photon is absorbed (preferably by photoelectric effect)</li>
+          <li>Electron is raised to a higher energy level (conduction band)</li>
+          <li>Electron returns to the ground state and emits visible light</li>
+        </ul>
+
+        <div class="note">
+          Important rule: The emitted light always has longer wavelength (lower energy) than the absorbed radiation.
+        </div>
+
+        <h4>Key Efficiency Concepts</h4>
+        <ul>
+          <li><strong>Quantum Detection Efficiency (QDE)</strong> – how well the phosphor absorbs the X-rays</li>
+          <li><strong>Photon Conversion Efficiency (PCE)</strong> – how many light photons are produced per absorbed X-ray</li>
+          <li>K-edge of the phosphor should be close to or slightly above the X-ray energy for maximum absorption</li>
+        </ul>
+
+        <div class="q-box">
+          <strong>Q5.</strong> Why must the K-edge of a phosphor be considered when choosing intensifying screen material?
+          <br><button class="show-btn" onclick="toggle(this)">Show Answer</button>
+          <div class="answer">
+            Maximum photoelectric absorption (and therefore highest light output) occurs when the X-ray energy is just above the K-edge of the phosphor. Choosing a phosphor with a suitable K-edge greatly improves Quantum Detection Efficiency.
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="btn-row">
+        <button class="btn btn-next" onclick="window.location.href='202note.html'">Next Page →</button>
+        <button class="btn btn-exam" onclick="window.location.href='202note1q.html'">📝 Go to Exam</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    function setTheme(theme) {
+      document.body.classList.remove('light','dark');
+      document.body.classList.add(theme);
+      themeBtn.textContent = theme === 'light' ? '☀️' : '🌙';
+      localStorage.setItem('theme', theme);
+    }
+    setTheme(localStorage.getItem('theme') || 'dark');
+    themeBtn.onclick = () => setTheme(document.body.classList.contains('light') ? 'dark' : 'light');
+
+    // Show / Hide Answer
+    function toggle(btn) {
+      const ans = btn.nextElementSibling;
+      if (ans.style.display === 'block') {
+        ans.style.display = 'none';
+        btn.textContent = 'Show Answer';
+      } else {
+        ans.style.display = 'block';
+        btn.textContent = 'Hide Answer';
+      }
+    }
+  </script>
+</body>
+</html>
